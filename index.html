@@ -78,13 +78,18 @@
     
     .modal-backdrop, .drawer-backdrop, .login-backdrop { position: fixed; inset: 0; z-index: 90; padding: 16px; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; }
     .modal-backdrop.open, .drawer-backdrop.open, .login-backdrop.open { display: flex; }
-    .modal-panel { width: min(100%, 620px); max-height: 88vh; overflow: auto; border-radius: 20px; background: var(--surface); padding: 24px; border: 1px solid var(--line); }
+    .modal-panel { width: min(100%, 680px); max-height: 88vh; overflow: auto; border-radius: 20px; background: var(--surface); padding: 24px; border: 1px solid var(--line); }
     .drawer-panel { position: fixed; right: 0; top: 0; bottom: 0; width: 300px; background: var(--surface); z-index: 95; transform: translateX(100%); transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1); padding: 24px; display: flex; flex-direction: column; gap: 16px; box-shadow: -4px 0 24px rgba(0,0,0,0.2); }
     .drawer-panel.open { transform: translateX(0); }
     
     .decor-stripe { height: 4px; background: linear-gradient(90deg, #1a73e8 0 33%, #ea4335 33% 66%, #fbbc05 66% 100%); }
     #leaflet-map { width: 100%; height: 300px; border-radius: 12px; border: 1px solid var(--line); z-index: 10; }
     .hidden { display: none !important; }
+
+    /* Gaya Tabel Pratinjau Dokumen Kasat Mata */
+    .preview-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 10px; }
+    .preview-table th, .preview-table td { border: 1px solid #cbd5e1; padding: 6px 8px; vertical-align: top; }
+    .preview-table th { background-color: #f1f5f9; font-weight: 800; text-align: center; }
   </style>
  </head>
  <body>
@@ -396,7 +401,7 @@
        </div>
       </div>
 
-      <!-- STEP 3: Bagian B (Label Lengkap + Dinamis Produsen / Importir - Tanpa Auto-fill History) -->
+      <!-- STEP 3: Bagian B (Label Lengkap + Dinamis Produsen / Importir) -->
       <div class="wizard-step" data-step="3">
        <article class="section-card space-y-5">
         <div class="section-heading">
@@ -429,23 +434,35 @@
           </div>
          </div>
 
-         <!-- 2. Tercantum Pada Kemasan (Dinamis: Produsen jika Indonesia, Importir jika Lainnya) -->
+         <!-- 2. Tercantum Pada Kemasan (Sinkronisasi Otomatis jika "Sama", Manual jika "Berbeda") -->
          <div class="p-5 bg-slate-50 rounded-xl border space-y-3">
           <h4 class="font-black text-xs uppercase text-blue-700 tracking-wider">2. Tercantum Pada Kemasan</h4>
           <div>
            <label class="field-label text-xs">Merek Barang</label>
-           <select id="label-kem-merek-opt" class="field-control mb-2"><option value="Ada dan sama pada barang">Ada dan sama pada barang</option><option value="Ada dan berbeda pada barang">Ada dan berbeda pada barang</option><option value="Tidak ada" selected>Tidak ada</option></select>
+           <select id="label-kem-merek-opt" class="field-control mb-2">
+            <option value="Ada dan sama pada barang">Ada dan sama pada barang</option>
+            <option value="Ada dan berbeda pada barang">Ada dan berbeda pada barang</option>
+            <option value="Tidak ada" selected>Tidak ada</option>
+           </select>
            <input id="label-kem-merek-val" class="field-control hidden" placeholder="Tuliskan merek pada kemasan...">
           </div>
           <div>
            <label class="field-label text-xs">Penggunaan listrik / Spesifikasi Teknis / Ukuran</label>
-           <select id="label-kem-listrik-opt" class="field-control mb-2"><option value="Ada dan sama pada barang">Ada dan sama pada barang</option><option value="Ada dan berbeda pada barang">Ada dan berbeda pada barang</option><option value="Tidak ada" selected>Tidak ada</option></select>
+           <select id="label-kem-listrik-opt" class="field-control mb-2">
+            <option value="Ada dan sama pada barang">Ada dan sama pada barang</option>
+            <option value="Ada dan berbeda pada barang">Ada dan berbeda pada barang</option>
+            <option value="Tidak ada" selected>Tidak ada</option>
+           </select>
            <input id="label-kem-listrik-val" class="field-control hidden" placeholder="Format spesifikasi teknis...">
           </div>
           <div>
            <label class="field-label text-xs">Negara pembuat atau Made in</label>
-           <select id="label-kem-negara-opt" class="field-control mb-2" onchange="checkCountryMadeIn(this)"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
-           <input id="label-kem-negara-val" class="field-control hidden mt-1" placeholder="Tuliskan negara (Contoh: Indonesia)" oninput="checkCountryMadeIn(this)">
+           <select id="label-kem-negara-opt" class="field-control mb-2">
+            <option value="Ada dan sama pada barang">Ada dan sama pada barang</option>
+            <option value="Ada dan berbeda pada barang">Ada dan berbeda pada barang</option>
+            <option value="Tidak ada" selected>Tidak ada</option>
+           </select>
+           <input id="label-kem-negara-val" class="field-control hidden mt-1" placeholder="Tuliskan negara...">
           </div>
 
           <!-- Bagian Dinamis Produsen / Importir -->
@@ -827,7 +844,7 @@
      </div>
     </section>
 
-    <!-- 9. DIREKTORI REGULASI -->
+    <!-- 9. DIREKTORI REGULASI (DIPERBARUI LENGKAP DENGAN PERMEMDAG 25/2021 & 33/2025) -->
     <section id="page-regulasi" class="page">
      <div class="mb-5">
       <p class="text-xs font-bold uppercase text-blue-600">Regulasi & Dasar Hukum</p>
@@ -884,6 +901,34 @@
        </div>
        <h3 class="font-extrabold text-base text-slate-900">Peraturan Menteri Perdagangan tentang Pengawasan Barang Beredar dan/atau Jasa</h3>
        <p class="text-slate-600 leading-relaxed font-medium">Pedoman teknis pengawasan pasca-pasar bagi Pejabat Pengawas Perdagangan terhadap pemenuhan ketentuan teknis.</p>
+       <div class="pt-2">
+        <a href="https://jdih.kemendag.go.id" target="_blank" class="secondary-btn text-xs py-3 px-4 w-full justify-center font-bold">
+         <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text JDIH Kemendag)
+        </a>
+       </div>
+      </div>
+
+      <div class="section-card space-y-3">
+       <div class="flex items-center justify-between">
+        <span class="px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 font-black text-xs">Peraturan Menteri Perdagangan</span>
+        <span class="text-slate-400 font-mono text-xs font-bold">Permendag No. 25 Tahun 2021</span>
+       </div>
+       <h3 class="font-extrabold text-base text-slate-900">Peraturan Menteri Perdagangan tentang Penetapan Barang Yang Wajib Menggunakan Atau Melengkapi Label Berbahasa Indonesia</h3>
+       <p class="text-slate-600 leading-relaxed font-medium">Ketentuan wajib pencantuman label berbahasa Indonesia pada barang beredar demi perlindungan konsumen.</p>
+       <div class="pt-2">
+        <a href="https://jdih.kemendag.go.id" target="_blank" class="secondary-btn text-xs py-3 px-4 w-full justify-center font-bold">
+         <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text JDIH Kemendag)
+        </a>
+       </div>
+      </div>
+
+      <div class="section-card space-y-3">
+       <div class="flex items-center justify-between">
+        <span class="px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 font-black text-xs">Peraturan Menteri Perdagangan</span>
+        <span class="text-slate-400 font-mono text-xs font-bold">Permendag No. 33 Tahun 2025</span>
+       </div>
+       <h3 class="font-extrabold text-base text-slate-900">Peraturan Menteri Perdagangan tentang Standar Kegiatan Usaha dan/atau Standar Produk/Jasa pada Penyelenggaraan Perizinan Berusaha Berbasis Risiko Sektor Perdagangan dan Metrologi Legal</h3>
+       <p class="text-slate-600 leading-relaxed font-medium">Standar teknis kegiatan usaha dan persyaratan produk/jasa dalam perizinan berusaha berbasis risiko sektor perdagangan.</p>
        <div class="pt-2">
         <a href="https://jdih.kemendag.go.id" target="_blank" class="secondary-btn text-xs py-3 px-4 w-full justify-center font-bold">
          <i data-lucide="external-link" class="w-4 h-4"></i> Buka Dokumen Resmi (Full Text JDIH Kemendag)
@@ -1033,10 +1078,11 @@
     // --- DATABASE & STATE MANAGEMENT ---
     let db = null; 
     let reports = []; 
-    let isFormSubmitting = false; // Flag proteksi pengiriman ganda
+    let isFormSubmitting = false; 
     const DB_NAME = 'PagarPKTNDB'; 
     const STORE_NAME = 'reports';
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdcQdZ170t4-1EsHkqVk3bLj7Aw5A-AVlN_RftngVWzY_Yak-fColBBUOTF/exec";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdcQdZ170t4-1EsHkqVk3bLj7BpGCIx7Aw5A-AVlN_RftngVWzY_Yak-fColBBUOTF/exec";
+
     function initDB() {
       return new Promise((resolve, reject) => {
         const req = indexedDB.open(DB_NAME, 1);
@@ -1086,6 +1132,13 @@
         box.className = 'p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-bold text-emerald-800';
         box.innerHTML = `✅ Seluruh laporan (${reports.length} sampel) telah tersinkronisasi sempurna ke Cloud.`;
       }
+    }
+
+    function getStatusClass(status) {
+      if (!status) return 'pending';
+      if (status.includes('Legal')) return 'legal';
+      if (status.includes('Temuan')) return 'temuan';
+      return 'pending';
     }
 
     // --- TEMA TERANG / GELAP ---
@@ -1263,7 +1316,6 @@
       }
     };
 
-    // PROTEKSI PENDAFTARAN AKUN ADMIN
     document.getElementById('register-form').addEventListener('submit', e => {
       e.preventDefault();
       const name = document.getElementById('reg-name').value;
@@ -1332,7 +1384,6 @@
       }
     });
 
-    // UCAPAN TERIMA KASIH SAAT KELUAR (LOGOUT)
     document.getElementById('btn-logout').addEventListener('click', () => {
       showAppNotify("🌟 Tugas Selesai!", "Terima kasih telah melaksanakan tugas pengawasan dengan baik!", "success");
       localStorage.removeItem('pagar_pktn_user');
@@ -1376,7 +1427,6 @@
 
     updateSessionUI();
 
-    // --- TAMBAH PETUGAS DINAMIS ---
     window.addOfficerField = function() {
       const container = document.getElementById('officer-container');
       const div = document.createElement('div');
@@ -1389,7 +1439,6 @@
       lucide.createIcons();
     };
 
-    // --- NETWORK STATUS ---
     function updateNetworkStatus() {
       const pill = document.getElementById('network-status');
       const label = document.getElementById('network-label');
@@ -1400,7 +1449,6 @@
     window.addEventListener('offline', updateNetworkStatus);
     updateNetworkStatus();
 
-    // --- WIZARD NAVIGATION ---
     let currentStep = 1;
     function updateWizard() {
       document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active-step'));
@@ -1415,7 +1463,6 @@
     window.nextStep = function(step) { currentStep = step + 1; updateWizard(); };
     window.prevStep = function(step) { currentStep = step - 1; updateWizard(); };
 
-    // --- DRAWER & PAGE NAVIGATION ---
     const drawer = document.getElementById('drawer-panel');
     const backdrop = document.getElementById('drawer-backdrop');
     document.getElementById('btn-open-menu').addEventListener('click', () => { drawer.classList.add('open'); backdrop.classList.add('open'); });
@@ -1453,7 +1500,6 @@
       switchPage('page-form');
     });
 
-    // --- FORM TOGGLES & BAGIAN A KEMASAN LOGIC ---
     ['sni', 'lspro', 'npb'].forEach(type => {
       const barangOpt = document.getElementById(`${type}-barang-opt`);
       const barangNum = document.getElementById(`${type}-barang-num`);
@@ -1518,7 +1564,6 @@
       }
     }
 
-    // --- GARANSI MASTER TOGGLE ---
     const garansiMaster = document.getElementById('garansi-master-opt');
     if (garansiMaster) {
       garansiMaster.addEventListener('change', e => {
@@ -1531,19 +1576,74 @@
       });
     }
 
-    ['brg-merek', 'brg-listrik', 'brg-negara', 'kem-merek', 'kem-listrik', 'kem-negara'].forEach(item => {
-      const [sec, sub] = item.split('-');
-      const el = document.getElementById(`label-${sec}-${sub}-opt`);
+    // --- BAGIAN B: BARANG & KEMASAN SINKRONISASI OTOMATIS ---
+    ['brg-merek', 'brg-listrik', 'brg-negara'].forEach(item => {
+      const el = document.getElementById(`label-${item}-opt`);
       if(el) {
         el.addEventListener('change', e => {
-          const valInput = document.getElementById(`label-${sec}-${sub}-val`);
+          const valInput = document.getElementById(`label-${item}-val`);
           if (!e.target.value.includes('Tidak')) valInput.classList.remove('hidden');
-          else valInput.classList.add('hidden');
+          else {
+            valInput.classList.add('hidden');
+            valInput.value = '';
+          }
         });
       }
     });
 
-    // --- DETEKSI NEGARA PEMBUAT (PRODUSEN VS IMPORTIR) ---
+    function setupBagianBKemasan(type, barangValId) {
+      const optEl = document.getElementById(`label-kem-${type}-opt`);
+      const valInput = document.getElementById(`label-kem-${type}-val`);
+      const barangInput = document.getElementById(barangValId);
+
+      if (!optEl || !valInput) return;
+
+      function updateState() {
+        const val = optEl.value;
+        if (val === 'Ada dan sama pada barang') {
+          valInput.classList.remove('hidden');
+          if (barangInput) {
+            valInput.value = barangInput.value;
+          }
+          valInput.readOnly = true;
+          valInput.style.backgroundColor = 'var(--bg)';
+        } else if (val === 'Ada dan berbeda pada barang') {
+          valInput.classList.remove('hidden');
+          valInput.value = '';
+          valInput.readOnly = false;
+          valInput.style.backgroundColor = 'var(--surface)';
+          valInput.placeholder = 'Ketik manual informasi pada kemasan...';
+        } else {
+          valInput.classList.add('hidden');
+          valInput.value = '';
+          valInput.readOnly = false;
+          valInput.style.backgroundColor = 'var(--surface)';
+        }
+
+        if (type === 'negara') {
+          checkCountryMadeIn(optEl);
+        }
+      }
+
+      optEl.addEventListener('change', updateState);
+
+      if (barangInput) {
+        barangInput.addEventListener('input', () => {
+          if (optEl.value === 'Ada dan sama pada barang') {
+            valInput.value = barangInput.value;
+            if (type === 'negara') checkCountryMadeIn(optEl);
+          }
+        });
+      }
+      updateState();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setupBagianBKemasan('merek', 'label-brg-merek-val');
+      setupBagianBKemasan('listrik', 'label-brg-listrik-val');
+      setupBagianBKemasan('negara', 'label-brg-negara-val');
+    });
+
     window.checkCountryMadeIn = function(el) {
       const opt = document.getElementById('label-kem-negara-opt').value;
       const valInput = document.getElementById('label-kem-negara-val');
@@ -1551,8 +1651,7 @@
       const prodBox = document.getElementById('producer-dynamic-box');
       const impBox = document.getElementById('importer-dynamic-box');
 
-      if (opt === 'Ada') {
-        valInput.classList.remove('hidden');
+      if (!opt.includes('Tidak')) {
         entitySection.classList.remove('hidden');
         const countryVal = valInput.value.trim().toLowerCase();
 
@@ -1567,7 +1666,6 @@
           impBox.classList.add('hidden');
         }
       } else {
-        valInput.classList.add('hidden');
         entitySection.classList.add('hidden');
         prodBox.classList.add('hidden');
         impBox.classList.add('hidden');
@@ -1598,7 +1696,6 @@
       }, () => { fb.textContent = 'Gagal mendeteksi GPS.'; });
     });
 
-    // --- CAMERA & UI FEEDBACK & PEMBERSIHAN FOTO ---
     function updateDocUI(input) {
       const label = input.parentElement;
       const iconState = label.querySelector('.icon-state');
@@ -1652,13 +1749,11 @@
       });
     }
 
-    // --- SUBMIT FORM DENGAN PENCEGAHAN PENGIRIMAN GANDA ---
     document.getElementById('inspection-form').addEventListener('submit', async e => {
       e.preventDefault();
 
       const submitBtn = document.getElementById('submit-btn');
 
-      // Jika form sudah dikirim atau tombol dalam keadaan terkunci, cegah duplikasi
       if (isFormSubmitting || (submitBtn && submitBtn.disabled)) {
         showAppNotify("Pemberitahuan", "Formulir pengawasan ini telah dikirim sebelumnya. Silakan buat laporan baru jika ingin melakukan pengawasan lainnya.", "warning");
         return;
@@ -1684,7 +1779,6 @@
         return;
       }
 
-      // Kunci form secara total untuk mencegah klik ganda
       isFormSubmitting = true;
       if (submitBtn) {
         submitBtn.disabled = true;
@@ -1790,7 +1884,6 @@
         docUrl: '', folderUrl: ''
       };
 
-      // Jika online, kirim langsung ke cloud
       if (navigator.onLine) {
         try {
           await fetch(APPS_SCRIPT_URL, {
@@ -1810,20 +1903,12 @@
         }
       }
 
-      // Mode Offline
       reportData.synced = false;
       await saveReportToDB(reportData);
       form.reset(); resetAllDocUI(); currentStep = 1; updateWizard();
       switchPage('page-history');
       showAppNotify("⏳ Disimpan Sementara (Offline)", "Perangkat sedang offline. Data disimpan aman di memori lokal. Status validasi dapat diedit kapan saja sebelum disinkronkan.", "warning");
     });
-
-    // --- RENDER RIWAYAT ---
-    function getStatusClass(status) {
-      if (status.includes('Legal')) return 'legal';
-      if (status.includes('Temuan')) return 'temuan';
-      return 'pending';
-    }
 
     function renderHistory() {
       const list = document.getElementById('history-list');
@@ -1844,11 +1929,10 @@
       lucide.createIcons();
     }
 
-    // --- STATISTIK ---
     function renderAnalytics() {
       const total = reports.length;
-      const legal = reports.filter(r => r.sniStatus.includes('Legal')).length;
-      const temuan = reports.filter(r => r.sniStatus.includes('Temuan')).length;
+      const legal = reports.filter(r => r.sniStatus && r.sniStatus.includes('Legal')).length;
+      const temuan = reports.filter(r => r.sniStatus && r.sniStatus.includes('Temuan')).length;
       const pending = total - legal - temuan;
 
       document.getElementById('stat-card-legal').textContent = legal;
@@ -1876,7 +1960,6 @@
       }
     }
 
-    // --- PENCARIAN ---
     document.getElementById('btn-do-search').addEventListener('click', performSearch);
     document.getElementById('search-keyword').addEventListener('input', performSearch);
 
@@ -1903,7 +1986,6 @@
       lucide.createIcons();
     }
 
-    // --- DETAIL & EDIT OFFLINE & AKSES/DOWNLOAD GOOGLE DOCS ---
     window.openDetail = function(id) {
       const r = reports.find(item => item.id === id);
       if (!r) return;
@@ -1934,7 +2016,6 @@
                 <a href="${r.docUrl}" target="_blank" class="primary-btn text-xs font-bold py-2.5 flex-1 justify-center"><i data-lucide="external-link" class="w-4 h-4"></i> Buka Docs</a>
                 <a href="${docxDownloadUrl}" class="secondary-btn text-xs font-bold py-2.5 flex-1 justify-center bg-emerald-100 text-emerald-800 hover:bg-emerald-200"><i data-lucide="download" class="w-4 h-4"></i> Download .docx</a>
               </div>
-              <p class="text-[11px] text-slate-600 leading-relaxed">Klik 'Download .docx' untuk langsung mengunduh file dalam bentuk Word siap cetak.</p>
             </div>
           ` : `<p class="text-xs text-amber-600 font-semibold bg-amber-50 p-2.5 rounded-lg border border-amber-200">⚠️ Dokumen Google Docs otomatis tergenerate saat data disinkronkan ke Cloud.</p>`}
 
@@ -1945,199 +2026,157 @@
       lucide.createIcons();
     };
 
+    // --- FITUR PRATINJAU TABEL KASAT MATA LENGKAP ---
     window.openTablePreview = function(id) {
       const r = reports.find(item => item.id === id);
       if (!r) return;
-      document.getElementById('modal-title').textContent = `Tabel Kasat Mata: ${r.productType}`;
-      
-      const cAda = (opt) => opt && opt.includes('Ada') ? '√' : '';
-      const cTidak = (opt) => (!opt || opt.includes('Tidak') || opt === '') ? '√' : '';
 
+      const a = r.bagianA || {};
+      const l = r.labelData || {};
+      const c = r.bagianC || {};
+      const d = r.bagianD || {};
+
+      const isAda = (opt) => (opt && opt.includes('Ada')) ? '√' : '';
+      const isTidak = (opt) => (!opt || opt.includes('Tidak') || opt === '') ? '√' : '';
+
+      document.getElementById('modal-title').textContent = `Pratinjau Tabel: ${r.sampleCode}`;
       document.getElementById('modal-content').innerHTML = `
-        <div class="space-y-4 text-xs font-sans">
-          <div class="flex justify-between items-center pb-2 border-b print:hidden">
-            <button class="secondary-btn text-xs py-1.5 px-3 font-bold" onclick="openDetail('${r.id}')">&larr; Kembali ke Detail</button>
-            <button class="primary-btn text-xs py-1.5 px-3 font-bold" onclick="window.print()"><i data-lucide="printer" class="w-3.5 h-3.5"></i> Cetak Tabel</button>
+        <div class="space-y-2 text-xs">
+          <div class="p-3 bg-slate-50 rounded-xl border space-y-1">
+            <p><b>Nama Barang:</b> ${r.productType}</p>
+            <p><b>Merek Barang:</b> ${r.brand}</p>
+            <p><b>Kode Sampel:</b> ${r.sampleCode}</p>
+            <p><b>Nama & Alamat Pengecer:</b> ${r.businessName}, ${r.retailerAddress}</p>
+            <p><b>Kesimpulan:</b> <span class="font-bold text-blue-600">${r.sniStatus}</span></p>
           </div>
-          
-          <div class="p-5 bg-white rounded-xl border shadow-sm space-y-4 text-slate-900 leading-relaxed">
-            <div class="text-center font-black text-sm uppercase tracking-wider border-b pb-3">
-              TABEL PENGAMATAN KASAT MATA<br>${r.productType.toUpperCase()}
-            </div>
-            
-            <div class="grid grid-cols-1 gap-1 text-xs font-bold">
-              <div>Nama Barang &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${r.productType}</div>
-              <div>Merek Barang &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${r.brand}</div>
-              <div>Kode Sampel &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${r.sampleCode}</div>
-              <div>Nama dan Alamat Pengecer : ${r.businessName}, ${r.retailerAddress}</div>
-              <div>Kesimpulan &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: ${r.sniStatus}</div>
-            </div>
 
-            <table class="w-full text-[11px] border-collapse border border-slate-700 mt-3">
+          <div class="overflow-x-auto">
+            <table class="preview-table">
               <thead>
-                <tr class="bg-slate-100 text-center font-bold">
-                  <th class="border border-slate-700 p-2 w-1/4">Dasar Hukum</th>
-                  <th class="border border-slate-700 p-2 w-1/4">Parameter Pengawasan Barang</th>
-                  <th class="border border-slate-700 p-2">Keterangan Penandaan</th>
-                  <th class="border border-slate-700 p-2 w-12">Ada</th>
-                  <th class="border border-slate-700 p-2 w-12">Tidak</th>
-                  <th class="border border-slate-700 p-2 w-1/4">Keterangan</th>
+                <tr>
+                  <th style="width:20%">Dasar Hukum</th>
+                  <th style="width:20%">Parameter</th>
+                  <th style="width:25%">Penandaan</th>
+                  <th style="width:5%">Ada</th>
+                  <th style="width:5%">Tidak</th>
+                  <th style="width:25%">Keterangan</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-slate-700">
-                <!-- 1. Standar SNI -->
+              <tbody>
                 <tr>
-                  <td class="border border-slate-700 p-2 font-semibold align-top" rowspan="2">
-                    Undang-Undang Republik Indonesia Nomor 8 Tahun 1999 tentang Perlindungan Konsumen<br><br>
-                    Permendag Nomor 69 Tahun 2018 tentang Pengawasan Barang Beredar dan/atau Jasa<br><br>
-                    Permendag Nomor 25 Tahun 2021 tentang Penetapan Barang Yang Wajib Menggunakan Atau Melengkapi Label Berbahasa Indonesia<br><br>
-                    Permendag No.33 Tahun 2025 tentang Standar Kegiatan Usaha dan/atau Standar Produk/Jasa pada Penyelenggaraan Perizinan Berusaha Berbasis Risiko Sektor Perdagangan dan Metrologi Legal
-                  </td>
-                  <td class="border border-slate-700 p-2 font-bold" rowspan="2">Standar</td>
-                  <td class="border border-slate-700 p-2">Tanda dan Nomor SNI, Kode LSpro pada Barang dan/atau Kemasan</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${cAda(r.bagianA.sniBarangOpt) || cAda(r.bagianA.lsproBarangOpt)}</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${cTidak(r.bagianA.sniBarangOpt) && cTidak(r.bagianA.lsproBarangOpt) ? '√' : ''}</td>
-                  <td class="border border-slate-700 p-2">SNI: ${r.bagianA.sniBarangNum || '-'}<br>LSpro: ${r.bagianA.lsproBarangNum || '-'}</td>
+                  <td rowspan="8" class="text-[10px] text-slate-500">UU No.8/1999, Permendag 69/2018, Permendag 25/2021, Permendag 33/2025</td>
+                  <td>Standar SNI & LSpro</td>
+                  <td>Tanda/No SNI & Kode LSpro</td>
+                  <td class="text-center font-bold">${isAda(a.sniBarangOpt) || isAda(a.lsproBarangOpt)}</td>
+                  <td class="text-center font-bold">${isTidak(a.sniBarangOpt) && isTidak(a.lsproBarangOpt) ? '√' : ''}</td>
+                  <td>SNI: ${a.sniBarangNum || '-'}<br>LSpro: ${a.lsproBarangNum || '-'}</td>
                 </tr>
                 <tr>
-                  <td class="border border-slate-700 p-2">Nomor NPB pada Barang dan/atau Kemasan</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${cAda(r.bagianA.npbBarangOpt)}</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${cTidak(r.bagianA.npbBarangOpt)}</td>
-                  <td class="border border-slate-700 p-2">NPB: ${r.bagianA.npbBarangNum || '-'}</td>
-                </tr>
-
-                <!-- 2. Label Barang -->
-                <tr>
-                  <td class="border border-slate-700 p-2 font-semibold align-top" rowspan="4">Label Dalam Bahasa Indonesia</td>
-                  <td class="border border-slate-700 p-2 font-bold" rowspan="4">Tercantum Pada Barang</td>
-                  <td class="border border-slate-700 p-2">Merek Barang</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${cAda(r.labelData.brgMerekOpt)}</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${cTidak(r.labelData.brgMerekOpt)}</td>
-                  <td class="border border-slate-700 p-2">${r.labelData.brgMerekVal || r.brand}</td>
+                  <td>Standar NPB</td>
+                  <td>Nomor NPB</td>
+                  <td class="text-center font-bold">${isAda(a.npbBarangOpt)}</td>
+                  <td class="text-center font-bold">${isTidak(a.npbBarangOpt)}</td>
+                  <td>NPB: ${a.npbBarangNum || '-'}</td>
                 </tr>
                 <tr>
-                  <td class="border border-slate-700 p-2">Penggunaan listrik; Tegangan (Volt/V) dan frekuensi (Hz) / Spesifikasi</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${cAda(r.labelData.brgListrikOpt)}</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${cTidak(r.labelData.brgListrikOpt)}</td>
-                  <td class="border border-slate-700 p-2">${r.labelData.brgListrikVal || '-'}</td>
+                  <td>Label (Barang)</td>
+                  <td>Merek Barang</td>
+                  <td class="text-center font-bold">${isAda(l.brgMerekOpt)}</td>
+                  <td class="text-center font-bold">${isTidak(l.brgMerekOpt)}</td>
+                  <td>${l.brgMerekVal || r.brand}</td>
                 </tr>
                 <tr>
-                  <td class="border border-slate-700 p-2">Negara Pembuat atau Made in</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${cAda(r.labelData.brgNegaraOpt)}</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${cTidak(r.labelData.brgNegaraOpt)}</td>
-                  <td class="border border-slate-700 p-2">${r.labelData.brgNegaraVal || '-'}</td>
+                  <td>Label (Barang)</td>
+                  <td>Listrik / Spesifikasi</td>
+                  <td class="text-center font-bold">${isAda(l.brgListrikOpt)}</td>
+                  <td class="text-center font-bold">${isTidak(l.brgListrikOpt)}</td>
+                  <td>${l.brgListrikVal || '-'}</td>
                 </tr>
                 <tr>
-                  <td class="border border-slate-700 p-2">Nama Barang</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">√</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold"></td>
-                  <td class="border border-slate-700 p-2">${r.productType}</td>
-                </tr>
-
-                <!-- 3. Label Kemasan -->
-                <tr>
-                  <td class="border border-slate-700 p-2" rowspan="3"></td>
-                  <td class="border border-slate-700 p-2 font-bold" rowspan="3">Tercantum Pada Kemasan</td>
-                  <td class="border border-slate-700 p-2">Merek Barang</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${!r.labelData.kemMerekOpt.includes('Tidak') ? '√' : ''}</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${r.labelData.kemMerekOpt.includes('Tidak') ? '√' : ''}</td>
-                  <td class="border border-slate-700 p-2">${r.labelData.kemMerekVal || r.brand}</td>
+                  <td>Label (Barang)</td>
+                  <td>Negara Pembuat</td>
+                  <td class="text-center font-bold">${isAda(l.brgNegaraOpt)}</td>
+                  <td class="text-center font-bold">${isTidak(l.brgNegaraOpt)}</td>
+                  <td>${l.brgNegaraVal || '-'}</td>
                 </tr>
                 <tr>
-                  <td class="border border-slate-700 p-2">Penggunaan Listrik; Tegangan (Volt/V) dan Frekuensi (Hz) / Spesifikasi</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${!r.labelData.kemListrikOpt.includes('Tidak') ? '√' : ''}</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${r.labelData.kemListrikOpt.includes('Tidak') ? '√' : ''}</td>
-                  <td class="border border-slate-700 p-2">${r.labelData.kemListrikVal || '-'}</td>
+                  <td>Label (Kemasan)</td>
+                  <td>Merek Kemasan</td>
+                  <td class="text-center font-bold">${isAda(l.kemMerekOpt)}</td>
+                  <td class="text-center font-bold">${isTidak(l.kemMerekOpt)}</td>
+                  <td>${l.kemMerekVal || r.brand}</td>
                 </tr>
                 <tr>
-                  <td class="border border-slate-700 p-2">Nama dan Alamat Produsen / Importir</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${r.labelData.producerName || r.labelData.importerName ? '√' : ''}</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${!r.labelData.producerName && !r.labelData.importerName ? '√' : ''}</td>
-                  <td class="border border-slate-700 p-2">${r.labelData.producerName ? 'Produsen: ' + r.labelData.producerName + ', ' + r.labelData.producerAddr : (r.labelData.importerName ? 'Importir: ' + r.labelData.importerName + ', ' + r.labelData.importerAddr : '-')}</td>
-                </tr>
-
-                <!-- 4. Petunjuk Penggunaan -->
-                <tr>
-                  <td class="border border-slate-700 p-2" rowspan="2"></td>
-                  <td class="border border-slate-700 p-2 font-bold" rowspan="2">Petunjuk Penggunaan<br><span class="text-[10px] font-normal">(wajib memenuhi persyaratan paling sedikit mencantumkan)</span></td>
-                  <td class="border border-slate-700 p-2">Merek, Jenis, Tipe, Model, Spesifikasi, Cara Penggunaan & Petunjuk Pemeliharaan</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${cAda(r.bagianC.opt)}</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${cTidak(r.bagianC.opt)}</td>
-                  <td class="border border-slate-700 p-2">Tersedia manual penggunaan</td>
+                  <td>Petunjuk Penggunaan</td>
+                  <td>Manual Book & Registrasi</td>
+                  <td class="text-center font-bold">${isAda(c.opt)}</td>
+                  <td class="text-center font-bold">${isTidak(c.opt)}</td>
+                  <td>No. Reg: ${c.regVal || '-'}</td>
                 </tr>
                 <tr>
-                  <td class="border border-slate-700 p-2">Nomor Tanda Pendaftaran Petunjuk Penggunaan dan Jaminan Layanan Purna Jual</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${cAda(r.bagianC.regOpt)}</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${cTidak(r.bagianC.regOpt)}</td>
-                  <td class="border border-slate-700 p-2">No. Reg: ${r.bagianC.regVal || '-'}</td>
-                </tr>
-
-                <!-- 5. Garansi -->
-                <tr>
-                  <td class="border border-slate-700 p-2"></td>
-                  <td class="border border-slate-700 p-2 font-bold">Jaminan Layanan Purna Jual<br><span class="text-[10px] font-normal">(Kartu Garansi)</span></td>
-                  <td class="border border-slate-700 p-2">Pusat layanan min. 6 kota, Masa jaminan min. 1 tahun, Syarat Klaim, Suku Cadang, & No. Pendaftaran</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${cAda(r.bagianD.masterOpt)}</td>
-                  <td class="border border-slate-700 p-2 text-center font-bold">${cTidak(r.bagianD.masterOpt)}</td>
-                  <td class="border border-slate-700 p-2">Status Garansi: ${r.bagianD.masterOpt}</td>
+                  <td>Jaminan Garansi</td>
+                  <td>Purna Jual Min. 1 Thn</td>
+                  <td class="text-center font-bold">${isAda(d.masterOpt)}</td>
+                  <td class="text-center font-bold">${isTidak(d.masterOpt)}</td>
+                  <td>Status: ${d.masterOpt || '-'}</td>
                 </tr>
               </tbody>
             </table>
           </div>
+
+          <button class="secondary-btn w-full py-2.5 font-bold mt-3" onclick="openDetail('${r.id}')">&larr; Kembali ke Detail</button>
         </div>
       `;
       lucide.createIcons();
     };
 
+    // --- FITUR EDIT STATUS LAPORAN (OFFLINE VERIFICATION) ---
     window.openEditReport = function(id) {
       const r = reports.find(item => item.id === id);
       if (!r) return;
-      const modalContent = document.getElementById('modal-content');
-      document.getElementById('modal-title').textContent = `Verifikasi & Edit: ${r.sampleCode}`;
 
-      modalContent.innerHTML = `
-        <form id="edit-report-form" class="space-y-4 text-sm">
-          <!-- TOMBOL AKSES PORTAL BANG BENI DI MENU EDIT -->
-          <div class="p-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl text-white flex items-center justify-between gap-3 shadow-md">
-            <div>
-              <p class="font-black text-xs uppercase tracking-wider">Verifikasi Online</p>
-              <p class="text-[11px] text-blue-100 mt-0.5">Cek nomor SNI di Portal Resmi BSN.</p>
-            </div>
-            <a href="https://bangbeni.bsn.go.id" target="_blank" class="px-4 py-2.5 rounded-lg bg-white text-blue-700 font-bold text-xs shrink-0 shadow hover:bg-blue-50 transition-transform active:scale-95 flex items-center gap-1.5">
-              <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Buka Bang Beni
-            </a>
-          </div>
-
+      document.getElementById('modal-title').textContent = `Verifikasi: ${r.sampleCode}`;
+      document.getElementById('modal-content').innerHTML = `
+        <form onsubmit="saveEditedReport(event, '${r.id}')" class="space-y-4">
           <div>
-            <label class="field-label text-xs">Status Validasi / Verifikasi SNI (Dapat Diubah Kapan Saja)</label>
-            <select id="edit-status" class="field-control text-sm">
+            <label class="field-label text-xs">Status Validasi Pengawasan</label>
+            <select id="edit-sni-status" class="field-control text-sm">
               <option value="Terdaftar dan Sesuai (Legal)" ${r.sniStatus.includes('Legal') ? 'selected' : ''}>Terdaftar dan Sesuai (Legal)</option>
               <option value="Tidak Terdaftar (Temuan)" ${r.sniStatus.includes('Temuan') ? 'selected' : ''}>Tidak Terdaftar (Temuan)</option>
-              <option value="Terdaftar namun Tidak Sesuai Spesifikasinya" ${r.sniStatus.includes('Spesifikasi') ? 'selected' : ''}>Terdaftar namun Tidak Sesuai Spesifikasinya</option>
+              <option value="Terdaftar namun Tidak Sesuai Spesifikasinya" ${r.sniStatus.includes('Spesifikasinya') ? 'selected' : ''}>Terdaftar namun Tidak Sesuai Spesifikasinya</option>
             </select>
           </div>
           <div>
-            <label class="field-label text-xs">Nomor SNI Barang</label>
-            <input id="edit-sni-num" class="field-control text-sm" value="${r.bagianA.sniBarangNum || ''}">
+            <label class="field-label text-xs">Merek Tertera</label>
+            <input id="edit-brand" class="field-control text-sm" value="${r.brand}">
           </div>
-          <button type="button" class="primary-btn w-full py-3.5 text-xs font-bold bg-emerald-600 hover:bg-emerald-700" onclick="saveEditedReport('${r.id}')">
-            Simpan Perubahan Verifikasi
-          </button>
+          <div>
+            <label class="field-label text-xs">Nama Pengecer / Toko</label>
+            <input id="edit-business" class="field-control text-sm" value="${r.businessName}">
+          </div>
+          <div class="flex gap-2 pt-2">
+            <button type="button" class="secondary-btn flex-1 py-3 text-xs font-bold" onclick="openDetail('${r.id}')">Batal</button>
+            <button type="submit" class="primary-btn flex-1 py-3 text-xs font-bold bg-emerald-600 hover:bg-emerald-700">Simpan Perubahan</button>
+          </div>
         </form>
       `;
       lucide.createIcons();
     };
 
-    window.saveEditedReport = async function(id) {
+    window.saveEditedReport = async function(e, id) {
+      e.preventDefault();
       const r = reports.find(item => item.id === id);
       if (!r) return;
-      r.sniStatus = document.getElementById('edit-status').value;
-      r.bagianA.sniBarangNum = document.getElementById('edit-sni-num').value;
-      r.synced = false; 
+
+      r.sniStatus = document.getElementById('edit-sni-status').value;
+      r.brand = document.getElementById('edit-brand').value;
+      r.businessName = document.getElementById('edit-business').value;
+
       await saveReportToDB(r);
-      document.getElementById('detail-modal').classList.remove('open');
       renderHistory();
-      showAppNotify("Perubahan Disimpan", "Verifikasi status berhasil diperbarui. Laporan ditandai untuk disinkronkan ulang ke Cloud.", "success");
+      renderAnalytics();
+      openDetail(r.id);
+      showAppNotify("Perubahan Disimpan", "Data laporan berhasil diperbarui dalam database lokal!", "success");
     };
 
     window.deleteReportItem = async function(id) {
@@ -2156,7 +2195,6 @@
 
     document.getElementById('close-modal').addEventListener('click', () => document.getElementById('detail-modal').classList.remove('open'));
 
-    // --- EKSPOR CSV ---
     document.getElementById('export-csv').addEventListener('click', () => {
       if (reports.length === 0) { showAppNotify("Pemberitahuan", "Belum ada data untuk diekspor.", "info"); return; }
       let csv = "ID,Waktu,Sampel,Toko,Alamat,Merek,Barang,Status\n";
@@ -2170,7 +2208,6 @@
       link.click();
     });
 
-    // --- SINKRONISASI CLOUD ---
     document.getElementById('btn-sync-now').addEventListener('click', async () => {
       const unsynced = reports.filter(r => !r.synced);
       if (unsynced.length === 0) { 
@@ -2224,7 +2261,6 @@
       showAppNotify("📊 Laporan Sinkronisasi Cloud", `Berhasil dikirim: ${successCount} sampel\nGagal/Tertunda: ${failCount} sampel`, failCount === 0 ? "success" : "warning");
     });
 
-    // --- PETA LEAFLET DENGAN PENANDA WARNA ---
     let leafletMap = null;
     let leafletMarkers = [];
     function renderMapsList() {
@@ -2262,9 +2298,9 @@
           const lat = parseFloat(parts[0]);
           const lng = parseFloat(parts[1]);
           if (!isNaN(lat) && !isNaN(lng)) {
-            let markerColor = '#0f9d58'; // Hijau (Legal)
-            if (r.sniStatus.includes('Temuan')) markerColor = '#d93025'; // Merah
-            else if (r.sniStatus.includes('Spesifikasi')) markerColor = '#fbbc05'; // Kuning/Amber
+            let markerColor = '#0f9d58';
+            if (r.sniStatus && r.sniStatus.includes('Temuan')) markerColor = '#d93025';
+            else if (r.sniStatus && r.sniStatus.includes('Spesifikasi')) markerColor = '#fbbc05';
 
             const customIcon = L.divIcon({
               className: 'custom-map-marker',
