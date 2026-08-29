@@ -464,6 +464,32 @@
            </select>
            <input id="label-kem-negara-val" class="field-control hidden mt-1" placeholder="Tuliskan negara...">
           </div>
+
+          <!-- BAGIAN DINAMIS PRODUSEN / IMPORTIR (MUNCUL OTOMATIS BERDASARKAN NEGARA) -->
+          <div id="dynamic-entity-section" class="space-y-3 pt-3 border-t hidden">
+           <div id="producer-dynamic-box" class="space-y-3 hidden">
+            <div>
+             <label class="field-label text-xs">Nama Produsen</label>
+             <input id="dyn-producer-name" class="field-control text-xs" placeholder="Nama perusahaan produsen...">
+            </div>
+            <div>
+             <label class="field-label text-xs">Alamat Produsen</label>
+             <input id="dyn-producer-addr" class="field-control text-xs" placeholder="Alamat lengkap produsen...">
+            </div>
+           </div>
+
+           <div id="importer-dynamic-box" class="space-y-3 hidden">
+            <div>
+             <label class="field-label text-xs">Nama Importir</label>
+             <input id="dyn-importer-name" class="field-control text-xs" placeholder="Nama perusahaan importir...">
+            </div>
+            <div>
+             <label class="field-label text-xs">Alamat Importir</label>
+             <input id="dyn-importer-addr" class="field-control text-xs" placeholder="Alamat lengkap importir...">
+            </div>
+           </div>
+          </div>
+
          </div>
         </div>
        </article>
@@ -1687,6 +1713,13 @@
           }
         });
       }
+
+      if (type === 'negara') {
+        valInput.addEventListener('input', () => {
+          checkCountryMadeIn(optEl);
+        });
+      }
+
       updateState();
     }
 
@@ -1707,7 +1740,7 @@
         entitySection.classList.remove('hidden');
         const countryVal = valInput.value.trim().toLowerCase();
 
-        if (countryVal === 'indonesia' || countryVal === 'ri') {
+        if (countryVal === 'indonesia' || countryVal === 'ri' || countryVal.includes('indonesia')) {
           prodBox.classList.remove('hidden');
           impBox.classList.add('hidden');
         } else if (countryVal !== '') {
