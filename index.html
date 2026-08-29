@@ -473,7 +473,7 @@
        </div>
       </div>
 
-      <!-- STEP 4: Bagian C & D (Lengkap & Utuh) -->
+      <!-- STEP 4: Bagian C & D (Lengkap & Utuh dengan Kotak Keterangan Kondisional) -->
       <div class="wizard-step" data-step="4">
        <article class="section-card space-y-5">
         <div class="section-heading">
@@ -504,7 +504,7 @@
             <span class="font-bold">1. Nama dan alamat lengkap Produsen atau Importir</span>
             <select id="p-prod" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select>
            </div>
-           <input id="p-prod-ket" class="field-control text-xs mt-1" placeholder="Keterangan nama/alamat produsen/importir...">
+           <input id="p-prod-ket" class="field-control text-xs mt-1 hidden" placeholder="Keterangan nama/alamat produsen/importir...">
           </div>
 
           <!-- 2. Merek, Jenis, Tipe/Model -->
@@ -513,7 +513,7 @@
             <span class="font-bold">2. Merek, jenis, tipe dan/atau model produk</span>
             <select id="p-merek" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select>
            </div>
-           <input id="p-merek-ket" class="field-control text-xs mt-1" placeholder="Keterangan merek/jenis/tipe...">
+           <input id="p-merek-ket" class="field-control text-xs mt-1 hidden" placeholder="Keterangan merek/jenis/tipe...">
           </div>
 
           <!-- 3. Spesifikasi Produk -->
@@ -522,7 +522,7 @@
             <span class="font-bold">3. Spesifikasi produk</span>
             <select id="p-spek" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select>
            </div>
-           <input id="p-spek-ket" class="field-control text-xs mt-1" placeholder="Keterangan spesifikasi produk...">
+           <input id="p-spek-ket" class="field-control text-xs mt-1 hidden" placeholder="Keterangan spesifikasi produk...">
           </div>
 
           <!-- 4. Cara Penggunaan -->
@@ -531,7 +531,7 @@
             <span class="font-bold">4. Keterangan cara penggunaan sesuai fungsi produk</span>
             <select id="p-cara" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select>
            </div>
-           <input id="p-cara-ket" class="field-control text-xs mt-1" placeholder="Keterangan cara penggunaan...">
+           <input id="p-cara-ket" class="field-control text-xs mt-1 hidden" placeholder="Keterangan cara penggunaan...">
           </div>
 
           <!-- 5. Nomor Tanda Pendaftaran -->
@@ -561,61 +561,61 @@
           <!-- 1 -->
           <div class="space-y-1.5 border-b pb-3">
            <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">1. Nama & alamat Produsen/Importir</span><select id="g-prod" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-           <input id="g-prod-ket" class="field-control mt-1 text-xs" placeholder="Keterangan nama & alamat...">
+           <input id="g-prod-ket" class="field-control mt-1 text-xs hidden" placeholder="Keterangan nama & alamat...">
           </div>
 
           <!-- 2 -->
           <div class="space-y-1.5 border-b pb-3">
            <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">2. Nama & alamat pusat layanan (min. 6/10 kota)</span><select id="g-sc" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-           <input id="g-sc-ket" class="field-control mt-1 text-xs" placeholder="Keterangan pusat layanan / kota...">
+           <input id="g-sc-ket" class="field-control mt-1 text-xs hidden" placeholder="Keterangan pusat layanan / kota...">
           </div>
 
           <!-- 3 -->
           <div class="space-y-1.5 border-b pb-3">
            <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">3. Masa jaminan min. 1 tahun sejak pembelian</span><select id="g-masa-opt" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-           <input id="g-masa-val" class="field-control mt-1.5 text-xs" placeholder="Keterangan masa garansi (cth: 1 Tahun)...">
+           <input id="g-masa-val" class="field-control mt-1.5 text-xs hidden" placeholder="Keterangan masa garansi (cth: 1 Tahun)...">
           </div>
 
           <!-- 4 -->
           <div class="space-y-1.5 border-b pb-3">
            <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">4. Syarat, prosedur klaim, & perbaikan gratis</span><select id="g-syarat" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-           <input id="g-syarat-ket" class="field-control mt-1 text-xs" placeholder="Keterangan syarat & prosedur...">
+           <input id="g-syarat-ket" class="field-control mt-1 text-xs hidden" placeholder="Keterangan syarat & prosedur...">
           </div>
 
           <!-- 5 -->
           <div class="space-y-1.5 border-b pb-3">
            <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">5. Cakupan atau daftar kerusakan dijamin</span><select id="g-cakupan" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-           <input id="g-cakupan-ket" class="field-control mt-1 text-xs" placeholder="Keterangan cakupan kerusakan...">
+           <input id="g-cakupan-ket" class="field-control mt-1 text-xs hidden" placeholder="Keterangan cakupan kerusakan...">
           </div>
 
           <!-- 6 -->
           <div class="space-y-1.5 border-b pb-3">
            <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">6. Nomor Telepon pengaduan konsumen</span><select id="g-telp-opt" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-           <input id="g-telp-val" class="field-control mt-1.5 text-xs" placeholder="Nomor Telepon: 021-xxxxxxx">
+           <input id="g-telp-val" class="field-control mt-1.5 text-xs hidden" placeholder="Nomor Telepon: 021-xxxxxxx">
           </div>
 
           <!-- 7 -->
           <div class="space-y-1.5 border-b pb-3">
            <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">7. Data identitas unik Produk Elektronik/Telematika</span><select id="g-unik" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-           <input id="g-unik-ket" class="field-control mt-1 text-xs" placeholder="Keterangan identitas unik (SN/IMEI)...">
+           <input id="g-unik-ket" class="field-control mt-1 text-xs hidden" placeholder="Keterangan identitas unik (SN/IMEI)...">
           </div>
 
           <!-- 8 -->
           <div class="space-y-1.5 border-b pb-3">
            <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">8. Ketersediaan suku cadang</span><select id="g-spare" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-           <input id="g-spare-ket" class="field-control mt-1 text-xs" placeholder="Keterangan suku cadang...">
+           <input id="g-spare-ket" class="field-control mt-1 text-xs hidden" placeholder="Keterangan suku cadang...">
           </div>
 
           <!-- 9 -->
           <div class="space-y-1.5 border-b pb-3">
            <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">9. Pergantian barang sejenis selama masa jaminan</span><select id="g-ganti" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-           <input id="g-ganti-ket" class="field-control mt-1 text-xs" placeholder="Keterangan pergantian barang...">
+           <input id="g-ganti-ket" class="field-control mt-1 text-xs hidden" placeholder="Keterangan pergantian barang...">
           </div>
 
           <!-- 10 -->
           <div class="space-y-1.5">
            <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">10. Nomor tanda pendaftaran petunjuk & kartu jaminan</span><select id="g-reg-opt" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-           <input id="g-reg-val" class="field-control mt-1.5 text-xs" placeholder="Nomor tanda pendaftaran garansi...">
+           <input id="g-reg-val" class="field-control mt-1.5 text-xs hidden" placeholder="Nomor tanda pendaftaran garansi...">
           </div>
 
           <div class="pt-3">
@@ -1727,17 +1727,41 @@
     document.getElementById('petunjuk-opt').addEventListener('change', e => {
       if (e.target.value === 'Ada') document.getElementById('petunjuk-sub-box').classList.remove('hidden'); else document.getElementById('petunjuk-sub-box').classList.add('hidden');
     });
-    document.getElementById('p-reg-opt').addEventListener('change', e => {
-      if (e.target.value === 'Ada') document.getElementById('p-reg-val').classList.remove('hidden'); else document.getElementById('p-reg-val').classList.add('hidden');
-    });
-    document.getElementById('g-masa-opt').addEventListener('change', e => {
-      if (e.target.value === 'Ada') document.getElementById('g-masa-val').classList.remove('hidden'); else document.getElementById('g-masa-val').classList.add('hidden');
-    });
-    document.getElementById('g-telp-opt').addEventListener('change', e => {
-      if (e.target.value === 'Ada') document.getElementById('g-telp-val').classList.remove('hidden'); else document.getElementById('g-telp-val').classList.add('hidden');
-    });
-    document.getElementById('g-reg-opt').addEventListener('change', e => {
-      if (e.target.value === 'Ada') document.getElementById('g-reg-val').classList.remove('hidden'); else document.getElementById('g-reg-val').classList.add('hidden');
+
+    // --- TOGGLE KONDISIONAL KOTAK KETERANGAN BAGIAN C & D ---
+    function setupConditionalInput(selectId, inputId) {
+      const sel = document.getElementById(selectId);
+      const inp = document.getElementById(inputId);
+      if (!sel || !inp) return;
+      sel.addEventListener('change', e => {
+        if (e.target.value === 'Ada') {
+          inp.classList.remove('hidden');
+        } else {
+          inp.classList.add('hidden');
+          inp.value = '';
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Bagian C
+      setupConditionalInput('p-prod', 'p-prod-ket');
+      setupConditionalInput('p-merek', 'p-merek-ket');
+      setupConditionalInput('p-spek', 'p-spek-ket');
+      setupConditionalInput('p-cara', 'p-cara-ket');
+      setupConditionalInput('p-reg-opt', 'p-reg-val');
+
+      // Bagian D
+      setupConditionalInput('g-prod', 'g-prod-ket');
+      setupConditionalInput('g-sc', 'g-sc-ket');
+      setupConditionalInput('g-masa-opt', 'g-masa-val');
+      setupConditionalInput('g-syarat', 'g-syarat-ket');
+      setupConditionalInput('g-cakupan', 'g-cakupan-ket');
+      setupConditionalInput('g-telp-opt', 'g-telp-val');
+      setupConditionalInput('g-unik', 'g-unik-ket');
+      setupConditionalInput('g-spare', 'g-spare-ket');
+      setupConditionalInput('g-ganti', 'g-ganti-ket');
+      setupConditionalInput('g-reg-opt', 'g-reg-val');
     });
 
     document.getElementById('gps-button').addEventListener('click', () => {
