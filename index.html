@@ -1159,7 +1159,7 @@
     let isFormSubmitting = false; 
     const DB_NAME = 'PagarPKTNDB'; 
     const STORE_NAME = 'reports';
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyp7JACOv7Z9YNpHwN_suC0eoMHVlCgT_ySnlx6rk8Zjvf1W3OsPbZ9RBfyf_2eSgbd/exec";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQD_HTz_RpldnUMgue4HLoosdAfutDnAFVo3N2nzQL05LHC3Lem5YPewbpG206kHAo/exec";
 
     function initDB() {
       return new Promise((resolve, reject) => {
@@ -2004,15 +2004,16 @@
 
       if (navigator.onLine) {
         try {
-          const res = await fetch(APPS_SCRIPT_URL, {
+          await fetch(APPS_SCRIPT_URL, {
             method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(reportData)
           });
-          const resJson = await res.json();
-          if(resJson.status === 'success') {
-            reportData.docUrl = resJson.docUrl;
-            reportData.folderUrl = resJson.pdfUrl;
-          }
+          
+          reportData.docUrl = `https://drive.google.com/drive/search?q=${encodeURIComponent(reportData.sampleCode)}`;
+          reportData.folderUrl = `https://drive.google.com/drive/search?q=${encodeURIComponent(reportData.sampleCode)}`;
+          
           reportData.synced = true;
           await saveReportToDB(reportData);
           form.reset(); resetAllDocUI(); currentStep = 1; updateWizard();
@@ -2112,7 +2113,7 @@
       if (!r) return;
       document.getElementById('modal-title').textContent = `Sampel: ${r.sampleCode}`;
 
-      let pdfExportUrl = r.folderUrl || '#';
+      let driveSearchUrl = r.docUrl || `https://drive.google.com/drive/search?q=${encodeURIComponent(r.sampleCode)}`;
 
       document.getElementById('modal-content').innerHTML = `
         <p class="text-sm font-medium"><b>Toko:</b> ${r.businessName} (${r.retailerAddress})</p>
@@ -2124,15 +2125,13 @@
           <button class="primary-btn text-xs font-bold py-3 bg-blue-600 hover:bg-blue-700 w-full" onclick="openTablePreview('${r.id}')"><i data-lucide="table" class="w-4 h-4"></i> Pratinjau Tabel Laporan Kasat Mata</button>
           <button class="secondary-btn text-xs font-bold py-3 w-full" onclick="openEditReport('${r.id}')"><i data-lucide="edit-3" class="w-4 h-4"></i> Edit / Verifikasi Status Validasi</button>
           
-          ${r.docUrl ? `
-            <div class="p-3.5 bg-blue-50 border border-blue-200 rounded-xl space-y-2.5">
-              <p class="text-xs font-bold text-blue-900">Tautan Spreadsheet & Berkas PDF:</p>
-              <div class="flex gap-2">
-                <a href="${r.docUrl}" target="_blank" class="primary-btn text-xs font-bold py-2.5 flex-1 justify-center"><i data-lucide="external-link" class="w-4 h-4"></i> Buka Spreadsheet</a>
-                <a href="${pdfExportUrl}" target="_blank" class="secondary-btn text-xs font-bold py-2.5 flex-1 justify-center bg-emerald-100 text-emerald-800 hover:bg-emerald-200"><i data-lucide="download" class="w-4 h-4"></i> Unduh / Lihat PDF</a>
-              </div>
+          <div class="p-3.5 bg-blue-50 border border-blue-200 rounded-xl space-y-2.5">
+            <p class="text-xs font-bold text-blue-900">Akses Berkas Spreadsheet & PDF di Google Drive:</p>
+            <div class="flex gap-2">
+              <a href="${driveSearchUrl}" target="_blank" class="primary-btn text-xs font-bold py-2.5 flex-1 justify-center"><i data-lucide="external-link" class="w-4 h-4"></i> Cari Berkas di Drive</a>
+              <button class="secondary-btn text-xs font-bold py-2.5 flex-1 justify-center bg-emerald-100 text-emerald-800 hover:bg-emerald-200" onclick="openTablePreview('${r.id}')"><i data-lucide="file-text" class="w-4 h-4"></i> Lihat Tabel Pratinjau</button>
             </div>
-          ` : `<p class="text-xs text-slate-500 font-semibold bg-slate-50 p-2.5 rounded-lg border">Data laporan siap disinkronkan ke Spreadsheet dan Drive.</p>`}
+          </div>
 
           <button class="danger-btn text-xs font-bold py-3 w-full" onclick="deleteReportItem('${r.id}'); document.getElementById('detail-modal').classList.remove('open');">Hapus Laporan</button>
         </div>
@@ -2384,15 +2383,14 @@
         let sent = false;
         while (retries > 0 && !sent) {
           try {
-            const res = await fetch(APPS_SCRIPT_URL, { 
+            await fetch(APPS_SCRIPT_URL, { 
               method: 'POST', 
+              mode: 'no-cors',
+              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(r) 
             });
-            const resJson = await res.json();
-            if(resJson.status === 'success') {
-              r.docUrl = resJson.docUrl;
-              r.folderUrl = resJson.pdfUrl;
-            }
+            r.docUrl = `https://drive.google.com/drive/search?q=${encodeURIComponent(r.sampleCode)}`;
+            r.folderUrl = `https://drive.google.com/drive/search?q=${encodeURIComponent(r.sampleCode)}`;
             r.synced = true;
             await saveReportToDB(r);
             sent = true;
