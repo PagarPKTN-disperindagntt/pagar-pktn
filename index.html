@@ -2014,7 +2014,7 @@
           await saveReportToDB(reportData);
           form.reset(); resetAllDocUI(); currentStep = 1; updateWizard();
           switchPage('page-history');
-          showAppNotify("🚀 Laporan Berhasil Dikirim!", "Data pengawasan telah sukses diproses dan dikirim secara online ke Spreadsheet, Drive, dan Google Docs pusat.", "success");
+          showAppNotify("🚀 Laporan Berhasil Dikirim!", "Data pengawasan telah sukses diproses dan dikirim secara online ke Spreadsheet dan Drive pusat.", "success");
           return;
         } catch (err) {
           console.log("Kirim langsung gagal, fallback ke offline:", err);
@@ -2108,14 +2108,6 @@
       const r = reports.find(item => item.id === id);
       if (!r) return;
       document.getElementById('modal-title').textContent = `Sampel: ${r.sampleCode}`;
-      
-      let docxDownloadUrl = '#';
-      if (r.docUrl) {
-        const fileIdMatch = r.docUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
-        if (fileIdMatch && fileIdMatch[1]) {
-          docxDownloadUrl = `https://docs.google.com/document/d/${fileIdMatch[1]}/export?format=docx`;
-        }
-      }
 
       document.getElementById('modal-content').innerHTML = `
         <p class="text-sm font-medium"><b>Toko:</b> ${r.businessName} (${r.retailerAddress})</p>
@@ -2129,13 +2121,13 @@
           
           ${r.docUrl ? `
             <div class="p-3.5 bg-blue-50 border border-blue-200 rounded-xl space-y-2.5">
-              <p class="text-xs font-bold text-blue-900">Dokumen Google Docs & Unduh Word:</p>
+              <p class="text-xs font-bold text-blue-900">Tautan Spreadsheet & Ekspor PDF:</p>
               <div class="flex gap-2">
-                <a href="${r.docUrl}" target="_blank" class="primary-btn text-xs font-bold py-2.5 flex-1 justify-center"><i data-lucide="external-link" class="w-4 h-4"></i> Buka Docs</a>
-                <a href="${docxDownloadUrl}" class="secondary-btn text-xs font-bold py-2.5 flex-1 justify-center bg-emerald-100 text-emerald-800 hover:bg-emerald-200"><i data-lucide="download" class="w-4 h-4"></i> Download .docx</a>
+                <a href="${r.docUrl}" target="_blank" class="primary-btn text-xs font-bold py-2.5 flex-1 justify-center"><i data-lucide="external-link" class="w-4 h-4"></i> Buka Spreadsheet</a>
+                <button class="secondary-btn text-xs font-bold py-2.5 flex-1 justify-center bg-emerald-100 text-emerald-800 hover:bg-emerald-200" onclick="openTablePreview('${r.id}')"><i data-lucide="file-text" class="w-4 h-4"></i> Lihat Tabel PDF</button>
               </div>
             </div>
-          ` : `<p class="text-xs text-amber-600 font-semibold bg-amber-50 p-2.5 rounded-lg border border-amber-200">⚠️ Dokumen Google Docs otomatis tergenerate saat data disinkronkan ke Cloud.</p>`}
+          ` : `<p class="text-xs text-slate-500 font-semibold bg-slate-50 p-2.5 rounded-lg border">Data laporan siap disinkronkan ke Spreadsheet dan Drive.</p>`}
 
           <button class="danger-btn text-xs font-bold py-3 w-full" onclick="deleteReportItem('${r.id}'); document.getElementById('detail-modal').classList.remove('open');">Hapus Laporan</button>
         </div>
@@ -2144,7 +2136,7 @@
       lucide.createIcons();
     };
 
-    // --- FITUR PRATINJAU TABEL KASAT MATA LENGKAP ---
+    // --- FITUR PRATINJAU TABEL KASAT MATA LENGKAP (BAGIAN C & D LENGKAP) ---
     window.openTablePreview = function(id) {
       const r = reports.find(item => item.id === id);
       if (!r) return;
@@ -2157,7 +2149,7 @@
       const isAda = (opt) => (opt && opt.includes('Ada')) ? '√' : '';
       const isTidak = (opt) => (!opt || opt.includes('Tidak') || opt === '') ? '√' : '';
 
-      document.getElementById('modal-title').textContent = `Pratinjau Tabel: ${r.sampleCode}`;
+      document.getElementById('modal-title').textContent = `Pratinjau Tabel Lengkap: ${r.sampleCode}`;
       document.getElementById('modal-content').innerHTML = `
         <div class="space-y-2 text-xs">
           <div class="p-3 bg-slate-50 rounded-xl border space-y-1">
@@ -2172,71 +2164,108 @@
             <table class="preview-table">
               <thead>
                 <tr>
-                  <th style="width:20%">Dasar Hukum</th>
-                  <th style="width:20%">Parameter</th>
-                  <th style="width:25%">Penandaan</th>
-                  <th style="width:5%">Ada</th>
-                  <th style="width:5%">Tidak</th>
-                  <th style="width:25%">Keterangan</th>
+                  <th style="width:20%">Bagian / Aspek</th>
+                  <th style="width:30%">Parameter Pengawasan</th>
+                  <th style="width:10%">Ada</th>
+                  <th style="width:10%">Tidak</th>
+                  <th style="width:30%">Keterangan</th>
                 </tr>
               </thead>
               <tbody>
+                <!-- BAGIAN C -->
                 <tr>
-                  <td rowspan="8" class="text-[10px] text-slate-500">UU No.8/1999, Permendag 69/2018, Permendag 25/2021, Permendag 33/2025</td>
-                  <td>Standar SNI & LSpro</td>
-                  <td>Tanda/No SNI & Kode LSpro</td>
-                  <td class="text-center font-bold">${isAda(a.sniBarangOpt) || isAda(a.lsproBarangOpt)}</td>
-                  <td class="text-center font-bold">${isTidak(a.sniBarangOpt) && isTidak(a.lsproBarangOpt) ? '√' : ''}</td>
-                  <td>SNI: ${a.sniBarangNum || '-'}<br>LSpro: ${a.lsproBarangNum || '-'}</td>
-                </tr>
-                <tr>
-                  <td>Standar NPB</td>
-                  <td>Nomor NPB</td>
-                  <td class="text-center font-bold">${isAda(a.npbBarangOpt)}</td>
-                  <td class="text-center font-bold">${isTidak(a.npbBarangOpt)}</td>
-                  <td>NPB: ${a.npbBarangNum || '-'}</td>
-                </tr>
-                <tr>
-                  <td>Label (Barang)</td>
-                  <td>Merek Barang</td>
-                  <td class="text-center font-bold">${isAda(l.brgMerekOpt)}</td>
-                  <td class="text-center font-bold">${isTidak(l.brgMerekOpt)}</td>
-                  <td>${l.brgMerekVal || r.brand}</td>
-                </tr>
-                <tr>
-                  <td>Label (Barang)</td>
-                  <td>Listrik / Spesifikasi</td>
-                  <td class="text-center font-bold">${isAda(l.brgListrikOpt)}</td>
-                  <td class="text-center font-bold">${isTidak(l.brgListrikOpt)}</td>
-                  <td>${l.brgListrikVal || '-'}</td>
-                </tr>
-                <tr>
-                  <td>Label (Barang)</td>
-                  <td>Negara Pembuat</td>
-                  <td class="text-center font-bold">${isAda(l.brgNegaraOpt)}</td>
-                  <td class="text-center font-bold">${isTidak(l.brgNegaraOpt)}</td>
-                  <td>${l.brgNegaraVal || '-'}</td>
-                </tr>
-                <tr>
-                  <td>Label (Kemasan)</td>
-                  <td>Merek Kemasan</td>
-                  <td class="text-center font-bold">${isAda(l.kemMerekOpt)}</td>
-                  <td class="text-center font-bold">${isTidak(l.kemMerekOpt)}</td>
-                  <td>${l.kemMerekVal || r.brand}</td>
-                </tr>
-                <tr>
-                  <td>Petunjuk Penggunaan</td>
-                  <td>Manual Book & Registrasi</td>
+                  <td rowspan="5" class="font-bold bg-slate-100">Bagian C (Petunjuk Penggunaan)</td>
+                  <td>1. Nama & alamat Produsen/Importir</td>
                   <td class="text-center font-bold">${isAda(c.c1_status)}</td>
                   <td class="text-center font-bold">${isTidak(c.c1_status)}</td>
-                  <td>Keterangan: ${c.c1_ket || '-'}</td>
+                  <td>${c.c1_ket || '-'}</td>
                 </tr>
                 <tr>
-                  <td>Jaminan Garansi</td>
-                  <td>Purna Jual Min. 1 Thn</td>
+                  <td>2. Merek, jenis, tipe/model produk</td>
+                  <td class="text-center font-bold">${isAda(c.c2_status)}</td>
+                  <td class="text-center font-bold">${isTidak(c.c2_status)}</td>
+                  <td>${c.c2_ket || '-'}</td>
+                </tr>
+                <tr>
+                  <td>3. Spesifikasi produk</td>
+                  <td class="text-center font-bold">${isAda(c.c3_status)}</td>
+                  <td class="text-center font-bold">${isTidak(c.c3_status)}</td>
+                  <td>${c.c3_ket || '-'}</td>
+                </tr>
+                <tr>
+                  <td>4. Keterangan cara penggunaan sesuai fungsi</td>
+                  <td class="text-center font-bold">${isAda(c.c4_status)}</td>
+                  <td class="text-center font-bold">${isTidak(c.c4_status)}</td>
+                  <td>${c.c4_ket || '-'}</td>
+                </tr>
+                <tr>
+                  <td>5. Nomor tanda pendaftaran petunjuk penggunaan</td>
+                  <td class="text-center font-bold">${isAda(c.c5_status)}</td>
+                  <td class="text-center font-bold">${isTidak(c.c5_status)}</td>
+                  <td>${c.c5_ket || '-'}</td>
+                </tr>
+
+                <!-- BAGIAN D -->
+                <tr>
+                  <td rowspan="10" class="font-bold bg-slate-100">Bagian D (Garansi Purna Jual)</td>
+                  <td>1. Nama & alamat Produsen/Importir</td>
                   <td class="text-center font-bold">${isAda(d.d1_status)}</td>
                   <td class="text-center font-bold">${isTidak(d.d1_status)}</td>
-                  <td>Keterangan: ${d.d1_ket || '-'}</td>
+                  <td>${d.d1_ket || '-'}</td>
+                </tr>
+                <tr>
+                  <td>2. Nama & alamat pusat layanan (min. 6/10 kota)</td>
+                  <td class="text-center font-bold">${isAda(d.d2_status)}</td>
+                  <td class="text-center font-bold">${isTidak(d.d2_status)}</td>
+                  <td>${d.d2_ket || '-'}</td>
+                </tr>
+                <tr>
+                  <td>3. Masa jaminan min. 1 tahun sejak pembelian</td>
+                  <td class="text-center font-bold">${isAda(d.d3_status)}</td>
+                  <td class="text-center font-bold">${isTidak(d.d3_status)}</td>
+                  <td>${d.d3_ket || '-'}</td>
+                </tr>
+                <tr>
+                  <td>4. Syarat, prosedur klaim, & perbaikan gratis</td>
+                  <td class="text-center font-bold">${isAda(d.d4_status)}</td>
+                  <td class="text-center font-bold">${isTidak(d.d4_status)}</td>
+                  <td>${d.d4_ket || '-'}</td>
+                </tr>
+                <tr>
+                  <td>5. Cakupan atau daftar kerusakan dijamin</td>
+                  <td class="text-center font-bold">${isAda(d.d5_status)}</td>
+                  <td class="text-center font-bold">${isTidak(d.d5_status)}</td>
+                  <td>${d.d5_ket || '-'}</td>
+                </tr>
+                <tr>
+                  <td>6. Nomor Telepon pengaduan konsumen</td>
+                  <td class="text-center font-bold">${isAda(d.d6_status)}</td>
+                  <td class="text-center font-bold">${isTidak(d.d6_status)}</td>
+                  <td>${d.d6_ket || '-'}</td>
+                </tr>
+                <tr>
+                  <td>7. Data identitas unik Produk Elektronik/Telematika</td>
+                  <td class="text-center font-bold">${isAda(d.d7_status)}</td>
+                  <td class="text-center font-bold">${isTidak(d.d7_status)}</td>
+                  <td>${d.d7_ket || '-'}</td>
+                </tr>
+                <tr>
+                  <td>8. Ketersediaan suku cadang</td>
+                  <td class="text-center font-bold">${isAda(d.d8_status)}</td>
+                  <td class="text-center font-bold">${isTidak(d.d8_status)}</td>
+                  <td>${d.d8_ket || '-'}</td>
+                </tr>
+                <tr>
+                  <td>9. Pergantian barang sejenis selama masa jaminan</td>
+                  <td class="text-center font-bold">${isAda(d.d9_status)}</td>
+                  <td class="text-center font-bold">${isTidak(d.d9_status)}</td>
+                  <td>${d.d9_ket || '-'}</td>
+                </tr>
+                <tr>
+                  <td>10. Nomor tanda pendaftaran petunjuk & kartu jaminan</td>
+                  <td class="text-center font-bold">${isAda(d.d10_status)}</td>
+                  <td class="text-center font-bold">${isTidak(d.d10_status)}</td>
+                  <td>${d.d10_ket || '-'}</td>
                 </tr>
               </tbody>
             </table>
