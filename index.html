@@ -793,7 +793,7 @@
     <section id="page-sync" class="page">
      <div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Cloud</p><h2 class="text-2xl font-black">Penyinkronan Data Optimal</h2></div>
      <div class="section-card space-y-5">
-      <p class="text-sm text-slate-600 leading-relaxed font-medium">Kirim laporan offline ke Google Sheets, Google Docs & Drive pusat dengan sistem antrean teroptimasi dan penanganan percobaan ulang (*auto-retry*).</p>
+      <p class="text-sm text-slate-600 leading-relaxed font-medium">Kirim laporan offline ke Google Sheets & Drive pusat dengan sistem antrean teroptimasi dan penanganan percobaan ulang (*auto-retry*).</p>
       <div id="sync-status-box" class="p-4 bg-blue-50 border border-blue-200 rounded-xl text-xs font-bold text-blue-800">
        Status Antrean: Memeriksa...
       </div>
@@ -916,7 +916,7 @@
         <i data-lucide="table" class="w-5 h-5"></i> BAB IV: Pratinjau Tabel & Sinkronisasi Cloud
        </div>
        <p class="text-slate-600 leading-relaxed font-medium">
-        Hasil pengawasan dapat diverifikasi melalui menu **Riwayat &rarr; Detail &rarr; Pratinjau Tabel Laporan Kasat Mata** yang formatnya telah disesuaikan persis dengan dokumen resmi Google Docs. Data offline yang tersimpan sementara dapat langsung disinkronkan ke server pusat secara optimal menggunakan tombol sinkronisasi begitu jaringan internet tersedia.
+        Hasil pengawasan dapat diverifikasi melalui menu **Riwayat &rarr; Detail &rarr; Pratinjau Tabel Laporan Kasat Mata** yang formatnya telah disesuaikan persis dengan dokumen resmi Spreadsheet. Data offline yang tersimpan sementara dapat langsung disinkronkan ke server pusat secara optimal menggunakan tombol sinkronisasi begitu jaringan internet tersedia.
        </p>
       </div>
      </div>
@@ -2004,17 +2004,20 @@
 
       if (navigator.onLine) {
         try {
-          await fetch(APPS_SCRIPT_URL, {
+          const res = await fetch(APPS_SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(reportData)
           });
+          const resJson = await res.json();
+          if(resJson.status === 'success') {
+            reportData.docUrl = resJson.docUrl;
+            reportData.folderUrl = resJson.pdfUrl;
+          }
           reportData.synced = true;
           await saveReportToDB(reportData);
           form.reset(); resetAllDocUI(); currentStep = 1; updateWizard();
           switchPage('page-history');
-          showAppNotify("🚀 Laporan Berhasil Dikirim!", "Data pengawasan telah sukses diproses dan dikirim secara online ke Spreadsheet dan Drive pusat.", "success");
+          showAppNotify("🚀 Laporan Berhasil Dikirim!", "Data pengawasan telah sukses diproses dan dikirim ke Spreadsheet dan Drive pusat.", "success");
           return;
         } catch (err) {
           console.log("Kirim langsung gagal, fallback ke offline:", err);
@@ -2109,6 +2112,8 @@
       if (!r) return;
       document.getElementById('modal-title').textContent = `Sampel: ${r.sampleCode}`;
 
+      let pdfExportUrl = r.folderUrl || '#';
+
       document.getElementById('modal-content').innerHTML = `
         <p class="text-sm font-medium"><b>Toko:</b> ${r.businessName} (${r.retailerAddress})</p>
         <p class="text-sm font-medium"><b>Barang:</b> ${r.productType} - ${r.brand}</p>
@@ -2121,10 +2126,10 @@
           
           ${r.docUrl ? `
             <div class="p-3.5 bg-blue-50 border border-blue-200 rounded-xl space-y-2.5">
-              <p class="text-xs font-bold text-blue-900">Tautan Spreadsheet & Ekspor PDF:</p>
+              <p class="text-xs font-bold text-blue-900">Tautan Spreadsheet & Berkas PDF:</p>
               <div class="flex gap-2">
                 <a href="${r.docUrl}" target="_blank" class="primary-btn text-xs font-bold py-2.5 flex-1 justify-center"><i data-lucide="external-link" class="w-4 h-4"></i> Buka Spreadsheet</a>
-                <button class="secondary-btn text-xs font-bold py-2.5 flex-1 justify-center bg-emerald-100 text-emerald-800 hover:bg-emerald-200" onclick="openTablePreview('${r.id}')"><i data-lucide="file-text" class="w-4 h-4"></i> Lihat Tabel PDF</button>
+                <a href="${pdfExportUrl}" target="_blank" class="secondary-btn text-xs font-bold py-2.5 flex-1 justify-center bg-emerald-100 text-emerald-800 hover:bg-emerald-200"><i data-lucide="download" class="w-4 h-4"></i> Unduh / Lihat PDF</a>
               </div>
             </div>
           ` : `<p class="text-xs text-slate-500 font-semibold bg-slate-50 p-2.5 rounded-lg border">Data laporan siap disinkronkan ke Spreadsheet dan Drive.</p>`}
@@ -2136,7 +2141,7 @@
       lucide.createIcons();
     };
 
-    // --- FITUR PRATINJAU TABEL KASAT MATA LENGKAP (BAGIAN C & D LENGKAP) ---
+    // --- FITUR PRATINJAU TABEL KASAT MATA LENGKAP ---
     window.openTablePreview = function(id) {
       const r = reports.find(item => item.id === id);
       if (!r) return;
@@ -2379,12 +2384,15 @@
         let sent = false;
         while (retries > 0 && !sent) {
           try {
-            await fetch(APPS_SCRIPT_URL, { 
+            const res = await fetch(APPS_SCRIPT_URL, { 
               method: 'POST', 
-              mode: 'no-cors', 
-              headers: { 'Content-Type': 'application/json' }, 
               body: JSON.stringify(r) 
             });
+            const resJson = await res.json();
+            if(resJson.status === 'success') {
+              r.docUrl = resJson.docUrl;
+              r.folderUrl = resJson.pdfUrl;
+            }
             r.synced = true;
             await saveReportToDB(r);
             sent = true;
