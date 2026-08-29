@@ -1855,8 +1855,8 @@
         },
         labelData,
     bagianC: {
-            c1_status: "Ada",
-            c1_ket: document.getElementById('p-merek') ? document.getElementById('p-merek').value : "-",
+            c1_status: document.getElementById('petunjuk-opt') ? document.getElementById('petunjuk-opt').value : "Ada",
+            c1_ket: document.getElementById('p-prod') ? document.getElementById('p-prod').value : (document.getElementById('p-merek') ? document.getElementById('p-merek').value : "-"),
             c2_status: "Ada",
             c2_ket: document.getElementById('p-spek') ? document.getElementById('p-spek').value : "-",
             c3_status: "Ada",
@@ -1885,7 +1885,7 @@
             d8_ket: document.getElementById('g-ganti') ? document.getElementById('g-ganti').value : "-",
             d9_status: document.getElementById('g-reg-opt') ? document.getElementById('g-reg-opt').value : "Ada",
             d9_ket: document.getElementById('g-reg-val') ? document.getElementById('g-reg-val').value : "-",
-            d10_status: "Ada",
+            d10_status: document.getElementById('garansi-master-opt') ? document.getElementById('garansi-master-opt').value : "Ada",
             d10_ket: document.getElementById('g-prod') ? document.getElementById('g-prod').value : "-"
         },
         photos: { toko, etalase, pel1, pel2, docSniBrg, docSniKem, docLsproBrg, docLsproKem, docNpbBrg, docNpbKem, docLabelListrik, docPetunjuk, docGaransi },
