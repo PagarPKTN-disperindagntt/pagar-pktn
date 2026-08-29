@@ -1159,7 +1159,7 @@
     let isFormSubmitting = false; 
     const DB_NAME = 'PagarPKTNDB'; 
     const STORE_NAME = 'reports';
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQ2NP-4B7mKQBnxcSmv9jqdod_SpsnkuXvoJce0uiCeVe7rv94ETY9zZGvxMDRdPII/exec";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwhRNWsgSWBJw_6t_PPkvmiWMoJDaL1QN5lox9TzBdIUczHsP8IlpId_4Il-umJpv6_/exec";
 
     function initDB() {
       return new Promise((resolve, reject) => {
@@ -2004,16 +2004,15 @@
 
       if (navigator.onLine) {
         try {
-          await fetch(APPS_SCRIPT_URL, {
+          const res = await fetch(APPS_SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(reportData)
           });
-          
-          reportData.docUrl = `https://drive.google.com/drive/search?q=${encodeURIComponent(reportData.sampleCode)}`;
-          reportData.folderUrl = `https://drive.google.com/drive/search?q=${encodeURIComponent(reportData.sampleCode)}`;
-          
+          const resJson = await res.json();
+          if(resJson.status === 'success') {
+            reportData.docUrl = resJson.ssUrl;
+            reportData.folderUrl = resJson.pdfUrl;
+          }
           reportData.synced = true;
           await saveReportToDB(reportData);
           form.reset(); resetAllDocUI(); currentStep = 1; updateWizard();
@@ -2113,7 +2112,8 @@
       if (!r) return;
       document.getElementById('modal-title').textContent = `Sampel: ${r.sampleCode}`;
 
-      let driveSearchUrl = r.docUrl || `https://drive.google.com/drive/search?q=${encodeURIComponent(r.sampleCode)}`;
+      let spreadsheetUrl = r.docUrl || `https://drive.google.com/drive/search?q=${encodeURIComponent(r.sampleCode)}`;
+      let pdfUrl = r.folderUrl || `https://drive.google.com/drive/search?q=${encodeURIComponent(r.sampleCode)}`;
 
       document.getElementById('modal-content').innerHTML = `
         <p class="text-sm font-medium"><b>Toko:</b> ${r.businessName} (${r.retailerAddress})</p>
@@ -2126,10 +2126,10 @@
           <button class="secondary-btn text-xs font-bold py-3 w-full" onclick="openEditReport('${r.id}')"><i data-lucide="edit-3" class="w-4 h-4"></i> Edit / Verifikasi Status Validasi</button>
           
           <div class="p-3.5 bg-blue-50 border border-blue-200 rounded-xl space-y-2.5">
-            <p class="text-xs font-bold text-blue-900">Akses Berkas Spreadsheet & PDF di Google Drive:</p>
+            <p class="text-xs font-bold text-blue-900">Akses Berkas Spreadsheet & Berkas PDF:</p>
             <div class="flex gap-2">
-              <a href="${driveSearchUrl}" target="_blank" class="primary-btn text-xs font-bold py-2.5 flex-1 justify-center"><i data-lucide="external-link" class="w-4 h-4"></i> Cari Berkas di Drive</a>
-              <button class="secondary-btn text-xs font-bold py-2.5 flex-1 justify-center bg-emerald-100 text-emerald-800 hover:bg-emerald-200" onclick="openTablePreview('${r.id}')"><i data-lucide="file-text" class="w-4 h-4"></i> Lihat Tabel Pratinjau</button>
+              <a href="${spreadsheetUrl}" target="_blank" class="primary-btn text-xs font-bold py-2.5 flex-1 justify-center"><i data-lucide="external-link" class="w-4 h-4"></i> Buka Spreadsheet</a>
+              <a href="${pdfUrl}" target="_blank" class="secondary-btn text-xs font-bold py-2.5 flex-1 justify-center bg-emerald-100 text-emerald-800 hover:bg-emerald-200"><i data-lucide="download" class="w-4 h-4"></i> Unduh / Lihat PDF</a>
             </div>
           </div>
 
@@ -2150,8 +2150,8 @@
       const c = r.bagianC || {};
       const d = r.bagianD || {};
 
-      const isAda = (opt) => (opt && opt.includes('Ada')) ? '√' : '';
-      const isTidak = (opt) => (!opt || opt.includes('Tidak') || opt === '') ? '√' : '';
+      const isAda = (opt) => (opt && String(opt).includes('Ada')) ? '√' : '';
+      const isTidak = (opt) => (!opt || String(opt).includes('Tidak') || opt === '') ? '√' : '';
 
       document.getElementById('modal-title').textContent = `Pratinjau Tabel Lengkap: ${r.sampleCode}`;
       document.getElementById('modal-content').innerHTML = `
@@ -2168,105 +2168,173 @@
             <table class="preview-table">
               <thead>
                 <tr>
-                  <th style="width:20%">Bagian / Aspek</th>
-                  <th style="width:30%">Parameter Pengawasan</th>
-                  <th style="width:10%">Ada</th>
-                  <th style="width:10%">Tidak</th>
-                  <th style="width:30%">Keterangan</th>
+                  <th style="width:20%">Dasar Hukum</th>
+                  <th style="width:25%">Parameter Pengawasan</th>
+                  <th style="width:25%">Keterangan Penandaan</th>
+                  <th style="width:5%">Ada</th>
+                  <th style="width:5%">Tidak</th>
+                  <th style="width:20%">Keterangan</th>
                 </tr>
               </thead>
               <tbody>
-                <!-- BAGIAN C -->
+                <!-- Bagian A & B -->
+                <tr>
+                  <td rowspan="7" class="text-[10px] text-slate-500">UU No.8/1999, Permendag 69/2018, 25/2021, 33/2025</td>
+                  <td>Standar SNI & LSpro</td>
+                  <td>Tanda/No SNI & Kode LSpro</td>
+                  <td class="text-center font-bold">${isAda(a.sniBarangOpt) || isAda(a.lsproBarangOpt)}</td>
+                  <td class="text-center font-bold">${isTidak(a.sniBarangOpt) && isTidak(a.lsproBarangOpt) ? '√' : ''}</td>
+                  <td>SNI: ${a.sniBarangNum || '-'}<br>LSpro: ${a.lsproBarangNum || '-'}</td>
+                </tr>
+                <tr>
+                  <td>Standar NPB</td>
+                  <td>Nomor NPB</td>
+                  <td class="text-center font-bold">${isAda(a.npbBarangOpt)}</td>
+                  <td class="text-center font-bold">${isTidak(a.npbBarangOpt)}</td>
+                  <td>NPB: ${a.npbBarangNum || '-'}</td>
+                </tr>
+                <tr>
+                  <td>Label (Barang)</td>
+                  <td>Merek Barang</td>
+                  <td class="text-center font-bold">${isAda(l.brgMerekOpt)}</td>
+                  <td class="text-center font-bold">${isTidak(l.brgMerekOpt)}</td>
+                  <td>${l.brgMerekVal || r.brand}</td>
+                </tr>
+                <tr>
+                  <td>Label (Barang)</td>
+                  <td>Spesifikasi / Listrik</td>
+                  <td class="text-center font-bold">${isAda(l.brgListrikOpt)}</td>
+                  <td class="text-center font-bold">${isTidak(l.brgListrikOpt)}</td>
+                  <td>${l.brgListrikVal || '-'}</td>
+                </tr>
+                <tr>
+                  <td>Label (Barang)</td>
+                  <td>Negara Pembuat</td>
+                  <td class="text-center font-bold">${isAda(l.brgNegaraOpt)}</td>
+                  <td class="text-center font-bold">${isTidak(l.brgNegaraOpt)}</td>
+                  <td>${l.brgNegaraVal || '-'}</td>
+                </tr>
+                <tr>
+                  <td>Label (Kemasan)</td>
+                  <td>Merek Kemasan</td>
+                  <td class="text-center font-bold">${isAda(l.kemMerekOpt)}</td>
+                  <td class="text-center font-bold">${isTidak(l.kemMerekOpt)}</td>
+                  <td>${l.kemMerekVal || r.brand}</td>
+                </tr>
+                <tr>
+                  <td>Label (Kemasan)</td>
+                  <td>Produsen / Importir</td>
+                  <td class="text-center font-bold">${l.producerName || l.importerName ? '√' : ''}</td>
+                  <td class="text-center font-bold">${!l.producerName && !l.importerName ? '√' : ''}</td>
+                  <td>Produsen: ${l.producerName || '-'} (${l.producerAddr || '-'})<br>Importir: ${l.importerName || '-'} (${l.importerAddr || '-'})</td>
+                </tr>
+
+                <!-- Bagian C -->
                 <tr>
                   <td rowspan="5" class="font-bold bg-slate-100">Bagian C (Petunjuk Penggunaan)</td>
                   <td>1. Nama & alamat Produsen/Importir</td>
+                  <td>Petunjuk Penggunaan</td>
                   <td class="text-center font-bold">${isAda(c.c1_status)}</td>
                   <td class="text-center font-bold">${isTidak(c.c1_status)}</td>
                   <td>${c.c1_ket || '-'}</td>
                 </tr>
                 <tr>
-                  <td>2. Merek, jenis, tipe/model produk</td>
+                  <td>2. Merek, jenis, tipe/model</td>
+                  <td>Petunjuk Penggunaan</td>
                   <td class="text-center font-bold">${isAda(c.c2_status)}</td>
                   <td class="text-center font-bold">${isTidak(c.c2_status)}</td>
                   <td>${c.c2_ket || '-'}</td>
                 </tr>
                 <tr>
                   <td>3. Spesifikasi produk</td>
+                  <td>Petunjuk Penggunaan</td>
                   <td class="text-center font-bold">${isAda(c.c3_status)}</td>
                   <td class="text-center font-bold">${isTidak(c.c3_status)}</td>
                   <td>${c.c3_ket || '-'}</td>
                 </tr>
                 <tr>
-                  <td>4. Keterangan cara penggunaan sesuai fungsi</td>
+                  <td>4. Cara penggunaan sesuai fungsi</td>
+                  <td>Petunjuk Penggunaan</td>
                   <td class="text-center font-bold">${isAda(c.c4_status)}</td>
                   <td class="text-center font-bold">${isTidak(c.c4_status)}</td>
                   <td>${c.c4_ket || '-'}</td>
                 </tr>
                 <tr>
-                  <td>5. Nomor tanda pendaftaran petunjuk penggunaan</td>
+                  <td>5. Nomor tanda pendaftaran petunjuk</td>
+                  <td>Petunjuk Penggunaan</td>
                   <td class="text-center font-bold">${isAda(c.c5_status)}</td>
                   <td class="text-center font-bold">${isTidak(c.c5_status)}</td>
                   <td>${c.c5_ket || '-'}</td>
                 </tr>
 
-                <!-- BAGIAN D -->
+                <!-- Bagian D -->
                 <tr>
                   <td rowspan="10" class="font-bold bg-slate-100">Bagian D (Garansi Purna Jual)</td>
                   <td>1. Nama & alamat Produsen/Importir</td>
+                  <td>Kartu Jaminan</td>
                   <td class="text-center font-bold">${isAda(d.d1_status)}</td>
                   <td class="text-center font-bold">${isTidak(d.d1_status)}</td>
                   <td>${d.d1_ket || '-'}</td>
                 </tr>
                 <tr>
-                  <td>2. Nama & alamat pusat layanan (min. 6/10 kota)</td>
+                  <td>2. Pusat layanan (min. 6/10 kota)</td>
+                  <td>Kartu Jaminan</td>
                   <td class="text-center font-bold">${isAda(d.d2_status)}</td>
                   <td class="text-center font-bold">${isTidak(d.d2_status)}</td>
                   <td>${d.d2_ket || '-'}</td>
                 </tr>
                 <tr>
-                  <td>3. Masa jaminan min. 1 tahun sejak pembelian</td>
+                  <td>3. Masa jaminan min. 1 tahun</td>
+                  <td>Kartu Jaminan</td>
                   <td class="text-center font-bold">${isAda(d.d3_status)}</td>
                   <td class="text-center font-bold">${isTidak(d.d3_status)}</td>
                   <td>${d.d3_ket || '-'}</td>
                 </tr>
                 <tr>
-                  <td>4. Syarat, prosedur klaim, & perbaikan gratis</td>
+                  <td>4. Syarat, prosedur klaim & perbaikan</td>
+                  <td>Kartu Jaminan</td>
                   <td class="text-center font-bold">${isAda(d.d4_status)}</td>
                   <td class="text-center font-bold">${isTidak(d.d4_status)}</td>
                   <td>${d.d4_ket || '-'}</td>
                 </tr>
                 <tr>
-                  <td>5. Cakupan atau daftar kerusakan dijamin</td>
+                  <td>5. Cakupan kerusakan dijamin</td>
+                  <td>Kartu Jaminan</td>
                   <td class="text-center font-bold">${isAda(d.d5_status)}</td>
                   <td class="text-center font-bold">${isTidak(d.d5_status)}</td>
                   <td>${d.d5_ket || '-'}</td>
                 </tr>
                 <tr>
-                  <td>6. Nomor Telepon pengaduan konsumen</td>
+                  <td>6. Nomor telepon pengaduan</td>
+                  <td>Kartu Jaminan</td>
                   <td class="text-center font-bold">${isAda(d.d6_status)}</td>
                   <td class="text-center font-bold">${isTidak(d.d6_status)}</td>
                   <td>${d.d6_ket || '-'}</td>
                 </tr>
                 <tr>
-                  <td>7. Data identitas unik Produk Elektronik/Telematika</td>
+                  <td>7. Identitas unik produk (SN/IMEI)</td>
+                  <td>Kartu Jaminan</td>
                   <td class="text-center font-bold">${isAda(d.d7_status)}</td>
                   <td class="text-center font-bold">${isTidak(d.d7_status)}</td>
                   <td>${d.d7_ket || '-'}</td>
                 </tr>
                 <tr>
                   <td>8. Ketersediaan suku cadang</td>
+                  <td>Kartu Jaminan</td>
                   <td class="text-center font-bold">${isAda(d.d8_status)}</td>
                   <td class="text-center font-bold">${isTidak(d.d8_status)}</td>
                   <td>${d.d8_ket || '-'}</td>
                 </tr>
                 <tr>
-                  <td>9. Pergantian barang sejenis selama masa jaminan</td>
+                  <td>9. Pergantian barang sejenis</td>
+                  <td>Kartu Jaminan</td>
                   <td class="text-center font-bold">${isAda(d.d9_status)}</td>
                   <td class="text-center font-bold">${isTidak(d.d9_status)}</td>
                   <td>${d.d9_ket || '-'}</td>
                 </tr>
                 <tr>
-                  <td>10. Nomor tanda pendaftaran petunjuk & kartu jaminan</td>
+                  <td>10. Nomor tanda pendaftaran garansi</td>
+                  <td>Kartu Jaminan</td>
                   <td class="text-center font-bold">${isAda(d.d10_status)}</td>
                   <td class="text-center font-bold">${isTidak(d.d10_status)}</td>
                   <td>${d.d10_ket || '-'}</td>
@@ -2383,14 +2451,15 @@
         let sent = false;
         while (retries > 0 && !sent) {
           try {
-            await fetch(APPS_SCRIPT_URL, { 
+            const res = await fetch(APPS_SCRIPT_URL, { 
               method: 'POST', 
-              mode: 'no-cors',
-              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(r) 
             });
-            r.docUrl = `https://drive.google.com/drive/search?q=${encodeURIComponent(r.sampleCode)}`;
-            r.folderUrl = `https://drive.google.com/drive/search?q=${encodeURIComponent(r.sampleCode)}`;
+            const resJson = await res.json();
+            if(resJson.status === 'success') {
+              r.docUrl = resJson.ssUrl;
+              r.folderUrl = resJson.pdfUrl;
+            }
             r.synced = true;
             await saveReportToDB(r);
             sent = true;
