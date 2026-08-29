@@ -464,169 +464,177 @@
            </select>
            <input id="label-kem-negara-val" class="field-control hidden mt-1" placeholder="Tuliskan negara...">
           </div>
+         </div>
+        </div>
+       </article>
+       <div class="flex gap-3">
+        <button type="button" class="secondary-btn w-1/2 py-4 font-bold text-sm" onclick="prevStep(3)">&larr; Sebelumnya</button>
+        <button type="button" class="primary-btn w-1/2 py-4 font-bold text-sm" onclick="nextStep(3)">Selanjutnya: Bagian C & D &rarr;</button>
+       </div>
+      </div>
 
       <!-- STEP 4: Bagian C & D (Lengkap & Utuh) -->
-<div class="wizard-step" data-step="4">
- <article class="section-card space-y-5">
-  <div class="section-heading">
-   <div class="section-icon"><i data-lucide="book-open" class="w-5 h-5"></i></div>
-   <div class="flex-1"><h3 class="font-extrabold text-base">Bagian C & D: Petunjuk & Garansi</h3></div>
-  </div>
+      <div class="wizard-step" data-step="4">
+       <article class="section-card space-y-5">
+        <div class="section-heading">
+         <div class="section-icon"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+         <div class="flex-1"><h3 class="font-extrabold text-base">Bagian C & D: Petunjuk & Garansi</h3></div>
+        </div>
 
-  <!-- BAGIAN C: PETUNJUK PENGGUNAAN -->
-  <div class="p-5 bg-slate-50 rounded-xl border space-y-4">
-   <h4 class="font-black text-xs uppercase text-blue-700 tracking-wider">Bagian C: Petunjuk Penggunaan</h4>
-   <div>
-    <label class="field-label">Petunjuk Penggunaan</label>
-    <select id="petunjuk-opt" class="field-control">
-     <option value="Ada">Ada</option>
-     <option value="Tidak ada" selected>Tidak ada</option>
-    </select>
-   </div>
+        <!-- BAGIAN C: PETUNJUK PENGGUNAAN -->
+        <div class="p-5 bg-slate-50 rounded-xl border space-y-4">
+         <h4 class="font-black text-xs uppercase text-blue-700 tracking-wider">Bagian C: Petunjuk Penggunaan</h4>
+         <div>
+          <label class="field-label">Petunjuk Penggunaan</label>
+          <select id="petunjuk-opt" class="field-control">
+           <option value="Ada">Ada</option>
+           <option value="Tidak ada" selected>Tidak ada</option>
+          </select>
+         </div>
 
-   <div id="petunjuk-sub-box" class="hidden space-y-4 pt-2">
-    <label class="doc-box" for="doc-petunjuk">
-     <input id="doc-petunjuk" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
-     <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto Petunjuk Penggunaan</span>
-    </label>
+         <div id="petunjuk-sub-box" class="hidden space-y-4 pt-2">
+          <label class="doc-box" for="doc-petunjuk">
+           <input id="doc-petunjuk" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+           <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto Petunjuk Penggunaan</span>
+          </label>
 
-    <!-- 1. Produsen / Importir -->
-    <div class="space-y-1.5 border-b pb-3">
-     <div class="flex items-center justify-between gap-3 text-sm">
-      <span class="font-bold">1. Nama dan alamat lengkap Produsen atau Importir</span>
-      <select id="p-prod" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select>
-     </div>
-     <input id="p-prod-ket" class="field-control text-xs mt-1" placeholder="Keterangan nama/alamat produsen/importir...">
-    </div>
+          <!-- 1. Produsen / Importir -->
+          <div class="space-y-1.5 border-b pb-3">
+           <div class="flex items-center justify-between gap-3 text-sm">
+            <span class="font-bold">1. Nama dan alamat lengkap Produsen atau Importir</span>
+            <select id="p-prod" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select>
+           </div>
+           <input id="p-prod-ket" class="field-control text-xs mt-1" placeholder="Keterangan nama/alamat produsen/importir...">
+          </div>
 
-    <!-- 2. Merek, Jenis, Tipe/Model -->
-    <div class="space-y-1.5 border-b pb-3">
-     <div class="flex items-center justify-between gap-3 text-sm">
-      <span class="font-bold">2. Merek, jenis, tipe dan/atau model produk</span>
-      <select id="p-merek" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select>
-     </div>
-     <input id="p-merek-ket" class="field-control text-xs mt-1" placeholder="Keterangan merek/jenis/tipe...">
-    </div>
+          <!-- 2. Merek, Jenis, Tipe/Model -->
+          <div class="space-y-1.5 border-b pb-3">
+           <div class="flex items-center justify-between gap-3 text-sm">
+            <span class="font-bold">2. Merek, jenis, tipe dan/atau model produk</span>
+            <select id="p-merek" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select>
+           </div>
+           <input id="p-merek-ket" class="field-control text-xs mt-1" placeholder="Keterangan merek/jenis/tipe...">
+          </div>
 
-    <!-- 3. Spesifikasi Produk -->
-    <div class="space-y-1.5 border-b pb-3">
-     <div class="flex items-center justify-between gap-3 text-sm">
-      <span class="font-bold">3. Spesifikasi produk</span>
-      <select id="p-spek" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select>
-     </div>
-     <input id="p-spek-ket" class="field-control text-xs mt-1" placeholder="Keterangan spesifikasi produk...">
-    </div>
+          <!-- 3. Spesifikasi Produk -->
+          <div class="space-y-1.5 border-b pb-3">
+           <div class="flex items-center justify-between gap-3 text-sm">
+            <span class="font-bold">3. Spesifikasi produk</span>
+            <select id="p-spek" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select>
+           </div>
+           <input id="p-spek-ket" class="field-control text-xs mt-1" placeholder="Keterangan spesifikasi produk...">
+          </div>
 
-    <!-- 4. Cara Penggunaan -->
-    <div class="space-y-1.5 border-b pb-3">
-     <div class="flex items-center justify-between gap-3 text-sm">
-      <span class="font-bold">4. Keterangan cara penggunaan sesuai fungsi produk</span>
-      <select id="p-cara" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select>
-     </div>
-     <input id="p-cara-ket" class="field-control text-xs mt-1" placeholder="Keterangan cara penggunaan...">
-    </div>
+          <!-- 4. Cara Penggunaan -->
+          <div class="space-y-1.5 border-b pb-3">
+           <div class="flex items-center justify-between gap-3 text-sm">
+            <span class="font-bold">4. Keterangan cara penggunaan sesuai fungsi produk</span>
+            <select id="p-cara" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select>
+           </div>
+           <input id="p-cara-ket" class="field-control text-xs mt-1" placeholder="Keterangan cara penggunaan...">
+          </div>
 
-    <!-- 5. Nomor Tanda Pendaftaran -->
-    <div class="space-y-1.5">
-     <div class="flex items-center justify-between gap-3 text-sm">
-      <span class="font-bold">5. Nomor tanda pendaftaran petunjuk penggunaan</span>
-      <select id="p-reg-opt" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select>
-     </div>
-     <input id="p-reg-val" class="field-control hidden mt-1.5 text-xs" placeholder="Nomor tanda pendaftaran...">
-    </div>
-   </div>
-  </div>
+          <!-- 5. Nomor Tanda Pendaftaran -->
+          <div class="space-y-1.5">
+           <div class="flex items-center justify-between gap-3 text-sm">
+            <span class="font-bold">5. Nomor tanda pendaftaran petunjuk penggunaan</span>
+            <select id="p-reg-opt" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select>
+           </div>
+           <input id="p-reg-val" class="field-control hidden mt-1.5 text-xs" placeholder="Nomor tanda pendaftaran...">
+          </div>
+         </div>
+        </div>
 
-  <!-- BAGIAN D: JAMINAN LAYANAN PURNA JUAL (GARANSI) -->
-  <div class="p-5 bg-slate-50 rounded-xl border space-y-4">
-   <h4 class="font-black text-xs uppercase text-blue-700 tracking-wider">Bagian D: Jaminan Layanan Purna Jual (Garansi)</h4>
-   <div>
-    <label class="field-label">Jaminan Layanan Purna Jual (Garansi)</label>
-    <select id="garansi-master-opt" class="field-control text-sm">
-     <option value="Ada">Ada</option>
-     <option value="Tidak" selected>Tidak</option>
-    </select>
-   </div>
+        <!-- BAGIAN D: JAMINAN LAYANAN PURNA JUAL (GARANSI) -->
+        <div class="p-5 bg-slate-50 rounded-xl border space-y-4">
+         <h4 class="font-black text-xs uppercase text-blue-700 tracking-wider">Bagian D: Jaminan Layanan Purna Jual (Garansi)</h4>
+         <div>
+          <label class="field-label">Jaminan Layanan Purna Jual (Garansi)</label>
+          <select id="garansi-master-opt" class="field-control text-sm">
+           <option value="Ada">Ada</option>
+           <option value="Tidak" selected>Tidak</option>
+          </select>
+         </div>
 
-   <div id="garansi-sub-box" class="hidden space-y-3.5 text-sm pt-2">
-    
-    <!-- 1 -->
-    <div class="space-y-1.5 border-b pb-3">
-     <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">1. Nama & alamat Produsen/Importir</span><select id="g-prod" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-     <input id="g-prod-ket" class="field-control mt-1 text-xs" placeholder="Keterangan nama & alamat...">
-    </div>
+         <div id="garansi-sub-box" class="hidden space-y-3.5 text-sm pt-2">
+          
+          <!-- 1 -->
+          <div class="space-y-1.5 border-b pb-3">
+           <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">1. Nama & alamat Produsen/Importir</span><select id="g-prod" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
+           <input id="g-prod-ket" class="field-control mt-1 text-xs" placeholder="Keterangan nama & alamat...">
+          </div>
 
-    <!-- 2 -->
-    <div class="space-y-1.5 border-b pb-3">
-     <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">2. Nama & alamat pusat layanan (min. 6/10 kota)</span><select id="g-sc" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-     <input id="g-sc-ket" class="field-control mt-1 text-xs" placeholder="Keterangan pusat layanan / kota...">
-    </div>
+          <!-- 2 -->
+          <div class="space-y-1.5 border-b pb-3">
+           <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">2. Nama & alamat pusat layanan (min. 6/10 kota)</span><select id="g-sc" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
+           <input id="g-sc-ket" class="field-control mt-1 text-xs" placeholder="Keterangan pusat layanan / kota...">
+          </div>
 
-    <!-- 3 -->
-    <div class="space-y-1.5 border-b pb-3">
-     <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">3. Masa jaminan min. 1 tahun sejak pembelian</span><select id="g-masa-opt" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-     <input id="g-masa-val" class="field-control mt-1.5 text-xs" placeholder="Keterangan masa garansi (cth: 1 Tahun)...">
-    </div>
+          <!-- 3 -->
+          <div class="space-y-1.5 border-b pb-3">
+           <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">3. Masa jaminan min. 1 tahun sejak pembelian</span><select id="g-masa-opt" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
+           <input id="g-masa-val" class="field-control mt-1.5 text-xs" placeholder="Keterangan masa garansi (cth: 1 Tahun)...">
+          </div>
 
-    <!-- 4 -->
-    <div class="space-y-1.5 border-b pb-3">
-     <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">4. Syarat, prosedur klaim, & perbaikan gratis</span><select id="g-syarat" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-     <input id="g-syarat-ket" class="field-control mt-1 text-xs" placeholder="Keterangan syarat & prosedur...">
-    </div>
+          <!-- 4 -->
+          <div class="space-y-1.5 border-b pb-3">
+           <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">4. Syarat, prosedur klaim, & perbaikan gratis</span><select id="g-syarat" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
+           <input id="g-syarat-ket" class="field-control mt-1 text-xs" placeholder="Keterangan syarat & prosedur...">
+          </div>
 
-    <!-- 5 -->
-    <div class="space-y-1.5 border-b pb-3">
-     <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">5. Cakupan atau daftar kerusakan dijamin</span><select id="g-cakupan" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-     <input id="g-cakupan-ket" class="field-control mt-1 text-xs" placeholder="Keterangan cakupan kerusakan...">
-    </div>
+          <!-- 5 -->
+          <div class="space-y-1.5 border-b pb-3">
+           <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">5. Cakupan atau daftar kerusakan dijamin</span><select id="g-cakupan" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
+           <input id="g-cakupan-ket" class="field-control mt-1 text-xs" placeholder="Keterangan cakupan kerusakan...">
+          </div>
 
-    <!-- 6 -->
-    <div class="space-y-1.5 border-b pb-3">
-     <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">6. Nomor Telepon pengaduan konsumen</span><select id="g-telp-opt" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-     <input id="g-telp-val" class="field-control mt-1.5 text-xs" placeholder="Nomor Telepon: 021-xxxxxxx">
-    </div>
+          <!-- 6 -->
+          <div class="space-y-1.5 border-b pb-3">
+           <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">6. Nomor Telepon pengaduan konsumen</span><select id="g-telp-opt" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
+           <input id="g-telp-val" class="field-control mt-1.5 text-xs" placeholder="Nomor Telepon: 021-xxxxxxx">
+          </div>
 
-    <!-- 7 -->
-    <div class="space-y-1.5 border-b pb-3">
-     <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">7. Data identitas unik Produk Elektronik/Telematika</span><select id="g-unik" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-     <input id="g-unik-ket" class="field-control mt-1 text-xs" placeholder="Keterangan identitas unik (SN/IMEI)...">
-    </div>
+          <!-- 7 -->
+          <div class="space-y-1.5 border-b pb-3">
+           <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">7. Data identitas unik Produk Elektronik/Telematika</span><select id="g-unik" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
+           <input id="g-unik-ket" class="field-control mt-1 text-xs" placeholder="Keterangan identitas unik (SN/IMEI)...">
+          </div>
 
-    <!-- 8 -->
-    <div class="space-y-1.5 border-b pb-3">
-     <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">8. Ketersediaan suku cadang</span><select id="g-spare" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-     <input id="g-spare-ket" class="field-control mt-1 text-xs" placeholder="Keterangan suku cadang...">
-    </div>
+          <!-- 8 -->
+          <div class="space-y-1.5 border-b pb-3">
+           <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">8. Ketersediaan suku cadang</span><select id="g-spare" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
+           <input id="g-spare-ket" class="field-control mt-1 text-xs" placeholder="Keterangan suku cadang...">
+          </div>
 
-    <!-- 9 -->
-    <div class="space-y-1.5 border-b pb-3">
-     <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">9. Pergantian barang sejenis selama masa jaminan</span><select id="g-ganti" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-     <input id="g-ganti-ket" class="field-control mt-1 text-xs" placeholder="Keterangan pergantian barang...">
-    </div>
+          <!-- 9 -->
+          <div class="space-y-1.5 border-b pb-3">
+           <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">9. Pergantian barang sejenis selama masa jaminan</span><select id="g-ganti" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
+           <input id="g-ganti-ket" class="field-control mt-1 text-xs" placeholder="Keterangan pergantian barang...">
+          </div>
 
-    <!-- 10 -->
-    <div class="space-y-1.5">
-     <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">10. Nomor tanda pendaftaran petunjuk & kartu jaminan</span><select id="g-reg-opt" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
-     <input id="g-reg-val" class="field-control mt-1.5 text-xs" placeholder="Nomor tanda pendaftaran garansi...">
-    </div>
+          <!-- 10 -->
+          <div class="space-y-1.5">
+           <div class="flex items-center justify-between gap-3"><span class="font-bold text-xs">10. Nomor tanda pendaftaran petunjuk & kartu jaminan</span><select id="g-reg-opt" class="field-control w-28 text-xs"><option value="Ada">Ada</option><option value="Tidak" selected>Tidak</option></select></div>
+           <input id="g-reg-val" class="field-control mt-1.5 text-xs" placeholder="Nomor tanda pendaftaran garansi...">
+          </div>
 
-    <div class="pt-3">
-     <label class="doc-box" for="doc-garansi">
-      <input id="doc-garansi" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
-      <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto Kartu Jaminan / Garansi</span>
-     </label>
-    </div>
-   </div>
-  </div>
+          <div class="pt-3">
+           <label class="doc-box" for="doc-garansi">
+            <input id="doc-garansi" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+            <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto Kartu Jaminan / Garansi</span>
+           </label>
+          </div>
+         </div>
+        </div>
 
- </article>
+       </article>
 
- <!-- TOMBOL NAVIGASI WIZARD STEP 4 -->
- <div class="flex gap-3 mt-5">
-  <button type="button" class="secondary-btn w-1/2 py-4 font-bold text-sm" onclick="prevStep(4)">&larr; Sebelumnya</button>
-  <button type="button" class="primary-btn w-1/2 py-4 font-bold text-sm" onclick="nextStep(4)">Selanjutnya: Dokumentasi &rarr;</button>
- </div>
-</div>
+       <!-- TOMBOL NAVIGASI WIZARD STEP 4 -->
+       <div class="flex gap-3 mt-5">
+        <button type="button" class="secondary-btn w-1/2 py-4 font-bold text-sm" onclick="prevStep(4)">&larr; Sebelumnya</button>
+        <button type="button" class="primary-btn w-1/2 py-4 font-bold text-sm" onclick="nextStep(4)">Selanjutnya: Dokumentasi &rarr;</button>
+       </div>
+      </div>
 
       <!-- STEP 5: Dokumentasi Utama & Lapangan Opsional -->
       <div class="wizard-step" data-step="5">
@@ -888,7 +896,7 @@
      </div>
     </section>
 
-    <!-- 9. DIREKTORI REGULASI (DIPERBARUI LENGKAP DENGAN PERMEMDAG 25/2021 & 33/2025) -->
+    <!-- 9. DIREKTORI REGULASI -->
     <section id="page-regulasi" class="page">
      <div class="mb-5">
       <p class="text-xs font-bold uppercase text-blue-600">Regulasi & Dasar Hukum</p>
@@ -1898,7 +1906,7 @@
           npbKemasanNum: document.getElementById('npb-kemasan-num')?.value || '',
         },
         labelData,
-  bagianC: {
+        bagianC: {
             c1_status: document.getElementById('p-prod').value,
             c1_ket: document.getElementById('p-prod-ket').value || "-",
             c2_status: document.getElementById('p-merek').value,
@@ -2162,16 +2170,16 @@
                 <tr>
                   <td>Petunjuk Penggunaan</td>
                   <td>Manual Book & Registrasi</td>
-                  <td class="text-center font-bold">${isAda(c.opt)}</td>
-                  <td class="text-center font-bold">${isTidak(c.opt)}</td>
-                  <td>No. Reg: ${c.regVal || '-'}</td>
+                  <td class="text-center font-bold">${isAda(c.c1_status)}</td>
+                  <td class="text-center font-bold">${isTidak(c.c1_status)}</td>
+                  <td>Keterangan: ${c.c1_ket || '-'}</td>
                 </tr>
                 <tr>
                   <td>Jaminan Garansi</td>
                   <td>Purna Jual Min. 1 Thn</td>
-                  <td class="text-center font-bold">${isAda(d.masterOpt)}</td>
-                  <td class="text-center font-bold">${isTidak(d.masterOpt)}</td>
-                  <td>Status: ${d.masterOpt || '-'}</td>
+                  <td class="text-center font-bold">${isAda(d.d1_status)}</td>
+                  <td class="text-center font-bold">${isTidak(d.d1_status)}</td>
+                  <td>Keterangan: ${d.d1_ket || '-'}</td>
                 </tr>
               </tbody>
             </table>
