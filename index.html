@@ -296,54 +296,41 @@ button{-webkit-tap-highlight-color:transparent}
 </style>
 
 
-<style id="final-ui-polish-pagar-sni">
+<style id="pagar-sni-final-ui-only">
 
-/* ===== FINAL UI POLISH ===== */
+/* FINAL SAFE UI PATCH
+   Tidak mengubah fungsi login/API/database.
+*/
 
-/* Banner Beranda - gambar lebih terlihat */
-.welcome-banner,
-#welcome-banner,
-.hero-banner,
-[class*="welcome"],
-[class*="hero"] {
+/* Banner beranda - target tambahan yang tidak mengganggu login */
+.welcome-sni-banner,
+#page-beranda .section-card:first-child,
+#page-beranda .hero-card {
     background-image:
     linear-gradient(
         90deg,
-        rgba(15, 78, 170, 0.72),
-        rgba(15, 78, 170, 0.38)
+        rgba(15,78,170,.72),
+        rgba(15,78,170,.35)
     ),
-    url('./assets/login-bg-sni.png') !important;
-    background-size: cover !important;
-    background-position: center !important;
+    url('./assets/login-bg-sni.png');
+    background-size: cover;
+    background-position: center;
 }
 
-/* Menu card lebih mirip mockup */
+/* Ikon input data jika lucide tersedia */
+[data-lucide="file-pen-line"] {
+    display:inline-flex !important;
+}
+
+/* Efek kartu menu */
 .section-card,
-.menu-card,
 .quick-action {
-    transition: transform .2s ease, box-shadow .2s ease;
+    transition:.2s ease;
 }
 
 .section-card:hover,
-.menu-card:hover,
 .quick-action:hover {
-    transform: translateY(-3px);
-}
-
-/* icon input data */
-[data-lucide="file-pen-line"] {
-    stroke-width: 2.2;
-}
-
-/* Header lebih rapi */
-.app-header {
-    backdrop-filter: blur(10px);
-}
-
-/* Bottom navigation */
-.bottom-nav,
-nav {
-    backdrop-filter: blur(12px);
+    transform:translateY(-2px);
 }
 
 </style>
