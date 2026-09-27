@@ -123,6 +123,72 @@ button{-webkit-tap-highlight-color:transparent}
 }
 </style>
 
+
+<style id="pagar-sni-v3-fix">
+/* V3 RESPONSIVE LOGIN FIX */
+#login-modal.login-backdrop,
+.login-backdrop {
+    background-image:
+    linear-gradient(90deg, rgba(3,25,60,.78), rgba(3,25,60,.35)),
+    url('./assets/login-bg-sni.png') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    min-height: 100vh !important;
+}
+
+/* make login panel readable on all devices */
+#login-modal .modal-panel {
+    position: relative !important;
+    z-index: 3 !important;
+}
+
+/* hide generated desktop text on mobile and create clean layout */
+@media (max-width: 768px) {
+    #login-modal:before {
+        display:none !important;
+    }
+
+    #login-modal {
+        padding: 24px !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background-position: center !important;
+    }
+
+    #login-modal .modal-panel {
+        width: min(92vw, 420px) !important;
+        max-height: 90vh !important;
+        overflow-y: auto !important;
+        margin:auto !important;
+        border-radius:24px !important;
+    }
+}
+
+@media (min-width:769px) {
+    #login-modal:before {
+        content:"PENGAWASAN BARANG BER-SNI\A\A Pengawasan Hari Ini untuk Perlindungan Konsumen";
+        white-space:pre-line;
+        position:absolute;
+        left:8%;
+        top:50%;
+        transform:translateY(-50%);
+        width:430px;
+        color:#fff;
+        font-size:34px;
+        font-weight:800;
+        line-height:1.25;
+        z-index:2;
+    }
+}
+
+/* dashboard input icon */
+[data-lucide="file-pen-line"],
+[data-lucide="file-pen-line"] {
+    display:none !important;
+}
+</style>
+
 </head>
 <body>
 
