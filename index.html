@@ -189,6 +189,59 @@ button{-webkit-tap-highlight-color:transparent}
 }
 </style>
 
+
+<style id="pagar-sni-v4-final">
+/* V4 LOGIN DESKTOP RIGHT PANEL */
+@media (min-width: 900px){
+  #login-modal .modal-panel{
+    margin-left:auto !important;
+    margin-right:8vw !important;
+    width:430px !important;
+    max-width:430px !important;
+  }
+
+  #login-modal:before{
+    left:8% !important;
+    width:520px !important;
+    font-size:42px !important;
+  }
+}
+
+/* V4 MOBILE FIX */
+@media (max-width:768px){
+  #login-modal .modal-panel{
+    width:92vw !important;
+    max-height:92vh !important;
+  }
+}
+
+/* Banner dashboard menggunakan background SNI */
+#welcome-banner,
+.welcome-banner,
+.hero-banner,
+[class*="welcome"]{
+ background-image:
+ linear-gradient(90deg,rgba(11,77,162,.92),rgba(11,77,162,.65)),
+ url('./assets/login-bg-sni.png') !important;
+ background-size:cover !important;
+ background-position:center !important;
+}
+
+/* Icon input data */
+.input-data i,
+[data-menu="input-data"] i,
+.card-menu:first-child i,
+[data-lucide="file-pen-line"]{
+ color:#2563eb !important;
+}
+
+/* fallback bila icon lama */
+[data-lucide="file-pen-line"],
+[data-lucide="file-text"]{
+ display:block !important;
+}
+</style>
+
 </head>
 <body>
 
