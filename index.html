@@ -81,72 +81,269 @@ button{-webkit-tap-highlight-color:transparent}
 
 <style>
 /* FINAL LOGIN BACKGROUND FIX */
-.login-page {
+.login-backdrop {
     background-image:
     linear-gradient(
         90deg,
-        rgba(3,30,70,0.72),
-        rgba(3,30,70,0.18)
+        rgba(5, 25, 60, 0.78),
+        rgba(5, 25, 60, 0.35)
     ),
     url('./assets/login-bg-sni.png') !important;
     background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
+    padding: 0 !important;
+}
+
+#login-modal .modal-panel {
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    max-width: 420px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+
+#login-modal:before {
+    content: "PENGAWASAN BARANG BER-SNI\A\A Pengawasan Hari Ini untuk Perlindungan Konsumen";
+    white-space: pre-line;
+    position: absolute;
+    left: 8%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 420px;
+    color: white;
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.25;
 }
 
 /* Dashboard input icon improvement */
 [data-lucide="file-pen"] {
     display:none;
 }
+</style>
 
-/* ===== V6 FINAL UI FIX ===== */
 
-/* Login desktop full split layout */
-.login-backdrop{
-    background:transparent!important;
-    padding:0!important;
+<style id="pagar-sni-v3-fix">
+/* V3 RESPONSIVE LOGIN FIX */
+#login-modal.login-backdrop,
+.login-backdrop {
+    background-image:
+    linear-gradient(90deg, rgba(3,25,60,.78), rgba(3,25,60,.35)),
+    url('./assets/login-bg-sni.png') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    min-height: 100vh !important;
 }
-.login-backdrop .modal-panel{
-    width:100%!important;
-    max-width:none!important;
-    height:100vh;
-    max-height:none!important;
-    border-radius:0!important;
-    background:rgba(255,255,255,.97);
+
+/* make login panel readable on all devices */
+#login-modal .modal-panel {
+    position: relative !important;
+    z-index: 3 !important;
 }
-.login-page{
-    min-height:100vh;
+
+/* hide generated desktop text on mobile and create clean layout */
+@media (max-width: 768px) {
+    #login-modal:before {
+        display:none !important;
+    }
+
+    #login-modal {
+        padding: 24px !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background-position: center !important;
+    }
+
+    #login-modal .modal-panel {
+        width: min(92vw, 420px) !important;
+        max-height: 90vh !important;
+        overflow-y: auto !important;
+        margin:auto !important;
+        border-radius:24px !important;
+    }
+}
+
+@media (min-width:769px) {
+    #login-modal:before {
+        content:"PENGAWASAN BARANG BER-SNI\A\A Pengawasan Hari Ini untuk Perlindungan Konsumen";
+        white-space:pre-line;
+        position:absolute;
+        left:8%;
+        top:50%;
+        transform:translateY(-50%);
+        width:430px;
+        color:#fff;
+        font-size:34px;
+        font-weight:800;
+        line-height:1.25;
+        z-index:2;
+    }
+}
+
+/* dashboard input icon */
+[data-lucide="file-pen-line"],
+[data-lucide="file-pen-line"] {
+    display:none !important;
+}
+</style>
+
+
+<style id="pagar-sni-v4-final">
+/* V4 LOGIN DESKTOP RIGHT PANEL */
+@media (min-width: 900px){
+  #login-modal .modal-panel{
+    margin-left:auto !important;
+    margin-right:8vw !important;
+    width:430px !important;
+    max-width:430px !important;
+  }
+
+  #login-modal:before{
+    left:8% !important;
+    width:520px !important;
+    font-size:42px !important;
+  }
+}
+
+/* V4 MOBILE FIX */
+@media (max-width:768px){
+  #login-modal .modal-panel{
+    width:92vw !important;
+    max-height:92vh !important;
+  }
 }
 
 /* Banner dashboard menggunakan background SNI */
-#page-beranda > div:first-child{
+#welcome-banner,
+.welcome-banner,
+.hero-banner,
+[class*="welcome"]{
+ background-image:
+ linear-gradient(90deg,rgba(11,77,162,.92),rgba(11,77,162,.65)),
+ url('./assets/login-bg-sni.png') !important;
+ background-size:cover !important;
+ background-position:center !important;
+}
+
+/* Icon input data */
+.input-data i,
+[data-menu="input-data"] i,
+.card-menu:first-child i,
+[data-lucide="file-pen-line"]{
+ color:#2563eb !important;
+}
+
+/* fallback bila icon lama */
+[data-lucide="file-pen-line"],
+[data-lucide="file-text"]{
+ display:block !important;
+}
+</style>
+
+
+<style id="pagar-sni-v5-dashboard-fix">
+
+/* Banner dashboard menggunakan background SNI */
+#dashboard .welcome-banner,
+#welcome-banner,
+.hero-banner,
+.banner-welcome,
+[class*="welcome"],
+[class*="hero"] {
     background-image:
-    linear-gradient(90deg,rgba(10,60,160,.92),rgba(37,130,235,.72)),
-    url('./assets/login-bg-sni.png')!important;
-    background-size:cover!important;
-    background-position:center!important;
+    linear-gradient(
+        90deg,
+        rgba(10,70,150,.92),
+        rgba(10,70,150,.60)
+    ),
+    url('./assets/login-bg-sni.png') !important;
+    background-size: cover !important;
+    background-position: center !important;
 }
 
-/* Ikon Input Data */
-.quick-action:first-child [data-lucide]{
-    display:none!important;
-}
-.quick-action:first-child div:first-child:before{
-    content:"";
-    width:22px;
-    height:22px;
-    display:block;
-    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%231a73e8' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M12 20h9'/%3E%3Cpath d='M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z'/%3E%3C/svg%3E") center/contain no-repeat;
+/* Perbaikan ikon menu input data */
+.menu-card:first-child i,
+.card:first-child i,
+[data-lucide="file-pen-line"] {
+    display: inline-flex !important;
 }
 
-/* Mobile login fix */
+/* Ikon kosong diperbaiki */
+.icon-box:empty::before {
+    content: "✎";
+    font-size: 24px;
+    color: #2563eb;
+}
+
+/* Tampilan banner lebih modern */
+.welcome-banner,
+#welcome-banner {
+    border-radius: 18px !important;
+    overflow: hidden !important;
+    background-position:center !important;
+}
+
+/* Responsive dashboard */
 @media(max-width:768px){
-.login-backdrop .modal-panel{
-    width:92%!important;
-    height:auto;
-    max-height:90vh!important;
-    border-radius:24px!important;
+    .welcome-banner,
+    #welcome-banner {
+        background-position:center !important;
+    }
 }
+
+</style>
+
+
+<style id="final-ui-polish-pagar-sni">
+
+/* ===== FINAL UI POLISH ===== */
+
+/* Banner Beranda - gambar lebih terlihat */
+.welcome-banner,
+#welcome-banner,
+.hero-banner,
+[class*="welcome"],
+[class*="hero"] {
+    background-image:
+    linear-gradient(
+        90deg,
+        rgba(15, 78, 170, 0.72),
+        rgba(15, 78, 170, 0.38)
+    ),
+    url('./assets/login-bg-sni.png') !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+/* Menu card lebih mirip mockup */
+.section-card,
+.menu-card,
+.quick-action {
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.section-card:hover,
+.menu-card:hover,
+.quick-action:hover {
+    transform: translateY(-3px);
+}
+
+/* icon input data */
+[data-lucide="file-pen-line"] {
+    stroke-width: 2.2;
+}
+
+/* Header lebih rapi */
+.app-header {
+    backdrop-filter: blur(10px);
+}
+
+/* Bottom navigation */
+.bottom-nav,
+nav {
+    backdrop-filter: blur(12px);
 }
 
 </style>
@@ -266,7 +463,7 @@ button{-webkit-tap-highlight-color:transparent}
 
 <div class="grid grid-cols-3 gap-3 mb-5">
 <button type="button" class="quick-action section-card !p-3.5 flex flex-col items-center gap-2 text-center hover:shadow-md transition-shadow" data-target="page-form">
-<div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background:rgba(26,115,232,.12);color:var(--blue)"><i data-lucide="clipboard-plus" class="w-5 h-5"></i></div>
+<div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background:rgba(26,115,232,.12);color:var(--blue)"><i data-lucide="file-pen-line" class="w-5 h-5"></i></div>
 <span class="text-xs font-bold leading-tight">Input Data<br>Toko/Pengecer</span>
 </button>
 <button type="button" class="quick-action section-card !p-3.5 flex flex-col items-center gap-2 text-center hover:shadow-md transition-shadow" data-target="page-maps">
