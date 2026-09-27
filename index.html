@@ -3,7 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PAGAR PKTN — Sistem Pengawasan Barang SNI</title>
+<title>Pagar-SNI PKTN — Sistem Pengawasan Barang SNI</title>
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#1a73e8">
+<link rel="icon" href="./assets/icon-192.png">
+<link rel="apple-touch-icon" href="./assets/icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Pagar-SNI PKTN">
 <script src="https://cdn.tailwindcss.com/3.4.17"></script>
 <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
@@ -87,9 +95,9 @@ button{-webkit-tap-highlight-color:transparent}
 <div id="login-modal" class="login-backdrop open">
 <div class="modal-panel max-w-sm w-full space-y-5">
 <div class="text-center">
-<div class="brand-mark mx-auto mb-3"><i data-lucide="shield-check" class="w-6 h-6"></i></div>
-<h3 id="auth-title" class="font-extrabold text-xl">Login Petugas / Admin</h3>
-<p id="auth-desc" class="text-xs text-slate-500 mt-1">Masukkan akun terdaftar atau daftar akun baru.</p>
+<img src="./assets/logo-pagar-sni-full.png" alt="Pagar-SNI PKTN" class="w-32 h-32 mx-auto mb-3 object-contain">
+<h2 class="font-black text-2xl tracking-tight"><span style="color:#0d2a52">Pagar-SNI</span> <span style="color:var(--blue)">PKTN</span></h2>
+<p class="text-xs text-slate-500 mt-1">Pendataan Pengawasan Barang Ber-SNI</p>
 </div>
 <div class="flex rounded-xl bg-slate-100 p-1 text-xs font-bold">
 <button type="button" id="tab-login" class="flex-1 py-2.5 rounded-lg bg-white shadow text-blue-600" onclick="switchAuthTab('login')">Masuk</button>
@@ -99,12 +107,16 @@ button{-webkit-tap-highlight-color:transparent}
 <form id="login-form" class="space-y-4">
 <div>
 <label class="field-label text-xs">Email Petugas / Admin</label>
-<input id="login-email" type="email" class="field-control text-sm" required placeholder="Masukkan email terdaftar...">
+<div class="relative">
+<i data-lucide="mail" class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+<input id="login-email" type="email" class="field-control text-sm pl-11" required placeholder="Masukkan email terdaftar...">
+</div>
 </div>
 <div>
 <label class="field-label text-xs">Kata Sandi</label>
 <div class="relative">
-<input id="login-password" type="password" class="field-control text-sm pr-16" required placeholder="Masukkan kata sandi...">
+<i data-lucide="lock" class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+<input id="login-password" type="password" class="field-control text-sm pl-11 pr-16" required placeholder="Masukkan kata sandi...">
 <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 secondary-btn text-xs py-1.5 px-2.5 font-bold" onclick="toggleLoginPassword(this)">Lihat</button>
 </div>
 </div>
@@ -114,7 +126,7 @@ button{-webkit-tap-highlight-color:transparent}
 </label>
 <span class="text-slate-500">Lupa sandi? Hubungi Admin</span>
 </div>
-<button type="submit" class="primary-btn w-full py-3.5 text-sm font-bold">Masuk Sesi</button>
+<button type="submit" class="primary-btn w-full py-3.5 text-sm font-bold">Masuk <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
 </form>
 
 <form id="register-form" class="space-y-4 hidden">
@@ -144,9 +156,9 @@ button{-webkit-tap-highlight-color:transparent}
 <div class="decor-stripe" aria-hidden="true"></div>
 <div class="mobile-frame px-4 py-3 flex items-center justify-between gap-3">
 <div class="flex items-center gap-3 min-w-0">
-<div class="brand-mark shrink-0"><i data-lucide="shield-check" class="w-6 h-6"></i></div>
+<img src="./assets/logo-pagar-sni-mini.png" alt="Pagar-SNI PKTN" class="w-11 h-11 object-contain shrink-0">
 <div class="min-w-0">
-<h1 class="font-extrabold leading-tight text-lg tracking-tight">PAGAR PKTN</h1>
+<h1 class="font-extrabold leading-tight text-lg tracking-tight"><span style="color:#0d2a52">Pagar-SNI</span> <span style="color:var(--blue)">PKTN</span></h1>
 <p id="active-user-badge" class="text-xs text-slate-500 font-bold truncate">Sesi: Memuat...</p>
 </div>
 </div>
@@ -161,15 +173,68 @@ button{-webkit-tap-highlight-color:transparent}
 
 <main class="mobile-frame px-4 py-5">
 
-<!-- BANNER SELAMAT DATANG -->
-<div id="welcome-banner" class="mb-5 p-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl shadow-lg flex items-center justify-between">
+<!-- 0. BERANDA (DASHBOARD) -->
+<section id="page-beranda" class="page active">
+<div class="mb-5 p-5 text-white rounded-2xl shadow-lg relative overflow-hidden" style="background:linear-gradient(135deg,#0a3ca0,#2582eb)">
+<div class="relative z-10 flex items-start justify-between gap-3">
 <div>
-<p class="text-xs font-bold uppercase tracking-wider text-blue-200">Sistem Pengawasan Aktif</p>
-<h2 id="welcome-greeting" class="text-lg font-black mt-1">Selamat Datang, Petugas!</h2>
-<p class="text-sm text-blue-100 mt-1">Siap melaksanakan pengamatan kasat mata barang beredar.</p>
+<p class="text-xs font-bold uppercase tracking-wider text-blue-200">Pengawasan Barang Ber-SNI</p>
+<h2 id="welcome-greeting" class="text-xl font-black mt-1">Selamat Datang, Petugas!</h2>
+<p class="text-sm text-blue-100 mt-1 max-w-[220px]">Untuk perlindungan konsumen dan tertib niaga yang lebih baik.</p>
 </div>
-<div class="hidden sm:block"><i data-lucide="shield-alert" class="w-12 h-12 text-blue-200 opacity-80"></i></div>
+<button id="bell-sync" type="button" class="relative shrink-0 w-10 h-10 rounded-full bg-white/15 flex items-center justify-center" title="Status sinkronisasi">
+<i data-lucide="bell" class="w-5 h-5"></i>
+<span id="bell-badge" class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-black flex items-center justify-center">0</span>
+</button>
 </div>
+<div class="absolute -right-6 -bottom-10 w-32 h-32 rounded-full bg-white/10"></div>
+<div class="absolute right-10 -bottom-16 w-24 h-24 rounded-full bg-white/10"></div>
+</div>
+
+<div class="grid grid-cols-3 gap-3 mb-5">
+<button type="button" class="quick-action section-card !p-3.5 flex flex-col items-center gap-2 text-center hover:shadow-md transition-shadow" data-target="page-form">
+<div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background:rgba(26,115,232,.12);color:var(--blue)"><i data-lucide="clipboard-plus" class="w-5 h-5"></i></div>
+<span class="text-xs font-bold leading-tight">Input Data<br>Toko/Pengecer</span>
+</button>
+<button type="button" class="quick-action section-card !p-3.5 flex flex-col items-center gap-2 text-center hover:shadow-md transition-shadow" data-target="page-maps">
+<div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background:rgba(15,157,88,.12);color:var(--success)"><i data-lucide="map-pin" class="w-5 h-5"></i></div>
+<span class="text-xs font-bold leading-tight">Peta Lokasi</span>
+</button>
+<button type="button" class="quick-action section-card !p-3.5 flex flex-col items-center gap-2 text-center hover:shadow-md transition-shadow" data-target="page-search">
+<div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background:rgba(251,188,5,.15);color:#b06000"><i data-lucide="search" class="w-5 h-5"></i></div>
+<span class="text-xs font-bold leading-tight">Cari Data</span>
+</button>
+<button type="button" class="quick-action section-card !p-3.5 flex flex-col items-center gap-2 text-center hover:shadow-md transition-shadow" data-target="page-history">
+<div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background:rgba(124,58,237,.12);color:#7c3aed"><i data-lucide="history" class="w-5 h-5"></i></div>
+<span class="text-xs font-bold leading-tight">Riwayat<br>Laporan</span>
+</button>
+<button type="button" class="quick-action section-card !p-3.5 flex flex-col items-center gap-2 text-center hover:shadow-md transition-shadow" data-target="page-analytics">
+<div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background:rgba(217,48,37,.1);color:var(--danger)"><i data-lucide="bar-chart-3" class="w-5 h-5"></i></div>
+<span class="text-xs font-bold leading-tight">Statistik<br>Kepatuhan</span>
+</button>
+<button type="button" class="quick-action section-card !p-3.5 flex flex-col items-center gap-2 text-center hover:shadow-md transition-shadow" data-target="page-guide">
+<div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background:rgba(13,42,82,.1);color:#0d2a52"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+<span class="text-xs font-bold leading-tight">Panduan SOP</span>
+</button>
+</div>
+
+<div class="flex items-center justify-between mb-2.5">
+<h3 class="font-extrabold text-sm text-slate-700">Rekapitulasi Pengawasan</h3>
+<span class="text-xs font-bold text-slate-400">Bulan Ini</span>
+</div>
+<div class="grid grid-cols-4 gap-2.5 mb-5">
+<div class="stat-card !p-3 text-center"><b id="ber-stat-total" class="block text-xl font-black" style="color:var(--blue)">0</b><span class="text-[10px] font-bold text-slate-500">Toko Terekam</span></div>
+<div class="stat-card !p-3 text-center"><b id="ber-stat-legal" class="block text-xl font-black" style="color:var(--success)">0</b><span class="text-[10px] font-bold text-slate-500">Terverifikasi</span></div>
+<div class="stat-card !p-3 text-center"><b id="ber-stat-menunggu" class="block text-xl font-black" style="color:var(--warning)">0</b><span class="text-[10px] font-bold text-slate-500">Menunggu</span></div>
+<div class="stat-card !p-3 text-center"><b id="ber-stat-tidak" class="block text-xl font-black" style="color:var(--danger)">0</b><span class="text-[10px] font-bold text-slate-500">Tidak Sesuai</span></div>
+</div>
+
+<div class="flex items-center justify-between mb-2.5">
+<h3 class="font-extrabold text-sm text-slate-700">Aktivitas Terbaru</h3>
+<button type="button" class="quick-action text-xs font-bold text-blue-600" data-target="page-history">Lihat Semua</button>
+</div>
+<div id="beranda-recent-list" class="space-y-2.5"></div>
+</section>
 
 <!-- PANEL ADMIN -->
 <section id="page-admin-panel" class="page">
@@ -184,7 +249,7 @@ button{-webkit-tap-highlight-color:transparent}
 </section>
 
 <!-- 1. FORMULIR WIZARD 5 LANGKAH -->
-<section id="page-form" class="page active">
+<section id="page-form" class="page">
 <div class="mb-5">
 <div class="flex justify-between items-center mb-1.5">
 <p class="font-bold uppercase tracking-wider text-xs text-blue-600" id="wizard-title">Langkah 1 dari 5: Tim &amp; Toko</p>
@@ -225,6 +290,7 @@ button{-webkit-tap-highlight-color:transparent}
 <div>
 <label class="field-label">Kode Sampel <span class="text-rose-600">*</span></label>
 <input class="field-control" id="sample-code" required placeholder="Contoh: 003">
+<p id="sample-code-feedback" class="mt-1.5 text-xs font-semibold"></p>
 </div>
 <div>
 <label class="field-label">Nomor Telepon / WhatsApp <span class="text-rose-600">*</span></label>
@@ -907,10 +973,10 @@ Belum ada data laporan yang direkam untuk dianalisis.
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav">
 <div class="nav-inner">
-<button data-target="page-form" class="nav-btn active" type="button"><i data-lucide="file-text"></i><span>Form</span></button>
-<button data-target="page-history" class="nav-btn" type="button"><i data-lucide="history"></i><span>Riwayat</span></button>
-<button data-target="page-search" class="nav-btn" type="button"><i data-lucide="search"></i><span>Cari</span></button>
+<button data-target="page-beranda" class="nav-btn active" type="button"><i data-lucide="home"></i><span>Beranda</span></button>
+<button data-target="page-form" class="nav-btn" type="button"><i data-lucide="file-text"></i><span>Form</span></button>
 <button data-target="page-maps" class="nav-btn" type="button"><i data-lucide="map"></i><span>Peta</span></button>
+<button data-target="page-history" class="nav-btn" type="button"><i data-lucide="history"></i><span>Riwayat</span></button>
 <button data-target="page-profile" class="nav-btn" type="button"><i data-lucide="user"></i><span>Profil</span></button>
 </div>
 </nav>
@@ -944,7 +1010,18 @@ Belum ada data laporan yang direkam untuk dianalisis.
 </div>
 </div>
 
-<!-- ===== BAGIAN 4 BERAKHIR DI SINI. Seluruh tampilan (markup) sudah lengkap. Bagian 5 dan 6 = <script> lalu </body></html>. ===== -->
+<!-- ===== BAGIAN 4 BERAKHIR DI SINI. Seluruh tampilan (markup) sudah lengkap. Bagian 5 dan 6 = <script> lalu 
+<style>
+.login-page {
+    background-image:
+    linear-gradient(90deg, rgba(3,30,70,.72), rgba(3,30,70,.18)),
+    url('./assets/login-bg-sni.png') !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+</style>
+
+</body></html>. ===== -->
 <!-- ===== BAGIAN 5 DIMULAI (lanjutan setelah bagian 4). Tag <script> dibuka di sini dan ditutup di bagian 6. ===== -->
 <script>
 // --- NOTIFIKASI KUSTOM ---
@@ -968,7 +1045,7 @@ let reports = [];
 let isFormSubmitting = false;
 const DB_NAME = 'PagarPKTNDB';
 const STORE_NAME = 'reports';
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyM8GRS50S8Ex2zhoBPqwbz-hRTpZkGKGN1pqqsyO2RqWlf6QNLJmTxoJv8dyeJxXMM/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyMB5l9fT87YBHF2eesbbhg_8f71O6N_p_DLOzfyYhlisYu50yMKSAHj6o9mXxNTrO2/exec";
 
 function initDB() {
   return new Promise((resolve, reject) => {
@@ -985,7 +1062,7 @@ function loadReportsFromDB() {
     const req = tx.objectStore(STORE_NAME).getAll();
     req.onsuccess = e => {
       reports = e.target.result.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-      renderHistory(); renderAnalytics(); updateSyncStatusBox(); resolve(reports);
+      renderHistory(); renderAnalytics(); updateSyncStatusBox(); renderBeranda(); resolve(reports);
     };
     req.onerror = () => resolve([]);
   });
@@ -1096,12 +1173,30 @@ function handleSessionExpired() {
 async function sendReport(report) {
   try {
     const out = await api('submitReport', { report });
-    return out.status === 'success';
+    return out; // { status: 'success' | 'duplicate_sample' | 'error' | 'unauthorized', message }
   } catch (err) {
     console.log('sendReport gagal:', err);
-    return false;
+    return null; // gagal jaringan / server tak merespons
   }
 }
+
+// --- CEK KODE SAMPEL GANDA (peringatan dini saat isi formulir) ---
+document.getElementById('sample-code').addEventListener('blur', async function () {
+  const box = document.getElementById('sample-code-feedback');
+  const val = this.value.trim();
+  box.textContent = '';
+  if (!val || !navigator.onLine || !currentInspector) return;
+  try {
+    const out = await api('checkSampleCode', { sampleCode: val });
+    if (out.status === 'success' && out.exists) {
+      box.textContent = '⚠️ Kode sampel ini sudah pernah digunakan. Gunakan kode lain agar tidak bentrok.';
+      box.className = 'mt-1.5 text-xs font-semibold text-rose-600';
+    } else {
+      box.textContent = '✓ Kode sampel tersedia.';
+      box.className = 'mt-1.5 text-xs font-semibold text-emerald-600';
+    }
+  } catch (err) { /* abaikan, pengecekan akhir tetap dilakukan server saat kirim */ }
+});
 
 // ---------- Tampilan sesi ----------
 function updateSessionUI() {
@@ -1366,6 +1461,21 @@ function resetSubmitButton() {
   const sBtn = document.getElementById('submit-btn');
   if (sBtn) { sBtn.disabled = false; sBtn.style.opacity = '1'; sBtn.style.cursor = 'pointer'; }
 }
+function setSubmitLock(locked) {
+  document.querySelectorAll('.bottom-nav button, #fab-form').forEach(b => b.disabled = locked);
+  let overlay = document.getElementById('submit-lock-overlay');
+  if (locked) {
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'submit-lock-overlay';
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;';
+      overlay.innerHTML = '<div style="background:var(--surface);padding:20px 28px;border-radius:16px;font-weight:800;color:var(--ink);">⏳ Mengirim laporan, mohon tunggu...</div>';
+      document.body.appendChild(overlay);
+    }
+  } else if (overlay) {
+    overlay.remove();
+  }
+}
 function switchPage(target) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -1373,19 +1483,49 @@ function switchPage(target) {
   const btn = document.querySelector(`.nav-btn[data-target="${target}"]`);
   if (btn) btn.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (target === 'page-form') resetSubmitButton();
+  if (target === 'page-form' && !isFormSubmitting) resetSubmitButton();
+  if (target === 'page-beranda') renderBeranda();
   if (target === 'page-history') renderHistory();
   if (target === 'page-analytics') renderAnalytics();
   if (target === 'page-maps') renderMapsList();
   if (target === 'page-sync') updateSyncStatusBox();
 }
-document.querySelectorAll('.nav-btn, .drawer-menu-item').forEach(btn => {
+document.querySelectorAll('.nav-btn, .drawer-menu-item, .quick-action').forEach(btn => {
   btn.addEventListener('click', () => {
     switchPage(btn.getAttribute('data-target'));
     drawer.classList.remove('open'); backdrop.classList.remove('open');
   });
 });
+document.getElementById('bell-sync').addEventListener('click', () => switchPage('page-sync'));
 document.getElementById('fab-form').addEventListener('click', () => { resetSubmitButton(); switchPage('page-form'); });
+
+// --- BERANDA (DASHBOARD) ---
+function renderBeranda() {
+  const now = new Date();
+  const monthly = reports.filter(r => {
+    const d = new Date(r.timestamp);
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+  });
+  const legal = monthly.filter(r => r.sniStatus && r.sniStatus.includes('Legal')).length;
+  const temuan = monthly.filter(r => r.sniStatus && r.sniStatus.includes('Temuan')).length;
+  const menunggu = monthly.length - legal - temuan;
+  document.getElementById('ber-stat-total').textContent = monthly.length;
+  document.getElementById('ber-stat-legal').textContent = legal;
+  document.getElementById('ber-stat-menunggu').textContent = menunggu;
+  document.getElementById('ber-stat-tidak').textContent = temuan;
+
+  const unsynced = reports.filter(r => !r.synced).length;
+  const badge = document.getElementById('bell-badge');
+  if (unsynced > 0) { badge.textContent = unsynced > 99 ? '99+' : unsynced; badge.classList.remove('hidden'); }
+  else { badge.classList.add('hidden'); }
+
+  const list = document.getElementById('beranda-recent-list');
+  const recent = reports.slice(0, 4);
+  list.innerHTML = recent.length === 0
+    ? `<div class="section-card text-center text-sm font-semibold text-slate-500">Belum ada laporan tersimpan.</div>`
+    : recent.map(r => reportCard(r, true)).join('');
+  lucide.createIcons();
+}
 
 // --- BAGIAN A: SNI / LSpro / NPB (barang & kemasan) ---
 ['sni', 'lspro', 'npb'].forEach(type => {
@@ -1632,6 +1772,7 @@ document.getElementById('inspection-form').addEventListener('submit', async e =>
 
   isFormSubmitting = true;
   if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = '0.6'; submitBtn.style.cursor = 'not-allowed'; }
+  setSubmitLock(true);
 
   const officersList = Array.from(document.querySelectorAll('.officer-input')).map(i => i.value.trim()).filter(v => v !== '');
   const val = id => document.getElementById(id)?.value || '';
@@ -1678,17 +1819,36 @@ document.getElementById('inspection-form').addEventListener('submit', async e =>
   };
 
   const driveLink = `https://drive.google.com/drive/search?q=${encodeURIComponent(reportData.sampleCode)}`;
-  if (navigator.onLine && await sendReport(reportData)) {
-    reportData.docUrl = driveLink; reportData.folderUrl = driveLink; reportData.synced = true;
+  const sendResult = navigator.onLine ? await sendReport(reportData) : null;
+
+  if (sendResult && sendResult.status === 'success') {
+    reportData.docUrl = sendResult.folderUrl || driveLink;
+    reportData.folderUrl = reportData.docUrl;
+    reportData.synced = true;
     await saveReportToDB(reportData);
     form.reset(); resetAllDocUI(); currentStep = 1; updateWizard();
+    setSubmitLock(false);
     switchPage('page-history');
     showAppNotify("🚀 Laporan Berhasil Dikirim!", "Data pengawasan telah sukses diproses dan dikirim ke Spreadsheet dan Drive pusat.", "success");
     return;
   }
+
+  if (sendResult && sendResult.status === 'duplicate_sample') {
+    // Bukan gangguan jaringan — kode sampel memang bentrok. Jangan simpan sebagai antrean offline,
+    // karena akan terus gagal setiap kali disinkronkan. Minta petugas memperbaiki kode sampel dulu.
+    resetSubmitButton();
+    setSubmitLock(false);
+    showAppNotify("Kode Sampel Sudah Digunakan", sendResult.message || "Kode sampel ini sudah dipakai pada laporan lain. Silakan ganti kode sampel.", "warning");
+    currentStep = 1; updateWizard();
+    document.getElementById('sample-code').focus();
+    return;
+  }
+
+  // Sisanya: perangkat offline, atau server tidak merespons -> simpan sebagai antrean offline
   reportData.synced = false;
   await saveReportToDB(reportData);
   form.reset(); resetAllDocUI(); currentStep = 1; updateWizard();
+  setSubmitLock(false);
   switchPage('page-history');
   showAppNotify("⏳ Disimpan Sementara", "Laporan belum terkirim (perangkat offline atau server tidak merespons). Data tersimpan aman di memori lokal dan dapat disinkronkan lewat menu Sinkronisasi.", "warning");
 });
@@ -1842,7 +2002,23 @@ window.saveEditedReport = async function(e, id) {
   r.businessName = document.getElementById('edit-business').value;
   await saveReportToDB(r);
   renderHistory(); renderAnalytics(); openDetail(r.id);
-  showAppNotify("Perubahan Disimpan", "Data laporan berhasil diperbarui dalam database lokal!", "success");
+
+  if (r.synced && navigator.onLine) {
+    try {
+      const out = await api('updateReportStatus', { id: r.id, sniStatus: r.sniStatus, brand: r.brand, businessName: r.businessName });
+      if (out.status === 'success') {
+        showAppNotify("Perubahan Disimpan", "Data laporan diperbarui di perangkat ini dan di Spreadsheet pusat.", "success");
+      } else {
+        showAppNotify("Tersimpan Sebagian", "Perubahan tersimpan di perangkat ini, tapi gagal diperbarui di Spreadsheet: " + (out.message || 'kesalahan tidak diketahui') + ". Coba edit lagi saat online.", "warning");
+      }
+    } catch (err) {
+      showAppNotify("Tersimpan Sebagian", "Perubahan tersimpan di perangkat ini, tapi tidak dapat menghubungi server untuk memperbarui Spreadsheet. Coba edit lagi saat online.", "warning");
+    }
+  } else if (r.synced && !navigator.onLine) {
+    showAppNotify("Tersimpan Sebagian", "Perubahan tersimpan di perangkat ini. Karena sedang offline, Spreadsheet pusat belum diperbarui — buka kembali laporan ini dan simpan ulang saat online.", "warning");
+  } else {
+    showAppNotify("Perubahan Disimpan", "Data laporan berhasil diperbarui dalam database lokal!", "success");
+  }
 };
 window.deleteReportItem = async function(id) {
   if (confirm('Apakah Anda yakin ingin menghapus laporan ini?')) { await deleteReportFromDB(id); renderHistory(); }
@@ -1870,7 +2046,7 @@ document.getElementById('btn-sync-now').addEventListener('click', async () => {
   if (!navigator.onLine) { showAppNotify("Perangkat Offline", "⚠️ Sambungkan ke internet terlebih dahulu sebelum melakukan sinkronisasi cloud.", "warning"); return; }
   if (!currentInspector) { updateSessionUI(); return; }
 
-  let successCount = 0, failCount = 0;
+  let successCount = 0, failCount = 0, conflictCount = 0;
   const syncBtn = document.getElementById('btn-sync-now');
   syncBtn.disabled = true;
   syncBtn.textContent = "Sedang Menyinkronkan ke Cloud...";
@@ -1879,12 +2055,17 @@ document.getElementById('btn-sync-now').addEventListener('click', async () => {
     let retries = 3, sent = false;
     while (retries > 0 && !sent) {
       if (!currentInspector) break; // sesi berakhir di tengah jalan
-      const ok = await sendReport(r);
-      if (ok) {
-        r.docUrl = `https://drive.google.com/drive/search?q=${encodeURIComponent(r.sampleCode)}`;
+      const out = await sendReport(r);
+      if (out && out.status === 'success') {
+        r.docUrl = out.folderUrl || `https://drive.google.com/drive/search?q=${encodeURIComponent(r.sampleCode)}`;
         r.folderUrl = r.docUrl; r.synced = true;
         await saveReportToDB(r);
         sent = true; successCount++;
+      } else if (out && out.status === 'duplicate_sample') {
+        // Kode sampel bentrok dengan laporan lain -> tidak akan pernah berhasil walau diulang.
+        conflictCount++;
+        retries = 0;
+        break;
       } else {
         retries--;
         if (retries === 0) failCount++; else await new Promise(res => setTimeout(res, 1000));
@@ -1897,7 +2078,7 @@ document.getElementById('btn-sync-now').addEventListener('click', async () => {
   syncBtn.innerHTML = `<i data-lucide="cloud-upload" class="w-5 h-5"></i> Sinkronkan Antrean ke Cloud Sekarang`;
   lucide.createIcons();
   renderHistory();
-  showAppNotify("📊 Laporan Sinkronisasi Cloud", `Berhasil dikirim: ${successCount} sampel\nGagal/Tertunda: ${failCount} sampel`, failCount === 0 ? "success" : "warning");
+  showAppNotify("📊 Laporan Sinkronisasi Cloud", `Berhasil dikirim: ${successCount} sampel\nBentrok kode sampel (perlu diedit manual): ${conflictCount} sampel\nGagal/Tertunda: ${failCount} sampel`, (failCount === 0 && conflictCount === 0) ? "success" : "warning");
 });
 
 // --- PETA ---
@@ -1944,8 +2125,26 @@ function renderMapsList() {
   }, 200);
 }
 
+// --- DAFTARKAN SERVICE WORKER (mode offline sesungguhnya) ---
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW gagal didaftarkan:', err));
+  });
+}
+
 initDB();
 lucide.createIcons();
 </script>
+
+<style>
+.login-page {
+    background-image:
+    linear-gradient(90deg, rgba(3,30,70,.72), rgba(3,30,70,.18)),
+    url('./assets/login-bg-sni.png') !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+</style>
+
 </body>
 </html>
