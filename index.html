@@ -242,6 +242,59 @@ button{-webkit-tap-highlight-color:transparent}
 }
 </style>
 
+
+<style id="pagar-sni-v5-dashboard-fix">
+
+/* Banner dashboard menggunakan background SNI */
+#dashboard .welcome-banner,
+#welcome-banner,
+.hero-banner,
+.banner-welcome,
+[class*="welcome"],
+[class*="hero"] {
+    background-image:
+    linear-gradient(
+        90deg,
+        rgba(10,70,150,.92),
+        rgba(10,70,150,.60)
+    ),
+    url('./assets/login-bg-sni.png') !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+/* Perbaikan ikon menu input data */
+.menu-card:first-child i,
+.card:first-child i,
+[data-lucide="file-pen-line"] {
+    display: inline-flex !important;
+}
+
+/* Ikon kosong diperbaiki */
+.icon-box:empty::before {
+    content: "✎";
+    font-size: 24px;
+    color: #2563eb;
+}
+
+/* Tampilan banner lebih modern */
+.welcome-banner,
+#welcome-banner {
+    border-radius: 18px !important;
+    overflow: hidden !important;
+    background-position:center !important;
+}
+
+/* Responsive dashboard */
+@media(max-width:768px){
+    .welcome-banner,
+    #welcome-banner {
+        background-position:center !important;
+    }
+}
+
+</style>
+
 </head>
 <body>
 
