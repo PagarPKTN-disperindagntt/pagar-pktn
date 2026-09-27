@@ -81,17 +81,40 @@ button{-webkit-tap-highlight-color:transparent}
 
 <style>
 /* FINAL LOGIN BACKGROUND FIX */
-.login-page {
+.login-backdrop {
     background-image:
     linear-gradient(
         90deg,
-        rgba(3,30,70,0.72),
-        rgba(3,30,70,0.18)
+        rgba(5, 25, 60, 0.78),
+        rgba(5, 25, 60, 0.35)
     ),
     url('./assets/login-bg-sni.png') !important;
     background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
+    padding: 0 !important;
+}
+
+#login-modal .modal-panel {
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    max-width: 420px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+
+#login-modal:before {
+    content: "PENGAWASAN BARANG BER-SNI\A\A Pengawasan Hari Ini untuk Perlindungan Konsumen";
+    white-space: pre-line;
+    position: absolute;
+    left: 8%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 420px;
+    color: white;
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.25;
 }
 
 /* Dashboard input icon improvement */
@@ -215,7 +238,7 @@ button{-webkit-tap-highlight-color:transparent}
 
 <div class="grid grid-cols-3 gap-3 mb-5">
 <button type="button" class="quick-action section-card !p-3.5 flex flex-col items-center gap-2 text-center hover:shadow-md transition-shadow" data-target="page-form">
-<div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background:rgba(26,115,232,.12);color:var(--blue)"><i data-lucide="clipboard-plus" class="w-5 h-5"></i></div>
+<div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background:rgba(26,115,232,.12);color:var(--blue)"><i data-lucide="file-pen-line" class="w-5 h-5"></i></div>
 <span class="text-xs font-bold leading-tight">Input Data<br>Toko/Pengecer</span>
 </button>
 <button type="button" class="quick-action section-card !p-3.5 flex flex-col items-center gap-2 text-center hover:shadow-md transition-shadow" data-target="page-maps">
