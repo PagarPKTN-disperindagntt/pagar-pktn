@@ -2,13 +2,16 @@
 // Letakkan file ini SEJAJAR dengan index.html (di root repo), bukan di dalam folder assets/,
 // karena cakupan (scope) service worker dibatasi ke lokasi file ini berada.
 
-const CACHE_NAME = 'pagar-sni-pktn-v2'; // dinaikkan supaya browser mengambil cache baru & membuang yang lama
+const CACHE_NAME = 'pagar-sni-pktn-v3'; // dinaikkan supaya browser mengambil cache baru & membuang yang lama
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.json',
   './assets/icon-192.png',
   './assets/icon-512.png',
+  './assets/icon-maskable-192.png',
+  './assets/icon-maskable-512.png',
+  './assets/apple-touch-icon.png',
   './assets/logo-pagar-sni-mini.png',
   './assets/logo-pagar-sni-full.png',
   './assets/login-bg-sni.png',
