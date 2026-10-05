@@ -733,6 +733,30 @@ button{-webkit-tap-highlight-color:transparent}
 <div class="stat-card"><span class="text-xs font-bold text-slate-500 uppercase">Total Laporan</span><div id="stat-total" class="text-3xl font-black mt-1">0</div></div>
 <div class="stat-card"><span class="text-xs font-bold text-slate-500 uppercase">Tersinkron</span><div id="stat-synced" class="text-3xl font-black mt-1 text-emerald-600">0</div></div>
 </div>
+
+<div class="section-card !p-4 mb-5 space-y-3">
+<input id="hist-keyword" class="field-control text-sm" placeholder="Cari nama toko, merek, atau kode sampel...">
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+<input id="hist-from" type="date" class="field-control text-xs !min-h-[44px]" title="Dari tanggal">
+<input id="hist-to" type="date" class="field-control text-xs !min-h-[44px]" title="Sampai tanggal">
+<select id="hist-product" class="field-control text-xs !min-h-[44px]">
+<option value="">Semua Produk</option>
+<option value="Pompa Air Listrik">Pompa Air Listrik</option>
+<option value="Setrika Listrik">Setrika Listrik</option>
+<option value="Baja Lembaran Lapis Seng">Baja Lembaran Lapis Seng</option>
+<option value="Baja Tulangan Beton">Baja Tulangan Beton</option>
+<option value="Kabel Listrik">Kabel Listrik</option>
+</select>
+<select id="hist-status" class="field-control text-xs !min-h-[44px]">
+<option value="">Semua Status</option>
+<option value="Legal">Terdaftar &amp; Sesuai</option>
+<option value="Temuan">Tidak Terdaftar</option>
+<option value="Spesifikasinya">Tidak Sesuai Spesifikasi</option>
+</select>
+</div>
+<button id="hist-filter-reset" type="button" class="text-xs font-bold text-blue-600">Reset Filter</button>
+</div>
+
 <div id="history-list" class="space-y-3.5"></div>
 </section>
 
@@ -807,6 +831,11 @@ button{-webkit-tap-highlight-color:transparent}
 <div id="analytics-summary-text" class="p-4 bg-blue-50 text-blue-900 rounded-xl text-sm font-semibold border border-blue-200 leading-relaxed">
 Belum ada data laporan yang direkam untuk dianalisis.
 </div>
+</div>
+
+<div class="section-card space-y-4">
+<h3 class="font-extrabold text-base text-slate-800">Kepatuhan Berdasarkan Jenis Produk</h3>
+<div id="analytics-per-produk" class="space-y-3"></div>
 </div>
 </section>
 
@@ -883,6 +912,12 @@ Belum ada data laporan yang direkam untuk dianalisis.
 <h2 class="text-2xl font-black">Titik Koordinat Toko &amp; Pengecer</h2>
 </div>
 <div class="section-card space-y-4">
+<div class="flex gap-2 text-xs font-bold">
+<button type="button" class="map-filter-btn flex-1 py-2 rounded-lg bg-blue-50 text-blue-600" data-status="">Semua</button>
+<button type="button" class="map-filter-btn flex-1 py-2 rounded-lg text-slate-500" data-status="Legal">Sesuai</button>
+<button type="button" class="map-filter-btn flex-1 py-2 rounded-lg text-slate-500" data-status="Temuan">Tidak Terdaftar</button>
+<button type="button" class="map-filter-btn flex-1 py-2 rounded-lg text-slate-500" data-status="Spesifikasinya">Tidak Sesuai</button>
+</div>
 <div id="leaflet-map"></div>
 <div>
 <h4 class="font-black text-xs text-slate-700 mb-3 uppercase tracking-wider">Daftar Lokasi Toko Terpetakan</h4>
@@ -1865,13 +1900,38 @@ function reportCard(r, withSync) {
     <button class="secondary-btn px-4 py-2 text-xs font-bold shrink-0" onclick="openDetail('${escHtml(r.id)}')">Detail</button>
   </div>`;
 }
+function applyHistoryFilters(list) {
+  const kw = (document.getElementById('hist-keyword')?.value || '').toLowerCase().trim();
+  const from = document.getElementById('hist-from')?.value || '';
+  const to = document.getElementById('hist-to')?.value || '';
+  const product = document.getElementById('hist-product')?.value || '';
+  const status = document.getElementById('hist-status')?.value || '';
+  return list.filter(r => {
+    if (kw && ![r.businessName, r.brand, r.sampleCode].some(v => v && String(v).toLowerCase().includes(kw))) return false;
+    if (from && r.timestamp < from) return false;
+    if (to && r.timestamp.slice(0, 10) > to) return false;
+    if (product && r.productType !== product) return false;
+    if (status && !(r.sniStatus && r.sniStatus.includes(status))) return false;
+    return true;
+  });
+}
+['hist-keyword', 'hist-from', 'hist-to', 'hist-product', 'hist-status'].forEach(id => {
+  document.getElementById(id).addEventListener('input', renderHistory);
+  document.getElementById(id).addEventListener('change', renderHistory);
+});
+document.getElementById('hist-filter-reset').addEventListener('click', () => {
+  ['hist-keyword', 'hist-from', 'hist-to', 'hist-product', 'hist-status'].forEach(id => document.getElementById(id).value = '');
+  renderHistory();
+});
+
 function renderHistory() {
   document.getElementById('stat-total').textContent = reports.length;
   document.getElementById('stat-synced').textContent = reports.filter(r => r.synced).length;
   updateSyncStatusBox();
-  document.getElementById('history-list').innerHTML = reports.length === 0
-    ? `<div class="section-card text-center text-sm font-semibold text-slate-500">Belum ada laporan tersimpan.</div>`
-    : reports.map(r => reportCard(r, true)).join('');
+  const filtered = applyHistoryFilters(reports);
+  document.getElementById('history-list').innerHTML = filtered.length === 0
+    ? `<div class="section-card text-center text-sm font-semibold text-slate-500">${reports.length === 0 ? 'Belum ada laporan tersimpan.' : 'Tidak ada laporan yang cocok dengan filter.'}</div>`
+    : filtered.map(r => reportCard(r, true)).join('');
   lucide.createIcons();
 }
 function renderAnalytics() {
@@ -1891,6 +1951,34 @@ function renderAnalytics() {
   document.getElementById('analytics-summary-text').innerHTML = total === 0
     ? "Belum ada data laporan yang direkam untuk dianalisis."
     : `<b>Analisis Ringkas:</b> Dari total <b>${total}</b> sampel pengawasan, tingkat kepatuhan legal mencapai <b>${pct(legal)}%</b> (${legal} sampel). Temuan ketidaksesuaian/pelanggaran tercatat sebanyak <b>${temuan + pending}</b> sampel.`;
+
+  const byProduk = {};
+  reports.forEach(r => {
+    const p = r.productType || '(Tidak diisi)';
+    if (!byProduk[p]) byProduk[p] = { total: 0, legal: 0, temuan: 0 };
+    byProduk[p].total++;
+    if (r.sniStatus && r.sniStatus.includes('Legal')) byProduk[p].legal++;
+    else if (r.sniStatus && r.sniStatus.includes('Temuan')) byProduk[p].temuan++;
+  });
+  const box = document.getElementById('analytics-per-produk');
+  const keys = Object.keys(byProduk).sort((a, b) => byProduk[b].total - byProduk[a].total);
+  box.innerHTML = keys.length === 0
+    ? `<p class="text-sm text-slate-400 italic">Belum ada data.</p>`
+    : keys.map(p => {
+        const d = byProduk[p];
+        const pctLegal = Math.round((d.legal / d.total) * 100);
+        return `<div>
+          <div class="flex justify-between text-xs font-bold mb-1">
+            <span>${escHtml(p)}</span>
+            <span class="text-slate-500">${d.total} sampel &middot; ${pctLegal}% sesuai</span>
+          </div>
+          <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden flex">
+            <div class="bg-emerald-500 h-full" style="width:${(d.legal/d.total)*100}%"></div>
+            <div class="bg-rose-500 h-full" style="width:${(d.temuan/d.total)*100}%"></div>
+            <div class="bg-amber-500 h-full" style="width:${((d.total-d.legal-d.temuan)/d.total)*100}%"></div>
+          </div>
+        </div>`;
+      }).join('');
 }
 function performSearch() {
   const kw = document.getElementById('search-keyword').value.toLowerCase();
@@ -2085,6 +2173,16 @@ document.getElementById('btn-sync-now').addEventListener('click', async () => {
 // --- PETA ---
 let leafletMap = null;
 let leafletMarkers = [];
+let mapStatusFilter = '';
+document.querySelectorAll('.map-filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    mapStatusFilter = btn.dataset.status;
+    document.querySelectorAll('.map-filter-btn').forEach(b => b.className = 'map-filter-btn flex-1 py-2 rounded-lg text-slate-500');
+    btn.className = 'map-filter-btn flex-1 py-2 rounded-lg bg-blue-50 text-blue-600';
+    renderMapsList();
+  });
+});
+
 function renderMapsList() {
   setTimeout(() => {
     if (!leafletMap) {
@@ -2096,8 +2194,9 @@ function renderMapsList() {
     leafletMarkers = [];
 
     const listBox = document.getElementById('map-locations-list');
-    const valid = reports.filter(r => r.coordinates && r.coordinates.includes(','));
-    if (valid.length === 0) { listBox.innerHTML = `<p class="text-sm text-slate-400 italic font-medium">Belum ada titik koordinat GPS toko yang terekam.</p>`; return; }
+    let valid = reports.filter(r => r.coordinates && r.coordinates.includes(','));
+    if (mapStatusFilter) valid = valid.filter(r => r.sniStatus && r.sniStatus.includes(mapStatusFilter));
+    if (valid.length === 0) { listBox.innerHTML = `<p class="text-sm text-slate-400 italic font-medium">${reports.some(r=>r.coordinates) ? 'Tidak ada laporan dengan status ini.' : 'Belum ada titik koordinat GPS toko yang terekam.'}</p>`; return; }
 
     listBox.innerHTML = valid.map(r => `
       <div class="p-3.5 bg-slate-50 border rounded-xl flex items-center justify-between text-sm">
