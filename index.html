@@ -266,6 +266,63 @@ button{-webkit-tap-highlight-color:transparent}
 </div>
 </section>
 
+<!-- DASHBOARD PIMPINAN -->
+<section id="page-pimpinan" class="page">
+<div class="mb-5">
+<p class="text-xs font-bold uppercase text-indigo-600">Pimpinan</p>
+<h2 class="text-2xl font-black">Dashboard Pengawasan Organisasi</h2>
+<p class="text-xs text-slate-500 mt-1">Agregat seluruh laporan dari semua petugas (bukan hanya perangkat ini).</p>
+</div>
+<div id="pimpinan-content">
+<div class="section-card text-center text-sm font-semibold text-slate-500">Memuat data...</div>
+</div>
+</section>
+
+<!-- KEGIATAN PENGAWASAN -->
+<section id="page-kegiatan" class="page">
+<div class="mb-5 flex items-center justify-between">
+<div><p class="text-xs font-bold uppercase text-blue-600">Agenda</p><h2 class="text-2xl font-black">Kegiatan Pengawasan</h2></div>
+<button id="btn-new-kegiatan" type="button" class="primary-btn text-xs py-2.5 px-3.5 font-bold hidden"><i data-lucide="plus" class="w-4 h-4"></i> Kegiatan Baru</button>
+</div>
+<div id="kegiatan-form-box" class="section-card space-y-3 hidden">
+<h3 class="font-extrabold text-sm">Buat Kegiatan Baru</h3>
+<input id="keg-nama" class="field-control text-sm" placeholder="Nama kegiatan">
+<input id="keg-jenis" class="field-control text-sm" placeholder="Jenis pengawasan (contoh: Rutin, Khusus)">
+<input id="keg-wilayah" class="field-control text-sm" placeholder="Wilayah target (contoh: Kota Kupang)">
+<input id="keg-tanggal" type="date" class="field-control text-sm">
+<input id="keg-petugas" class="field-control text-sm" placeholder="Petugas ditugaskan (opsional)">
+<div class="flex gap-2">
+<button type="button" class="secondary-btn flex-1 py-2.5 text-sm font-bold" onclick="document.getElementById('kegiatan-form-box').classList.add('hidden')">Batal</button>
+<button id="btn-save-kegiatan" type="button" class="primary-btn flex-1 py-2.5 text-sm font-bold">Simpan Kegiatan</button>
+</div>
+</div>
+<div id="kegiatan-list" class="space-y-3"></div>
+</section>
+
+<!-- TEMUAN -->
+<section id="page-temuan" class="page">
+<div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Ketidaksesuaian</p><h2 class="text-2xl font-black">Daftar Temuan</h2></div>
+<p class="text-xs text-slate-500 mb-4">Tercatat otomatis dari laporan berstatus "Tidak Terdaftar" atau "Tidak Sesuai Spesifikasi".</p>
+<div id="temuan-list" class="space-y-3"></div>
+</section>
+
+<!-- LAPORAN ARSIP -->
+<section id="page-laporan-arsip" class="page">
+<div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Arsip PDF</p><h2 class="text-2xl font-black">Laporan Arsip</h2></div>
+<p class="text-xs text-slate-500 mb-4">Katalog setiap laporan PDF yang berhasil dibuat otomatis, dari seluruh petugas.</p>
+<div id="laporan-arsip-list" class="space-y-3"></div>
+</section>
+
+<!-- LOG AKTIVITAS -->
+<section id="page-log" class="page">
+<div class="mb-5">
+<p class="text-xs font-bold uppercase text-amber-600">Administrator</p>
+<h2 class="text-2xl font-black">Log Aktivitas Sistem</h2>
+</div>
+<p class="text-xs text-slate-500 mb-4">300 aktivitas terbaru: login, pengiriman laporan, perubahan akun, dan lainnya.</p>
+<div id="log-list" class="space-y-2"></div>
+</section>
+
 <!-- 1. FORMULIR WIZARD 5 LANGKAH -->
 <section id="page-form" class="page">
 <div class="mb-5">
@@ -322,6 +379,10 @@ button{-webkit-tap-highlight-color:transparent}
 <div>
 <label class="field-label">Alamat Pengecer <span class="text-rose-600">*</span></label>
 <input class="field-control" id="retailer-address" required placeholder="Alamat lengkap lokasi">
+</div>
+<div>
+<label class="field-label">Kabupaten / Kota <span class="text-rose-600">*</span></label>
+<input class="field-control" id="wilayah" required placeholder="Contoh: Kota Kupang">
 </div>
 <div>
 <label class="field-label">Nama Pemilik / Penanggung Jawab <span class="text-rose-600">*</span></label>
@@ -837,6 +898,11 @@ Belum ada data laporan yang direkam untuk dianalisis.
 <h3 class="font-extrabold text-base text-slate-800">Kepatuhan Berdasarkan Jenis Produk</h3>
 <div id="analytics-per-produk" class="space-y-3"></div>
 </div>
+
+<div class="section-card space-y-4">
+<h3 class="font-extrabold text-base text-slate-800">Pelanggaran Berdasarkan Wilayah</h3>
+<div id="analytics-per-wilayah" class="space-y-3"></div>
+</div>
 </section>
 
 <!-- 4. SINKRONISASI -->
@@ -918,6 +984,9 @@ Belum ada data laporan yang direkam untuk dianalisis.
 <button type="button" class="map-filter-btn flex-1 py-2 rounded-lg text-slate-500" data-status="Temuan">Tidak Terdaftar</button>
 <button type="button" class="map-filter-btn flex-1 py-2 rounded-lg text-slate-500" data-status="Spesifikasinya">Tidak Sesuai</button>
 </div>
+<select id="map-wilayah-filter" class="field-control text-xs !min-h-[44px]">
+<option value="">Semua Kabupaten/Kota</option>
+</select>
 <div id="leaflet-map"></div>
 <div>
 <h4 class="font-black text-xs text-slate-700 mb-3 uppercase tracking-wider">Daftar Lokasi Toko Terpetakan</h4>
@@ -1044,6 +1113,11 @@ Belum ada data laporan yang direkam untuk dianalisis.
 </div>
 <div class="space-y-2.5 flex-1 overflow-y-auto text-sm font-bold">
 <button id="drawer-admin-btn" data-target="page-admin-panel" class="drawer-menu-item hidden w-full text-left px-4 py-3.5 rounded-xl flex items-center gap-3 hover:bg-amber-50 text-amber-700" type="button"><i data-lucide="user-check" class="w-5 h-5 text-amber-600"></i><span>Kelola Akun (Admin)</span></button>
+<button id="drawer-pimpinan-btn" data-target="page-pimpinan" class="drawer-menu-item hidden w-full text-left px-4 py-3.5 rounded-xl flex items-center gap-3 hover:bg-indigo-50 text-indigo-700" type="button"><svg class="w-5 h-5 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg><span>Dashboard Pimpinan</span></button>
+<button data-target="page-kegiatan" class="drawer-menu-item w-full text-left px-4 py-3.5 rounded-xl flex items-center gap-3 hover:bg-blue-50 text-slate-700" type="button"><svg class="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span>Kegiatan Pengawasan</span></button>
+<button data-target="page-temuan" class="drawer-menu-item w-full text-left px-4 py-3.5 rounded-xl flex items-center gap-3 hover:bg-blue-50 text-slate-700" type="button"><i data-lucide="alert-triangle" class="w-5 h-5 text-blue-600"></i><span>Temuan</span></button>
+<button data-target="page-laporan-arsip" class="drawer-menu-item w-full text-left px-4 py-3.5 rounded-xl flex items-center gap-3 hover:bg-blue-50 text-slate-700" type="button"><svg class="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg><span>Laporan Arsip</span></button>
+<button id="drawer-log-btn" data-target="page-log" class="drawer-menu-item hidden w-full text-left px-4 py-3.5 rounded-xl flex items-center gap-3 hover:bg-amber-50 text-amber-700" type="button"><svg class="w-5 h-5 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg><span>Log Aktivitas</span></button>
 <button data-target="page-analytics" class="drawer-menu-item w-full text-left px-4 py-3.5 rounded-xl flex items-center gap-3 hover:bg-blue-50 text-slate-700" type="button"><i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-600"></i><span>Statistik Kepatuhan</span></button>
 <button data-target="page-sync" class="drawer-menu-item w-full text-left px-4 py-3.5 rounded-xl flex items-center gap-3 hover:bg-blue-50 text-slate-700" type="button"><i data-lucide="cloud" class="w-5 h-5 text-blue-600"></i><span>Sinkronisasi &amp; Backup</span></button>
 <button data-target="page-guide" class="drawer-menu-item w-full text-left px-4 py-3.5 rounded-xl flex items-center gap-3 hover:bg-blue-50 text-slate-700" type="button"><i data-lucide="book-open" class="w-5 h-5 text-blue-600"></i><span>Panduan SOP</span></button>
@@ -1271,6 +1345,9 @@ function updateSessionUI() {
   }
 
   document.getElementById('drawer-admin-btn').classList.toggle('hidden', currentInspector.role !== 'admin');
+  document.getElementById('drawer-log-btn').classList.toggle('hidden', currentInspector.role !== 'admin');
+  document.getElementById('drawer-pimpinan-btn').classList.toggle('hidden', currentInspector.role !== 'admin' && currentInspector.role !== 'pimpinan');
+  document.getElementById('btn-new-kegiatan').classList.toggle('hidden', currentInspector.role !== 'admin');
 }
 
 window.toggleLoginPassword = function (btn) {
@@ -1401,20 +1478,26 @@ async function renderAdminPanel() {
     const pending = out.users.filter(u => u.status === 'pending');
     const active = out.users.filter(u => u.status === 'approved' && u.role !== 'admin');
 
-    const row = (u, btns) => `
+    const row = (u, btns, roleBadge) => `
       <div class="p-3.5 bg-slate-50 border rounded-xl flex items-center justify-between gap-2 text-sm">
-        <div class="min-w-0"><p class="font-black text-slate-800 truncate">${escHtml(u.name)} (NIP: ${escHtml(u.nip)})</p>
+        <div class="min-w-0"><p class="font-black text-slate-800 truncate">${escHtml(u.name)} (NIP: ${escHtml(u.nip)}) ${roleBadge||''}</p>
         <p class="text-xs text-slate-500 font-medium truncate">${escHtml(u.email)}</p></div>
-        <div class="flex gap-2 shrink-0">${btns}</div>
+        <div class="flex gap-2 shrink-0 flex-wrap justify-end">${btns}</div>
       </div>`;
-    const b = (act, email, label, cls) => `<button class="${cls} text-xs py-1.5 px-3 font-bold" data-act="${act}" data-email="${escHtml(email)}">${label}</button>`;
+    const b = (act, email, label, cls, extra) => `<button class="${cls} text-xs py-1.5 px-3 font-bold" data-act="${act}" data-email="${escHtml(email)}" ${extra||''}>${label}</button>`;
 
     let html = '<p class="text-xs font-black uppercase text-amber-700">Menunggu Persetujuan</p>';
     html += pending.length ? pending.map(u => row(u, b('approve', u.email, 'Setujui', 'primary-btn bg-emerald-600') + b('reject', u.email, 'Tolak', 'danger-btn'))).join('')
                            : '<p class="text-xs text-slate-400 italic">Tidak ada permintaan akun baru.</p>';
     html += '<p class="text-xs font-black uppercase text-blue-700 pt-3">Petugas Aktif</p>';
-    html += active.length ? active.map(u => row(u, b('resetPassword', u.email, 'Reset Sandi', 'secondary-btn') + b('deactivate', u.email, 'Nonaktifkan', 'danger-btn'))).join('')
-                          : '<p class="text-xs text-slate-400 italic">Belum ada petugas aktif.</p>';
+    html += active.length ? active.map(u => {
+      const isPimpinan = u.role === 'pimpinan';
+      const roleBadge = isPimpinan ? '<span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">Pimpinan</span>' : '';
+      const roleBtn = isPimpinan
+        ? b('setRole', u.email, 'Jadikan Petugas', 'secondary-btn', 'data-role="petugas"')
+        : b('setRole', u.email, 'Jadikan Pimpinan', 'secondary-btn', 'data-role="pimpinan"');
+      return row(u, roleBtn + b('resetPassword', u.email, 'Reset Sandi', 'secondary-btn') + b('deactivate', u.email, 'Nonaktifkan', 'danger-btn'), roleBadge);
+    }).join('') : '<p class="text-xs text-slate-400 italic">Belum ada petugas aktif.</p>';
     box.innerHTML = html;
   } catch (err) {
     box.innerHTML = '<p class="text-xs text-rose-600 font-bold">Tidak dapat terhubung ke server.</p>';
@@ -1434,6 +1517,9 @@ document.getElementById('admin-pending-list').addEventListener('click', async e 
     if (!confirm(`Tolak dan hapus permohonan ${email}?`)) return;
   } else if (act === 'deactivate') {
     if (!confirm(`Nonaktifkan akun ${email}? Petugas tidak akan bisa login atau mengirim laporan.`)) return;
+  } else if (act === 'setRole') {
+    payload.role = btn.dataset.role;
+    if (!confirm(`Ubah peran ${email} menjadi "${btn.dataset.role}"?`)) return;
   }
   btn.disabled = true;
   try {
@@ -1525,6 +1611,11 @@ function switchPage(target) {
   if (target === 'page-analytics') renderAnalytics();
   if (target === 'page-maps') renderMapsList();
   if (target === 'page-sync') updateSyncStatusBox();
+  if (target === 'page-pimpinan') renderPimpinan();
+  if (target === 'page-kegiatan') renderKegiatan();
+  if (target === 'page-temuan') renderTemuan();
+  if (target === 'page-laporan-arsip') renderLaporanArsip();
+  if (target === 'page-log') renderLog();
 }
 document.querySelectorAll('.nav-btn, .drawer-menu-item, .quick-action').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -1841,6 +1932,7 @@ document.getElementById('inspection-form').addEventListener('submit', async e =>
     timestamp: new Date().toISOString(),
     agency: form.agency.value, officers: officersList, inspectorAccount: currentInspector.name,
     sampleCode: val('sample-code'), businessName: val('business-name'), retailerAddress: val('retailer-address'),
+    wilayah: val('wilayah'),
     ownerName: val('owner-name'), phone: phoneClean, coordinates: val('coordinates'),
     productType: val('product-type'), brand: val('brand'), sniStatus: val('sni-status'),
     bagianA: {
@@ -1977,6 +2069,27 @@ function renderAnalytics() {
             <div class="bg-rose-500 h-full" style="width:${(d.temuan/d.total)*100}%"></div>
             <div class="bg-amber-500 h-full" style="width:${((d.total-d.legal-d.temuan)/d.total)*100}%"></div>
           </div>
+        </div>`;
+      }).join('');
+
+  const byWilayah = {};
+  reports.forEach(r => {
+    if (!r.wilayah) return; // laporan lama sebelum field ini ada, dilewati
+    const w = r.wilayah;
+    if (!byWilayah[w]) byWilayah[w] = { total: 0, legal: 0, temuan: 0 };
+    byWilayah[w].total++;
+    if (r.sniStatus && r.sniStatus.includes('Legal')) byWilayah[w].legal++;
+    else if (r.sniStatus && r.sniStatus.includes('Temuan')) byWilayah[w].temuan++;
+  });
+  const wbox = document.getElementById('analytics-per-wilayah');
+  const wkeys = Object.keys(byWilayah).sort((a, b) => byWilayah[b].temuan - byWilayah[a].temuan);
+  wbox.innerHTML = wkeys.length === 0
+    ? `<p class="text-sm text-slate-400 italic">Belum ada data wilayah (field Kabupaten/Kota baru ditambahkan — laporan berikutnya akan tercatat).</p>`
+    : wkeys.map(w => {
+        const d = byWilayah[w];
+        return `<div class="flex items-center justify-between text-xs">
+          <span class="font-bold">${escHtml(w)}</span>
+          <span class="text-slate-500">${d.total} sampel &middot; <span class="text-rose-600 font-bold">${d.temuan} temuan</span></span>
         </div>`;
       }).join('');
 }
@@ -2182,8 +2295,18 @@ document.querySelectorAll('.map-filter-btn').forEach(btn => {
     renderMapsList();
   });
 });
+document.getElementById('map-wilayah-filter').addEventListener('change', renderMapsList);
+
+function populateWilayahFilter() {
+  const sel = document.getElementById('map-wilayah-filter');
+  const current = sel.value;
+  const wilayahList = [...new Set(reports.map(r => r.wilayah).filter(Boolean))].sort();
+  sel.innerHTML = '<option value="">Semua Kabupaten/Kota</option>' + wilayahList.map(w => `<option value="${escHtml(w)}">${escHtml(w)}</option>`).join('');
+  if (wilayahList.includes(current)) sel.value = current;
+}
 
 function renderMapsList() {
+  populateWilayahFilter();
   setTimeout(() => {
     if (!leafletMap) {
       leafletMap = L.map('leaflet-map').setView([-10.1789, 123.6070], 13);
@@ -2193,10 +2316,12 @@ function renderMapsList() {
     leafletMarkers.forEach(m => leafletMap.removeLayer(m));
     leafletMarkers = [];
 
+    const wilayahFilter = document.getElementById('map-wilayah-filter').value;
     const listBox = document.getElementById('map-locations-list');
     let valid = reports.filter(r => r.coordinates && r.coordinates.includes(','));
     if (mapStatusFilter) valid = valid.filter(r => r.sniStatus && r.sniStatus.includes(mapStatusFilter));
-    if (valid.length === 0) { listBox.innerHTML = `<p class="text-sm text-slate-400 italic font-medium">${reports.some(r=>r.coordinates) ? 'Tidak ada laporan dengan status ini.' : 'Belum ada titik koordinat GPS toko yang terekam.'}</p>`; return; }
+    if (wilayahFilter) valid = valid.filter(r => r.wilayah === wilayahFilter);
+    if (valid.length === 0) { listBox.innerHTML = `<p class="text-sm text-slate-400 italic font-medium">${reports.some(r=>r.coordinates) ? 'Tidak ada laporan yang cocok dengan filter.' : 'Belum ada titik koordinat GPS toko yang terekam.'}</p>`; return; }
 
     listBox.innerHTML = valid.map(r => `
       <div class="p-3.5 bg-slate-50 border rounded-xl flex items-center justify-between text-sm">
@@ -2230,6 +2355,170 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW gagal didaftarkan:', err));
   });
+}
+
+// ============================================================
+// MODUL TAMBAHAN: Dashboard Pimpinan, Kegiatan, Temuan, Laporan Arsip, Log Aktivitas
+// ============================================================
+
+// --- DASHBOARD PIMPINAN ---
+async function renderPimpinan() {
+  const box = document.getElementById('pimpinan-content');
+  box.innerHTML = `<div class="section-card text-center text-sm font-semibold text-slate-500">Memuat data organisasi...</div>`;
+  if (!navigator.onLine) { box.innerHTML = `<div class="section-card text-center text-sm font-semibold text-amber-600">Dashboard ini butuh koneksi internet (data diambil langsung dari Spreadsheet pusat).</div>`; return; }
+  try {
+    const out = await api('getDashboardStats');
+    if (out.status !== 'success') { box.innerHTML = `<div class="section-card text-center text-sm font-semibold text-rose-600">${escHtml(out.message || 'Gagal memuat data.')}</div>`; return; }
+    const s = out.stats;
+    const pct = n => s.total ? Math.round((n / s.total) * 100) : 0;
+    const maxBulan = Math.max(1, ...s.perBulan.map(b => b.jumlah));
+    box.innerHTML = `
+      <div class="grid grid-cols-2 gap-3 mb-5">
+        <div class="stat-card text-center"><b class="block text-2xl font-black" style="color:var(--blue)">${s.total}</b><span class="text-[11px] font-bold text-slate-500">Total Pengawasan</span></div>
+        <div class="stat-card text-center"><b class="block text-2xl font-black" style="color:var(--success)">${pct(s.legal)}%</b><span class="text-[11px] font-bold text-slate-500">Tingkat Kepatuhan</span></div>
+        <div class="stat-card text-center"><b class="block text-2xl font-black" style="color:var(--danger)">${s.temuan}</b><span class="text-[11px] font-bold text-slate-500">Jumlah Temuan</span></div>
+        <div class="stat-card text-center"><b class="block text-2xl font-black" style="color:var(--warning)">${s.pending}</b><span class="text-[11px] font-bold text-slate-500">Perlu Tindak Lanjut</span></div>
+      </div>
+      <div class="section-card space-y-3 mb-5">
+        <h3 class="font-extrabold text-sm text-slate-800">Pengawasan per Bulan (6 Bulan Terakhir)</h3>
+        ${s.perBulan.length === 0 ? '<p class="text-sm text-slate-400 italic">Belum ada data.</p>' : s.perBulan.map(b => `
+          <div class="flex items-center gap-2.5 text-xs">
+            <span class="w-14 font-bold text-slate-500 shrink-0">${escHtml(b.bulan)}</span>
+            <div class="flex-1 bg-slate-100 h-3 rounded-full overflow-hidden"><div class="bg-blue-500 h-full rounded-full" style="width:${(b.jumlah/maxBulan)*100}%"></div></div>
+            <span class="w-6 text-right font-bold">${b.jumlah}</span>
+          </div>`).join('')}
+      </div>
+      <div class="section-card space-y-3 mb-5">
+        <h3 class="font-extrabold text-sm text-slate-800">Komoditas Terbanyak Diperiksa</h3>
+        ${s.perProduk.length === 0 ? '<p class="text-sm text-slate-400 italic">Belum ada data.</p>' : s.perProduk.slice(0,6).map(p => `
+          <div class="flex justify-between text-xs"><span class="font-bold">${escHtml(p.nama)}</span><span class="text-slate-500">${p.total} sampel &middot; ${p.total ? Math.round((p.legal/p.total)*100) : 0}% sesuai</span></div>`).join('')}
+      </div>
+      <div class="section-card space-y-3">
+        <h3 class="font-extrabold text-sm text-slate-800">Wilayah dengan Temuan Terbanyak</h3>
+        ${s.perWilayah.filter(w=>w.temuan>0).length === 0 ? '<p class="text-sm text-slate-400 italic">Belum ada temuan tercatat per wilayah.</p>' : s.perWilayah.filter(w=>w.temuan>0).slice(0,6).map(w => `
+          <div class="flex justify-between text-xs"><span class="font-bold">${escHtml(w.nama)}</span><span class="text-rose-600 font-bold">${w.temuan} temuan</span></div>`).join('')}
+      </div>`;
+  } catch (err) {
+    box.innerHTML = `<div class="section-card text-center text-sm font-semibold text-rose-600">Tidak dapat terhubung ke server.</div>`;
+  }
+}
+
+// --- KEGIATAN PENGAWASAN ---
+async function renderKegiatan() {
+  const box = document.getElementById('kegiatan-list');
+  box.innerHTML = `<p class="text-sm text-slate-400 italic">Memuat...</p>`;
+  if (!navigator.onLine) { box.innerHTML = `<p class="text-sm text-amber-600 font-semibold">Perlu koneksi internet untuk memuat kegiatan.</p>`; return; }
+  try {
+    const out = await api('listKegiatan');
+    if (out.status !== 'success') { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">${escHtml(out.message||'Gagal memuat.')}</p>`; return; }
+    const badge = s => s === 'Selesai' ? 'bg-emerald-50 text-emerald-700' : s === 'Berjalan' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700';
+    box.innerHTML = out.items.length === 0 ? `<div class="section-card text-center text-sm font-semibold text-slate-500">Belum ada kegiatan terjadwal.</div>` :
+      out.items.map(k => `
+        <div class="history-card pending">
+          <div class="flex items-start justify-between gap-2">
+            <div><h4 class="font-extrabold text-sm">${escHtml(k.nama)}</h4>
+            <p class="text-xs text-slate-500 mt-0.5">${escHtml(k.jenis||'-')} &middot; ${escHtml(k.wilayah||'-')} &middot; ${escHtml(k.tanggal)}</p>
+            ${k.petugas ? `<p class="text-xs text-slate-500 mt-0.5">Petugas: ${escHtml(k.petugas)}</p>` : ''}</div>
+            <span class="text-[10px] font-black px-2 py-1 rounded-full shrink-0 ${badge(k.status)}">${escHtml(k.status)}</span>
+          </div>
+          <select class="field-control text-xs mt-2.5 !min-h-[40px]" onchange="updateKegiatanStatus('${k.id}', this.value)">
+            <option ${k.status==='Direncanakan'?'selected':''}>Direncanakan</option>
+            <option ${k.status==='Berjalan'?'selected':''}>Berjalan</option>
+            <option ${k.status==='Selesai'?'selected':''}>Selesai</option>
+          </select>
+        </div>`).join('');
+  } catch (err) { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">Tidak dapat terhubung ke server.</p>`; }
+}
+window.updateKegiatanStatus = async function (id, status) {
+  try {
+    const out = await api('updateKegiatanStatus', { id, status });
+    if (out.status === 'success') showAppNotify('Status Diperbarui', 'Status kegiatan berhasil diubah.', 'success');
+    else showAppNotify('Gagal', out.message || '', 'warning');
+  } catch (err) { showAppNotify('Gagal Terhubung', 'Tidak dapat menghubungi server.', 'warning'); }
+};
+document.getElementById('btn-new-kegiatan').addEventListener('click', () => document.getElementById('kegiatan-form-box').classList.remove('hidden'));
+document.getElementById('btn-save-kegiatan').addEventListener('click', async () => {
+  const nama = document.getElementById('keg-nama').value.trim();
+  const tanggal = document.getElementById('keg-tanggal').value;
+  if (!nama || !tanggal) { showAppNotify('Lengkapi Data', 'Nama kegiatan dan tanggal wajib diisi.', 'warning'); return; }
+  try {
+    const out = await api('createKegiatan', {
+      nama, jenis: document.getElementById('keg-jenis').value.trim(),
+      wilayah: document.getElementById('keg-wilayah').value.trim(), tanggal,
+      petugas: document.getElementById('keg-petugas').value.trim()
+    });
+    if (out.status === 'success') {
+      ['keg-nama','keg-jenis','keg-wilayah','keg-tanggal','keg-petugas'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('kegiatan-form-box').classList.add('hidden');
+      showAppNotify('Kegiatan Dibuat', 'Kegiatan baru berhasil ditambahkan.', 'success');
+      renderKegiatan();
+    } else { showAppNotify('Gagal', out.message || '', 'warning'); }
+  } catch (err) { showAppNotify('Gagal Terhubung', 'Tidak dapat menghubungi server.', 'warning'); }
+});
+
+// --- TEMUAN ---
+async function renderTemuan() {
+  const box = document.getElementById('temuan-list');
+  box.innerHTML = `<p class="text-sm text-slate-400 italic">Memuat...</p>`;
+  if (!navigator.onLine) { box.innerHTML = `<p class="text-sm text-amber-600 font-semibold">Perlu koneksi internet untuk memuat data temuan.</p>`; return; }
+  try {
+    const out = await api('listTemuan');
+    if (out.status !== 'success') { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">${escHtml(out.message||'Gagal memuat.')}</p>`; return; }
+    box.innerHTML = out.items.length === 0 ? `<div class="section-card text-center text-sm font-semibold text-slate-500">Belum ada temuan tercatat.</div>` :
+      out.items.map(t => `
+        <div class="history-card temuan">
+          <span class="text-xs font-bold text-rose-600">${escHtml(t.kategori)} &middot; Sampel: ${escHtml(t.inspeksiId)}</span>
+          <p class="text-sm font-medium mt-1">${escHtml(t.deskripsi)}</p>
+          <label class="field-label text-xs mt-2.5">Tindak Lanjut</label>
+          <div class="flex gap-2">
+            <input class="field-control text-xs flex-1" id="tindakan-${escHtml(t.id)}" value="${escHtml(t.tindakan||'')}" placeholder="Catat tindak lanjut...">
+            <button type="button" class="secondary-btn text-xs px-3 font-bold" onclick="saveTindakan('${escHtml(t.id)}')">Simpan</button>
+          </div>
+        </div>`).join('');
+  } catch (err) { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">Tidak dapat terhubung ke server.</p>`; }
+}
+window.saveTindakan = async function (id) {
+  const val = document.getElementById('tindakan-' + id).value;
+  try {
+    const out = await api('updateTemuanTindakan', { id, tindakan: val });
+    showAppNotify(out.status === 'success' ? 'Tersimpan' : 'Gagal', out.status === 'success' ? 'Tindak lanjut berhasil disimpan.' : (out.message||''), out.status === 'success' ? 'success' : 'warning');
+  } catch (err) { showAppNotify('Gagal Terhubung', 'Tidak dapat menghubungi server.', 'warning'); }
+};
+
+// --- LAPORAN ARSIP ---
+async function renderLaporanArsip() {
+  const box = document.getElementById('laporan-arsip-list');
+  box.innerHTML = `<p class="text-sm text-slate-400 italic">Memuat...</p>`;
+  if (!navigator.onLine) { box.innerHTML = `<p class="text-sm text-amber-600 font-semibold">Perlu koneksi internet untuk memuat arsip laporan.</p>`; return; }
+  try {
+    const out = await api('listLaporan');
+    if (out.status !== 'success') { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">${escHtml(out.message||'Gagal memuat.')}</p>`; return; }
+    box.innerHTML = out.items.length === 0 ? `<div class="section-card text-center text-sm font-semibold text-slate-500">Belum ada laporan PDF yang tercatat.</div>` :
+      out.items.map(l => `
+        <div class="history-card legal flex items-center justify-between gap-3">
+          <div class="min-w-0"><h4 class="font-extrabold text-sm truncate">${escHtml(l.namaFile)}</h4>
+          <p class="text-xs text-slate-500 mt-0.5">Sampel: ${escHtml(l.inspeksiId)} &middot; ${escHtml(l.tanggal)}</p></div>
+          <a href="${escHtml(l.url)}" target="_blank" rel="noopener" class="secondary-btn text-xs px-3 py-2 font-bold shrink-0">Buka</a>
+        </div>`).join('');
+  } catch (err) { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">Tidak dapat terhubung ke server.</p>`; }
+}
+
+// --- LOG AKTIVITAS ---
+async function renderLog() {
+  const box = document.getElementById('log-list');
+  box.innerHTML = `<p class="text-sm text-slate-400 italic">Memuat...</p>`;
+  if (!navigator.onLine) { box.innerHTML = `<p class="text-sm text-amber-600 font-semibold">Perlu koneksi internet untuk memuat log.</p>`; return; }
+  try {
+    const out = await api('listLog');
+    if (out.status !== 'success') { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">${escHtml(out.message||'Gagal memuat.')}</p>`; return; }
+    box.innerHTML = out.items.length === 0 ? `<div class="section-card text-center text-sm font-semibold text-slate-500">Belum ada aktivitas tercatat.</div>` :
+      out.items.map(l => `
+        <div class="p-3 bg-slate-50 border rounded-xl text-xs">
+          <span class="text-slate-400 font-mono">${escHtml(l.tanggal)}</span>
+          <p class="font-bold mt-0.5">${escHtml(l.user)}</p>
+          <p class="text-slate-600">${escHtml(l.aktivitas)}</p>
+        </div>`).join('');
+  } catch (err) { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">Tidak dapat terhubung ke server.</p>`; }
 }
 
 initDB();
