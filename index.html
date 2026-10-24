@@ -96,6 +96,18 @@ button{-webkit-tap-highlight-color:transparent}
 </div>
 </div>
 
+<!-- PILIHAN SETELAH LAPORAN TERSIMPAN -->
+<div id="post-submit-modal" class="modal-backdrop">
+<div class="modal-panel max-w-sm w-full text-center space-y-3.5 p-6 rounded-3xl shadow-2xl bg-white border border-slate-100">
+<div class="w-16 h-16 mx-auto rounded-full flex items-center justify-center text-white shadow-lg text-2xl font-black bg-gradient-to-br from-emerald-400 to-emerald-600">✨</div>
+<h3 id="post-submit-title" class="text-lg font-black text-slate-900 tracking-tight">Laporan Tersimpan</h3>
+<p id="post-submit-desc" class="text-sm text-slate-600 font-medium leading-relaxed"></p>
+<button type="button" class="primary-btn w-full py-3.5 text-sm font-bold" onclick="closePostSubmitModal(); switchPage('page-form');">Lanjutkan Kegiatan Ini</button>
+<button type="button" class="secondary-btn w-full py-3.5 text-sm font-bold" onclick="closePostSubmitModal(); setActiveKegiatan('',''); switchPage('page-pilih-kegiatan');">Buat / Pilih Kegiatan Baru</button>
+<button type="button" class="text-xs font-bold text-slate-500" onclick="closePostSubmitModal(); switchPage('page-history');">Lihat Riwayat</button>
+</div>
+</div>
+
 <!-- LOGIN & REGISTRASI -->
 <div id="login-modal" class="login-backdrop open">
 <div class="login-hero">
@@ -289,14 +301,37 @@ button{-webkit-tap-highlight-color:transparent}
 <input id="keg-nama" class="field-control text-sm" placeholder="Nama kegiatan">
 <input id="keg-jenis" class="field-control text-sm" placeholder="Jenis pengawasan (contoh: Rutin, Khusus)">
 <input id="keg-wilayah" class="field-control text-sm" placeholder="Wilayah target (contoh: Kota Kupang)">
-<input id="keg-tanggal" type="date" class="field-control text-sm">
-<input id="keg-petugas" class="field-control text-sm" placeholder="Petugas ditugaskan (opsional)">
+<div class="grid grid-cols-2 gap-2.5">
+<div><label class="field-label text-xs">Tanggal Mulai</label><input id="keg-tanggal" type="date" class="field-control text-sm"></div>
+<div><label class="field-label text-xs">Tanggal Selesai</label><input id="keg-tanggal-selesai" type="date" class="field-control text-sm"></div>
+</div>
+<div>
+<label class="field-label text-xs">Rencana Komoditas Diperiksa</label>
+<div class="grid grid-cols-2 gap-1.5 text-xs">
+<label class="flex items-center gap-1.5"><input type="checkbox" class="keg-komoditas-chk" value="Pompa Air Listrik"> Pompa Air Listrik</label>
+<label class="flex items-center gap-1.5"><input type="checkbox" class="keg-komoditas-chk" value="Setrika Listrik"> Setrika Listrik</label>
+<label class="flex items-center gap-1.5"><input type="checkbox" class="keg-komoditas-chk" value="Baja Lembaran Lapis Seng"> Baja Lembaran Lapis Seng</label>
+<label class="flex items-center gap-1.5"><input type="checkbox" class="keg-komoditas-chk" value="Baja Tulangan Beton"> Baja Tulangan Beton</label>
+<label class="flex items-center gap-1.5"><input type="checkbox" class="keg-komoditas-chk" value="Kabel Listrik"> Kabel Listrik</label>
+</div>
+</div>
+<input id="keg-petugas" class="field-control text-sm" placeholder="Petugas/tim ditugaskan (pisahkan dengan koma, opsional)">
+<textarea id="keg-keterangan" class="field-control text-sm" rows="2" placeholder="Keterangan tambahan (opsional)"></textarea>
 <div class="flex gap-2">
 <button type="button" class="secondary-btn flex-1 py-2.5 text-sm font-bold" onclick="document.getElementById('kegiatan-form-box').classList.add('hidden')">Batal</button>
 <button id="btn-save-kegiatan" type="button" class="primary-btn flex-1 py-2.5 text-sm font-bold">Simpan Kegiatan</button>
 </div>
 </div>
 <div id="kegiatan-list" class="space-y-3"></div>
+</section>
+
+<!-- DETAIL KEGIATAN & LAPORAN GABUNGAN -->
+<section id="page-kegiatan-detail" class="page">
+<div class="mb-5 flex items-center gap-2">
+<button type="button" class="secondary-btn w-9 h-9 p-0 rounded-full flex items-center justify-center" onclick="switchPage('page-kegiatan')"><i data-lucide="arrow-right" class="w-4 h-4" style="transform:rotate(180deg)"></i></button>
+<div><p class="text-xs font-bold uppercase text-blue-600">Detail</p><h2 id="kegdetail-nama" class="text-2xl font-black">Kegiatan</h2></div>
+</div>
+<div id="kegdetail-content"></div>
 </section>
 
 <!-- TEMUAN -->
@@ -324,7 +359,16 @@ button{-webkit-tap-highlight-color:transparent}
 </section>
 
 <!-- 1. FORMULIR WIZARD 5 LANGKAH -->
+<!-- PILIH / BUAT KEGIATAN (gerbang sebelum formulir pemeriksaan) -->
+<section id="page-pilih-kegiatan" class="page">
+<div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Langkah Awal</p><h2 class="text-2xl font-black">Pilih atau Buat Kegiatan</h2></div>
+<p class="text-sm text-slate-500 mb-4">Setiap pemeriksaan harus terhubung ke satu Kegiatan Pengawasan. Pilih kegiatan yang sedang berjalan, atau buat kegiatan baru.</p>
+<button type="button" class="primary-btn w-full py-3.5 font-bold text-sm mb-4" onclick="document.getElementById('kegiatan-form-box').classList.remove('hidden'); switchPage('page-kegiatan');"><i data-lucide="plus" class="w-4 h-4"></i> Buat Kegiatan Baru</button>
+<div id="pilih-kegiatan-list" class="space-y-3"></div>
+</section>
+
 <section id="page-form" class="page">
+<div id="form-kegiatan-banner" class="mb-3 p-2.5 bg-blue-50 border border-blue-200 rounded-xl text-xs font-semibold text-blue-800"></div>
 <div class="mb-5">
 <div class="flex justify-between items-center mb-1.5">
 <p class="font-bold uppercase tracking-wider text-xs text-blue-600" id="wizard-title">Langkah 1 dari 5: Tim &amp; Toko</p>
@@ -1154,6 +1198,12 @@ function showAppNotify(title, desc, type = 'success') {
   lucide.createIcons();
 }
 function closeNotifyModal() { document.getElementById('app-notify-modal').classList.remove('open'); }
+function showPostSubmitChoice(desc) {
+  document.getElementById('post-submit-desc').textContent = desc + (currentKegiatanNama ? "\n\nKegiatan: " + currentKegiatanNama : "");
+  document.getElementById('post-submit-desc').style.whiteSpace = 'pre-line';
+  document.getElementById('post-submit-modal').classList.add('open');
+}
+function closePostSubmitModal() { document.getElementById('post-submit-modal').classList.remove('open'); }
 
 // --- DATABASE LOKAL (IndexedDB) & STATE ---
 let db = null;
@@ -1347,7 +1397,7 @@ function updateSessionUI() {
   document.getElementById('drawer-admin-btn').classList.toggle('hidden', currentInspector.role !== 'admin');
   document.getElementById('drawer-log-btn').classList.toggle('hidden', currentInspector.role !== 'admin');
   document.getElementById('drawer-pimpinan-btn').classList.toggle('hidden', currentInspector.role !== 'admin' && currentInspector.role !== 'pimpinan');
-  document.getElementById('btn-new-kegiatan').classList.toggle('hidden', currentInspector.role !== 'admin');
+  document.getElementById('btn-new-kegiatan').classList.remove('hidden'); // semua peran yang login boleh membuat kegiatan (lihat bagian J spesifikasi)
 }
 
 window.toggleLoginPassword = function (btn) {
@@ -1598,20 +1648,42 @@ function setSubmitLock(locked) {
     overlay.remove();
   }
 }
+// --- Kegiatan aktif (gerbang sebelum formulir pemeriksaan) ---
+let currentKegiatanId = localStorage.getItem('pagar_pktn_kegiatan_id') || '';
+let currentKegiatanNama = localStorage.getItem('pagar_pktn_kegiatan_nama') || '';
+function setActiveKegiatan(id, nama) {
+  currentKegiatanId = id || '';
+  currentKegiatanNama = nama || '';
+  if (id) { localStorage.setItem('pagar_pktn_kegiatan_id', id); localStorage.setItem('pagar_pktn_kegiatan_nama', nama || ''); }
+  else { localStorage.removeItem('pagar_pktn_kegiatan_id'); localStorage.removeItem('pagar_pktn_kegiatan_nama'); }
+  updateKegiatanBanner();
+}
+function updateKegiatanBanner() {
+  const b = document.getElementById('form-kegiatan-banner');
+  if (!b) return;
+  b.innerHTML = currentKegiatanId
+    ? `Kegiatan aktif: <b>${escHtml(currentKegiatanNama)}</b> &middot; <button type="button" class="underline font-bold" onclick="setActiveKegiatan('',''); switchPage('page-pilih-kegiatan');">Ganti Kegiatan</button>`
+    : '';
+}
+
 function switchPage(target) {
+  // Formulir pemeriksaan WAJIB punya Kegiatan aktif terlebih dahulu (lihat bagian E spesifikasi).
+  if (target === 'page-form' && !currentKegiatanId) target = 'page-pilih-kegiatan';
+
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(target).classList.add('active');
   const btn = document.querySelector(`.nav-btn[data-target="${target}"]`);
   if (btn) btn.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (target === 'page-form' && !isFormSubmitting) resetSubmitButton();
+  if (target === 'page-form') { if (!isFormSubmitting) resetSubmitButton(); updateKegiatanBanner(); }
   if (target === 'page-beranda') renderBeranda();
   if (target === 'page-history') renderHistory();
   if (target === 'page-analytics') renderAnalytics();
   if (target === 'page-maps') renderMapsList();
   if (target === 'page-sync') updateSyncStatusBox();
   if (target === 'page-pimpinan') renderPimpinan();
+  if (target === 'page-pilih-kegiatan') renderPilihKegiatan();
   if (target === 'page-kegiatan') renderKegiatan();
   if (target === 'page-temuan') renderTemuan();
   if (target === 'page-laporan-arsip') renderLaporanArsip();
@@ -1931,6 +2003,7 @@ document.getElementById('inspection-form').addEventListener('submit', async e =>
     id: 'INS-' + Date.now().toString(36).toUpperCase(),
     timestamp: new Date().toISOString(),
     agency: form.agency.value, officers: officersList, inspectorAccount: currentInspector.name,
+    idKegiatan: currentKegiatanId,
     sampleCode: val('sample-code'), businessName: val('business-name'), retailerAddress: val('retailer-address'),
     wilayah: val('wilayah'),
     ownerName: val('owner-name'), phone: phoneClean, coordinates: val('coordinates'),
@@ -1956,8 +2029,7 @@ document.getElementById('inspection-form').addEventListener('submit', async e =>
     await saveReportToDB(reportData);
     form.reset(); resetAllDocUI(); currentStep = 1; updateWizard();
     setSubmitLock(false);
-    switchPage('page-history');
-    showAppNotify("🚀 Laporan Berhasil Dikirim!", "Data pengawasan telah sukses diproses dan dikirim ke Spreadsheet dan Drive pusat.", "success");
+    showPostSubmitChoice("Data pengawasan telah sukses diproses dan dikirim ke Spreadsheet dan Drive pusat.");
     return;
   }
 
@@ -1977,8 +2049,7 @@ document.getElementById('inspection-form').addEventListener('submit', async e =>
   await saveReportToDB(reportData);
   form.reset(); resetAllDocUI(); currentStep = 1; updateWizard();
   setSubmitLock(false);
-  switchPage('page-history');
-  showAppNotify("⏳ Disimpan Sementara", "Laporan belum terkirim (perangkat offline atau server tidak merespons). Data tersimpan aman di memori lokal dan dapat disinkronkan lewat menu Sinkronisasi.", "warning");
+  showPostSubmitChoice("⏳ Disimpan sementara di perangkat ini (belum terkirim ke server — offline atau server tidak merespons). Dapat disinkronkan lewat menu Sinkronisasi.");
 });
 
 // --- RIWAYAT, STATISTIK, PENCARIAN ---
@@ -2417,15 +2488,21 @@ async function renderKegiatan() {
         <div class="history-card pending">
           <div class="flex items-start justify-between gap-2">
             <div><h4 class="font-extrabold text-sm">${escHtml(k.nama)}</h4>
-            <p class="text-xs text-slate-500 mt-0.5">${escHtml(k.jenis||'-')} &middot; ${escHtml(k.wilayah||'-')} &middot; ${escHtml(k.tanggal)}</p>
+            <p class="text-xs text-slate-500 mt-0.5">${escHtml(k.jenis||'-')} &middot; ${escHtml(k.wilayah||'-')}</p>
+            <p class="text-xs text-slate-500 mt-0.5">${escHtml(k.tanggal)}${k.tanggalSelesai && k.tanggalSelesai !== k.tanggal ? ' s/d ' + escHtml(k.tanggalSelesai) : ''}</p>
+            ${k.komoditas ? `<p class="text-xs text-slate-500 mt-0.5">Komoditas: ${escHtml(k.komoditas)}</p>` : ''}
             ${k.petugas ? `<p class="text-xs text-slate-500 mt-0.5">Petugas: ${escHtml(k.petugas)}</p>` : ''}</div>
             <span class="text-[10px] font-black px-2 py-1 rounded-full shrink-0 ${badge(k.status)}">${escHtml(k.status)}</span>
           </div>
-          <select class="field-control text-xs mt-2.5 !min-h-[40px]" onchange="updateKegiatanStatus('${k.id}', this.value)">
+          <select class="field-control text-xs mt-2.5 !min-h-[40px]" onchange="updateKegiatanStatus('${escHtml(k.id)}', this.value)">
             <option ${k.status==='Direncanakan'?'selected':''}>Direncanakan</option>
             <option ${k.status==='Berjalan'?'selected':''}>Berjalan</option>
             <option ${k.status==='Selesai'?'selected':''}>Selesai</option>
           </select>
+          <div class="flex gap-2 mt-2.5">
+            <button type="button" class="primary-btn flex-1 text-xs py-2.5 font-bold" onclick="pilihKegiatan('${escHtml(k.id)}','${escHtml(k.nama).replace(/'/g, "\\'")}')">Pilih &amp; Mulai Periksa</button>
+            <button type="button" class="secondary-btn flex-1 text-xs py-2.5 font-bold" onclick="openKegiatanDetail('${escHtml(k.id)}')">Detail &amp; Laporan</button>
+          </div>
         </div>`).join('');
   } catch (err) { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">Tidak dapat terhubung ke server.</p>`; }
 }
@@ -2436,24 +2513,124 @@ window.updateKegiatanStatus = async function (id, status) {
     else showAppNotify('Gagal', out.message || '', 'warning');
   } catch (err) { showAppNotify('Gagal Terhubung', 'Tidak dapat menghubungi server.', 'warning'); }
 };
+window.pilihKegiatan = function (id, nama) {
+  setActiveKegiatan(id, nama);
+  switchPage('page-form');
+};
+
+// --- Halaman "Pilih atau Buat Kegiatan" (gerbang sebelum formulir) ---
+async function renderPilihKegiatan() {
+  const box = document.getElementById('pilih-kegiatan-list');
+  box.innerHTML = `<p class="text-sm text-slate-400 italic">Memuat kegiatan aktif...</p>`;
+  if (!navigator.onLine) { box.innerHTML = `<div class="section-card text-sm font-semibold text-amber-600">Perlu koneksi internet untuk memuat daftar kegiatan. Jika Anda sedang offline dan sudah pernah memilih kegiatan, gunakan menu Form untuk melanjutkan.</div>`; return; }
+  try {
+    const out = await api('listKegiatan');
+    if (out.status !== 'success') { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">${escHtml(out.message||'Gagal memuat.')}</p>`; return; }
+    const aktif = out.items.filter(k => k.status !== 'Selesai');
+    box.innerHTML = aktif.length === 0
+      ? `<div class="section-card text-center text-sm font-semibold text-slate-500">Belum ada kegiatan aktif. Silakan buat kegiatan baru terlebih dahulu.</div>`
+      : aktif.map(k => `
+        <button type="button" class="section-card !p-4 w-full text-left hover:shadow-md" onclick="pilihKegiatan('${escHtml(k.id)}','${escHtml(k.nama).replace(/'/g, "\\'")}')">
+          <h4 class="font-extrabold text-sm">${escHtml(k.nama)}</h4>
+          <p class="text-xs text-slate-500 mt-0.5">${escHtml(k.jenis||'-')} &middot; ${escHtml(k.wilayah||'-')} &middot; ${escHtml(k.tanggal)}${k.tanggalSelesai && k.tanggalSelesai !== k.tanggal ? ' s/d ' + escHtml(k.tanggalSelesai) : ''}</p>
+          <span class="inline-block mt-1.5 text-[10px] font-black px-2 py-0.5 rounded-full bg-blue-50 text-blue-700">${escHtml(k.status)}</span>
+        </button>`).join('');
+  } catch (err) { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">Tidak dapat terhubung ke server.</p>`; }
+}
+
+// --- Detail Kegiatan + Generate Laporan Gabungan ---
+let detailKegiatanId = '';
+window.openKegiatanDetail = function (id) {
+  detailKegiatanId = id;
+  switchPage('page-kegiatan-detail');
+  renderKegiatanDetail();
+};
+async function renderKegiatanDetail() {
+  const box = document.getElementById('kegdetail-content');
+  box.innerHTML = `<p class="text-sm text-slate-400 italic">Memuat...</p>`;
+  if (!navigator.onLine) { box.innerHTML = `<div class="section-card text-sm font-semibold text-amber-600">Perlu koneksi internet.</div>`; return; }
+  try {
+    const [kegOut, inspOut] = await Promise.all([api('listKegiatan'), api('listInspeksiByKegiatan', { idKegiatan: detailKegiatanId })]);
+    const k = (kegOut.items || []).find(x => x.id === detailKegiatanId);
+    if (!k) { box.innerHTML = `<div class="section-card text-sm font-semibold text-rose-600">Kegiatan tidak ditemukan.</div>`; return; }
+    document.getElementById('kegdetail-nama').textContent = k.nama;
+    const items = inspOut.items || [];
+    const komoditasDiperiksa = [...new Set(items.map(r => r['Jenis Komoditas']).filter(Boolean))];
+    const kurang = items.filter(r => !r['Kabupaten/Kota'] || !r['Nama Toko/Pengecer'] || !r['Alamat Pengecer']).length;
+    box.innerHTML = `
+      <div class="section-card space-y-1.5 text-sm">
+        <p><b>Jenis:</b> ${escHtml(k.jenis||'-')}</p>
+        <p><b>Wilayah:</b> ${escHtml(k.wilayah||'-')}</p>
+        <p><b>Waktu:</b> ${escHtml(k.tanggal)}${k.tanggalSelesai && k.tanggalSelesai !== k.tanggal ? ' s/d ' + escHtml(k.tanggalSelesai) : ''}</p>
+        <p><b>Status:</b> ${escHtml(k.status)}</p>
+        <p><b>Rencana komoditas:</b> ${escHtml(k.komoditas||'-')}</p>
+        <p><b>Tim:</b> ${escHtml(k.petugas||'-')}</p>
+        ${k.keterangan ? `<p><b>Keterangan:</b> ${escHtml(k.keterangan)}</p>` : ''}
+      </div>
+      <div class="section-card space-y-2">
+        <h3 class="font-extrabold text-sm">Pemeriksaan Terhubung: ${items.length} sampel</h3>
+        <p class="text-xs text-slate-500">Komoditas yang benar-benar diperiksa: ${escHtml(komoditasDiperiksa.join(', ') || '-')}</p>
+        ${kurang > 0 ? `<p class="text-xs font-bold text-amber-600">⚠️ ${kurang} sampel belum lengkap datanya (wilayah/toko/alamat). Laporan tetap dapat dibuat, tetapi tabel akan menampilkan tanda "-" pada data yang kosong.</p>` : ''}
+        ${items.length === 0 ? `<p class="text-xs font-bold text-rose-600">Belum ada pemeriksaan yang terhubung. Laporan gabungan belum dapat dibuat.</p>` : items.slice(0, 15).map(r => `
+          <div class="p-2.5 bg-slate-50 border rounded-lg text-xs"><b>${escHtml(r['Kode Sampel']||'-')}</b> &middot; ${escHtml(r['Nama Toko/Pengecer']||'-')} &middot; ${escHtml(r['Jenis Komoditas']||'-')} &middot; <span class="font-bold">${escHtml(r['Status Validasi SNI']||'-')}</span></div>`).join('')}
+        ${items.length > 15 ? `<p class="text-xs text-slate-400 italic">...dan ${items.length - 15} sampel lainnya.</p>` : ''}
+      </div>
+      <button id="btn-generate-laporan-keg" type="button" class="primary-btn w-full py-3.5 font-bold text-sm" ${items.length === 0 ? 'disabled style="opacity:.5"' : ''}>Generate Laporan Kegiatan</button>
+      <div id="kegdetail-result" class="mt-3"></div>`;
+    document.getElementById('btn-generate-laporan-keg').addEventListener('click', generateLaporanKegiatanClient);
+  } catch (err) { box.innerHTML = `<div class="section-card text-sm font-semibold text-rose-600">Tidak dapat terhubung ke server.</div>`; }
+}
+async function generateLaporanKegiatanClient() {
+  const btn = document.getElementById('btn-generate-laporan-keg');
+  const result = document.getElementById('kegdetail-result');
+  if (btn.disabled) return;
+  btn.disabled = true; btn.textContent = 'Membuat laporan... (bisa 20-60 detik)';
+  result.innerHTML = '';
+  try {
+    const out = await api('generateLaporanKegiatan', { idKegiatan: detailKegiatanId });
+    if (out.status === 'success') {
+      result.innerHTML = `<div class="section-card space-y-2">
+        <p class="text-sm font-bold text-emerald-700">✅ Laporan gabungan berhasil dibuat (${out.jumlahSampel} sampel).</p>
+        <a href="${escHtml(out.pdfUrl)}" target="_blank" rel="noopener" class="primary-btn w-full text-xs py-2.5 font-bold">Buka PDF</a>
+        <a href="${escHtml(out.docUrl)}" target="_blank" rel="noopener" class="secondary-btn w-full text-xs py-2.5 font-bold">Buka Google Docs (untuk ditinjau/diedit)</a>
+        <p class="text-[11px] text-slate-500">Tinjau dokumen sebelum disahkan. Kesimpulan & rekomendasi dibuat otomatis berdasarkan aturan program dan perlu dikonfirmasi pengawas.</p>
+      </div>`;
+    } else {
+      result.innerHTML = `<div class="section-card text-sm font-semibold text-rose-600">${escHtml(out.message || 'Gagal membuat laporan.')}</div>`;
+    }
+  } catch (err) {
+    result.innerHTML = `<div class="section-card text-sm font-semibold text-rose-600">Tidak dapat menghubungi server (proses mungkin terlalu lama). Periksa menu Laporan Arsip, laporan bisa saja sudah selesai dibuat.</div>`;
+  } finally {
+    btn.disabled = false; btn.textContent = 'Generate Laporan Kegiatan';
+  }
+}
+
 document.getElementById('btn-new-kegiatan').addEventListener('click', () => document.getElementById('kegiatan-form-box').classList.remove('hidden'));
 document.getElementById('btn-save-kegiatan').addEventListener('click', async () => {
   const nama = document.getElementById('keg-nama').value.trim();
   const tanggal = document.getElementById('keg-tanggal').value;
-  if (!nama || !tanggal) { showAppNotify('Lengkapi Data', 'Nama kegiatan dan tanggal wajib diisi.', 'warning'); return; }
+  const tanggalSelesai = document.getElementById('keg-tanggal-selesai').value;
+  if (!nama || !tanggal) { showAppNotify('Lengkapi Data', 'Nama kegiatan dan tanggal mulai wajib diisi.', 'warning'); return; }
+  if (tanggalSelesai && tanggalSelesai < tanggal) { showAppNotify('Tanggal Tidak Valid', 'Tanggal selesai tidak boleh sebelum tanggal mulai.', 'warning'); return; }
+  const komoditas = Array.from(document.querySelectorAll('.keg-komoditas-chk:checked')).map(c => c.value).join(', ');
+  const btn = document.getElementById('btn-save-kegiatan');
+  btn.disabled = true;
   try {
     const out = await api('createKegiatan', {
       nama, jenis: document.getElementById('keg-jenis').value.trim(),
-      wilayah: document.getElementById('keg-wilayah').value.trim(), tanggal,
-      petugas: document.getElementById('keg-petugas').value.trim()
+      wilayah: document.getElementById('keg-wilayah').value.trim(), tanggal, tanggalSelesai, komoditas,
+      petugas: document.getElementById('keg-petugas').value.trim(),
+      keterangan: document.getElementById('keg-keterangan').value.trim()
     });
     if (out.status === 'success') {
-      ['keg-nama','keg-jenis','keg-wilayah','keg-tanggal','keg-petugas'].forEach(id => document.getElementById(id).value = '');
+      ['keg-nama','keg-jenis','keg-wilayah','keg-tanggal','keg-tanggal-selesai','keg-petugas','keg-keterangan'].forEach(id => document.getElementById(id).value = '');
+      document.querySelectorAll('.keg-komoditas-chk').forEach(c => c.checked = false);
       document.getElementById('kegiatan-form-box').classList.add('hidden');
-      showAppNotify('Kegiatan Dibuat', 'Kegiatan baru berhasil ditambahkan.', 'success');
+      showAppNotify('Kegiatan Dibuat', 'Kegiatan baru berhasil ditambahkan. Silakan pilih kegiatan ini untuk mulai memeriksa.', 'success');
       renderKegiatan();
     } else { showAppNotify('Gagal', out.message || '', 'warning'); }
   } catch (err) { showAppNotify('Gagal Terhubung', 'Tidak dapat menghubungi server.', 'warning'); }
+  finally { btn.disabled = false; }
 });
 
 // --- TEMUAN ---
