@@ -2,7 +2,7 @@
 // Letakkan file ini SEJAJAR dengan index.html (di root repo), bukan di dalam folder assets/,
 // karena cakupan (scope) service worker dibatasi ke lokasi file ini berada.
 
-const CACHE_NAME = 'pagar-sni-pktn-v3'; // dinaikkan supaya browser mengambil cache baru & membuang yang lama
+const CACHE_NAME = 'pagar-sni-pktn-v4'; // dinaikkan supaya browser mengambil cache baru & membuang yang lama
 const APP_SHELL = [
   './',
   './index.html',
