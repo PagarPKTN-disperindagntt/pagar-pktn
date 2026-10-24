@@ -308,7 +308,7 @@ button{-webkit-tap-highlight-color:transparent}
 </div>
 <div>
 <label class="field-label text-xs">Rencana Komoditas Diperiksa</label>
-<div class="grid grid-cols-2 gap-1.5 text-xs">
+<div id="keg-komoditas-box" class="grid grid-cols-2 gap-1.5 text-xs">
 <label class="flex items-center gap-1.5"><input type="checkbox" class="keg-komoditas-chk" value="Pompa Air Listrik"> Pompa Air Listrik</label>
 <label class="flex items-center gap-1.5"><input type="checkbox" class="keg-komoditas-chk" value="Setrika Listrik"> Setrika Listrik</label>
 <label class="flex items-center gap-1.5"><input type="checkbox" class="keg-komoditas-chk" value="Baja Lembaran Lapis Seng"> Baja Lembaran Lapis Seng</label>
@@ -316,7 +316,10 @@ button{-webkit-tap-highlight-color:transparent}
 <label class="flex items-center gap-1.5"><input type="checkbox" class="keg-komoditas-chk" value="Kabel Listrik"> Kabel Listrik</label>
 </div>
 </div>
-<input id="keg-petugas" class="field-control text-sm" placeholder="Petugas/tim ditugaskan (pisahkan dengan koma, opsional)">
+<div>
+<label class="field-label text-xs">Petugas / Tim Ditugaskan</label>
+<div id="keg-petugas-box" class="max-h-44 overflow-y-auto border rounded-xl p-2.5 space-y-1.5 text-xs"></div>
+</div>
 <textarea id="keg-keterangan" class="field-control text-sm" rows="2" placeholder="Keterangan tambahan (opsional)"></textarea>
 <div class="flex gap-2">
 <button type="button" class="secondary-btn flex-1 py-2.5 text-sm font-bold" onclick="document.getElementById('kegiatan-form-box').classList.add('hidden')">Batal</button>
@@ -398,7 +401,7 @@ button{-webkit-tap-highlight-color:transparent}
 <label class="field-label">Nama Petugas Pengawas <span class="text-rose-600">*</span></label>
 <div id="officer-container" class="space-y-3">
 <div class="flex gap-2">
-<input id="officer-0" class="field-control flex-1 officer-input" required value="Eryzon Arifandy Huan, S.Mat">
+<input id="officer-0" class="field-control flex-1 officer-input" list="petugas-list" required placeholder="Pilih / ketik nama petugas">
 </div>
 </div>
 <button type="button" class="secondary-btn text-xs py-2 px-3 font-bold mt-1" onclick="addOfficerField()">
@@ -1133,7 +1136,7 @@ Belum ada data laporan yang direkam untuk dianalisis.
 </section>
 
 </main>
-
+<datalist id="petugas-list"></datalist>
 <!-- FAB -->
 <button id="fab-form" class="fab-btn" title="Buat Laporan Baru"><i data-lucide="plus" class="w-7 h-7"></i></button>
 
@@ -1485,6 +1488,7 @@ document.getElementById('login-form').addEventListener('submit', async e => {
       saveSession({ token: out.token, exp: out.exp, user: out.user }, remember);
       e.target.reset();
       updateSessionUI();
+      loadMaster();
       showAppNotify('✨ Berhasil Masuk!', `Selamat datang, ${out.user.name}. Sistem pengawasan siap digunakan.`, 'success');
     } else if (out.status === 'pending') {
       showAppNotify('Menunggu Verifikasi', out.message, 'warning');
@@ -1592,7 +1596,7 @@ window.addOfficerField = function() {
   const div = document.createElement('div');
   div.className = 'flex gap-2 items-center';
   div.innerHTML = `
-    <input class="field-control flex-1 officer-input" required placeholder="Nama petugas tambahan">
+    <input class="field-control flex-1 officer-input" list="petugas-list" required placeholder="Nama petugas tambahan">
     <button type="button" class="danger-btn p-3 shrink-0" onclick="this.parentElement.remove()" title="Hapus Petugas"><i data-lucide="trash-2" class="w-5 h-5"></i></button>`;
   container.appendChild(div);
   lucide.createIcons();
@@ -1619,7 +1623,27 @@ function updateWizard() {
   document.getElementById('wizard-bar').style.width = pcts[currentStep - 1];
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-window.nextStep = function(step) { currentStep = step + 1; updateWizard(); };
+function validateStep(step) {
+  const v = id => (document.getElementById(id)?.value || '').trim();
+  const fail = (id, msg) => { showAppNotify('Data Belum Lengkap', msg, 'warning'); const el = document.getElementById(id); if (el) el.focus(); return false; };
+  if (step === 1) {
+    if (!Array.from(document.querySelectorAll('.officer-input')).some(i => i.value.trim())) return fail('officer-0', 'Nama petugas pengawas wajib diisi.');
+    if (!v('sample-code')) return fail('sample-code', 'Kode Sampel wajib diisi.');
+    const ph = v('phone').replace(/[^0-9]/g, '');
+    if (ph.length < 10 || ph.length > 15) return fail('phone', 'Nomor telepon harus 10-15 digit angka.');
+    if (!v('business-name')) return fail('business-name', 'Nama toko / pengecer wajib diisi.');
+    if (!v('retailer-address')) return fail('retailer-address', 'Alamat pengecer wajib diisi.');
+    if (!v('wilayah')) return fail('wilayah', 'Kabupaten / Kota wajib diisi.');
+    if (!v('owner-name')) return fail('owner-name', 'Nama pemilik / penanggung jawab wajib diisi.');
+  }
+  if (step === 2) {
+    if (!v('product-type')) return fail('product-type', 'Jenis produk wajib dipilih.');
+    if (!v('brand')) return fail('brand', 'Merek / brand wajib diisi.');
+    if (v('sni-barang-opt').includes('Ada') && !v('sni-barang-num')) return fail('sni-barang-num', 'Nomor SNI pada barang belum diisi.');
+  }
+  return true;
+}
+window.nextStep = function(step) { if (!validateStep(step)) return; currentStep = step + 1; updateWizard(); };
 window.prevStep = function(step) { currentStep = step - 1; updateWizard(); };
 
 // --- MENU SAMPING & NAVIGASI HALAMAN ---
@@ -1677,7 +1701,7 @@ function switchPage(target) {
   const btn = document.querySelector(`.nav-btn[data-target="${target}"]`);
   if (btn) btn.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (target === 'page-form') { if (!isFormSubmitting) resetSubmitButton(); updateKegiatanBanner(); }
+  if (target === 'page-form') { resetSubmitButton();updateKegiatanBanner(); }
   if (target === 'page-beranda') renderBeranda();
   if (target === 'page-history') renderHistory();
   if (target === 'page-analytics') renderAnalytics();
@@ -1955,6 +1979,7 @@ document.getElementById('inspection-form').addEventListener('submit', async e =>
   }
   if (!currentInspector) { updateSessionUI(); return; }
   const form = e.target;
+    for (const s of [1, 2]) { if (!validateStep(s)) { currentStep = s; updateWizard(); return; } }
 
   const phoneClean = document.getElementById('phone').value.trim().replace(/[^0-9]/g, '');
   if (phoneClean.length < 10 || phoneClean.length > 15) {
@@ -2028,7 +2053,7 @@ document.getElementById('inspection-form').addEventListener('submit', async e =>
     reportData.folderUrl = reportData.docUrl;
     reportData.synced = true;
     await saveReportToDB(reportData);
-    form.reset(); resetAllDocUI(); currentStep = 1; updateWizard();
+    afterSubmitReset(form);
     setSubmitLock(false);
     showPostSubmitChoice("Data pengawasan telah sukses diproses dan dikirim ke Spreadsheet dan Drive pusat.");
     return;
@@ -2048,7 +2073,7 @@ document.getElementById('inspection-form').addEventListener('submit', async e =>
   // Sisanya: perangkat offline, atau server tidak merespons -> simpan sebagai antrean offline
   reportData.synced = false;
   await saveReportToDB(reportData);
-  form.reset(); resetAllDocUI(); currentStep = 1; updateWizard();
+  afterSubmitReset(form);
   setSubmitLock(false);
   showPostSubmitChoice("⏳ Disimpan sementara di perangkat ini (belum terkirim ke server — offline atau server tidak merespons). Dapat disinkronkan lewat menu Sinkronisasi.");
 });
@@ -2503,6 +2528,7 @@ async function renderKegiatan() {
           <div class="flex gap-2 mt-2.5">
             <button type="button" class="primary-btn flex-1 text-xs py-2.5 font-bold" onclick="pilihKegiatan('${escHtml(k.id)}','${escHtml(k.nama).replace(/'/g, "\\'")}')">Pilih &amp; Mulai Periksa</button>
             <button type="button" class="secondary-btn flex-1 text-xs py-2.5 font-bold" onclick="openKegiatanDetail('${escHtml(k.id)}')">Detail &amp; Laporan</button>
+            ${currentInspector && currentInspector.role === 'admin' ? `<button type="button" class="danger-btn text-xs py-2.5 px-3 font-bold" onclick="hapusKegiatan('${escHtml(k.id)}')">Hapus</button>` : ''}
           </div>
         </div>`).join('');
   } catch (err) { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">Tidak dapat terhubung ke server.</p>`; }
@@ -2608,30 +2634,31 @@ async function generateLaporanKegiatanClient() {
 
 document.getElementById('btn-new-kegiatan').addEventListener('click', () => document.getElementById('kegiatan-form-box').classList.remove('hidden'));
 document.getElementById('btn-save-kegiatan').addEventListener('click', async () => {
+  const btn = document.getElementById('btn-save-kegiatan');
+  if (btn.disabled) return;
   const nama = document.getElementById('keg-nama').value.trim();
   const tanggal = document.getElementById('keg-tanggal').value;
   const tanggalSelesai = document.getElementById('keg-tanggal-selesai').value;
   if (!nama || !tanggal) { showAppNotify('Lengkapi Data', 'Nama kegiatan dan tanggal mulai wajib diisi.', 'warning'); return; }
   if (tanggalSelesai && tanggalSelesai < tanggal) { showAppNotify('Tanggal Tidak Valid', 'Tanggal selesai tidak boleh sebelum tanggal mulai.', 'warning'); return; }
   const komoditas = Array.from(document.querySelectorAll('.keg-komoditas-chk:checked')).map(c => c.value).join(', ');
-  const btn = document.getElementById('btn-save-kegiatan');
-  btn.disabled = true;
+  const petugas = Array.from(document.querySelectorAll('.keg-petugas-chk:checked')).map(c => c.value).join(' | ');
+  btn.disabled = true; btn.textContent = 'Menyimpan... mohon tunggu';
   try {
     const out = await api('createKegiatan', {
       nama, jenis: document.getElementById('keg-jenis').value.trim(),
-      wilayah: document.getElementById('keg-wilayah').value.trim(), tanggal, tanggalSelesai, komoditas,
-      petugas: document.getElementById('keg-petugas').value.trim(),
+      wilayah: document.getElementById('keg-wilayah').value.trim(), tanggal, tanggalSelesai, komoditas, petugas,
       keterangan: document.getElementById('keg-keterangan').value.trim()
     });
     if (out.status === 'success') {
-      ['keg-nama','keg-jenis','keg-wilayah','keg-tanggal','keg-tanggal-selesai','keg-petugas','keg-keterangan'].forEach(id => document.getElementById(id).value = '');
-      document.querySelectorAll('.keg-komoditas-chk').forEach(c => c.checked = false);
+      ['keg-nama','keg-jenis','keg-wilayah','keg-tanggal','keg-tanggal-selesai','keg-keterangan'].forEach(id => document.getElementById(id).value = '');
+      document.querySelectorAll('.keg-komoditas-chk, .keg-petugas-chk').forEach(c => c.checked = false);
       document.getElementById('kegiatan-form-box').classList.add('hidden');
       showAppNotify('Kegiatan Dibuat', 'Kegiatan baru berhasil ditambahkan. Silakan pilih kegiatan ini untuk mulai memeriksa.', 'success');
       renderKegiatan();
     } else { showAppNotify('Gagal', out.message || '', 'warning'); }
   } catch (err) { showAppNotify('Gagal Terhubung', 'Tidak dapat menghubungi server.', 'warning'); }
-  finally { btn.disabled = false; }
+  finally { btn.disabled = false; btn.textContent = 'Simpan Kegiatan'; }
 });
 
 // --- TEMUAN ---
@@ -2675,7 +2702,7 @@ async function renderLaporanArsip() {
       out.items.map(l => `
         <div class="history-card legal flex items-center justify-between gap-3">
           <div class="min-w-0"><h4 class="font-extrabold text-sm truncate">${escHtml(l.namaFile)}</h4>
-          <p class="text-xs text-slate-500 mt-0.5">Sampel: ${escHtml(l.inspeksiId)} &middot; ${escHtml(l.tanggal)}</p></div>
+          <p class="text-xs text-slate-500 mt-0.5">Ref: ${escHtml(l.inspeksiId)} &middot; ${escHtml(l.tanggal)}</p></div>
           <a href="${escHtml(l.url)}" target="_blank" rel="noopener" class="secondary-btn text-xs px-3 py-2 font-bold shrink-0">Buka</a>
         </div>`).join('');
   } catch (err) { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">Tidak dapat terhubung ke server.</p>`; }
@@ -2698,7 +2725,61 @@ async function renderLog() {
         </div>`).join('');
   } catch (err) { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">Tidak dapat terhubung ke server.</p>`; }
 }
+// --- DATA MASTER (komoditas & petugas dari Spreadsheet) ---
+const MASTER_KEY = 'pagar_pktn_master';
+let master = { komoditas: ['Pompa Air Listrik','Setrika Listrik','Baja Lembaran Lapis Seng','Baja Tulangan Beton','Kabel Listrik'], petugas: [] };
+try { const m = JSON.parse(localStorage.getItem(MASTER_KEY) || 'null'); if (m && m.komoditas) master = m; } catch (e) {}
 
+function applyMaster() {
+  const opt = n => `<option value="${escHtml(n)}">${escHtml(n)}</option>`;
+  const sel = document.getElementById('product-type');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">-- Pilih Jenis Produk Pengawasan --</option>' + master.komoditas.map(opt).join('');
+  if (master.komoditas.includes(cur)) sel.value = cur;
+  const hs = document.getElementById('hist-product');
+  const hcur = hs.value;
+  hs.innerHTML = '<option value="">Semua Produk</option>' + master.komoditas.map(opt).join('');
+  hs.value = master.komoditas.includes(hcur) ? hcur : '';
+  document.getElementById('keg-komoditas-box').innerHTML = master.komoditas.map(n =>
+    `<label class="flex items-center gap-1.5"><input type="checkbox" class="keg-komoditas-chk" value="${escHtml(n)}"> ${escHtml(n)}</label>`).join('');
+  document.getElementById('keg-petugas-box').innerHTML = master.petugas.length === 0
+    ? '<p class="text-slate-400 italic">Belum ada data petugas. Isi sheet "Data_Petugas" di Spreadsheet.</p>'
+    : master.petugas.map(p => `<label class="flex items-start gap-2"><input type="checkbox" class="keg-petugas-chk mt-0.5" value="${escHtml(p.nama)}"> <span><b>${escHtml(p.nama)}</b><br><span class="text-slate-500">${escHtml([p.pangkat, p.golongan].filter(Boolean).join(' / '))}${p.nip ? ' &middot; NIP ' + escHtml(p.nip) : ''}</span></span></label>`).join('');
+  document.getElementById('petugas-list').innerHTML = master.petugas.map(p => `<option value="${escHtml(p.nama)}"></option>`).join('');
+}
+async function loadMaster() {
+  if (navigator.onLine && loadSession()) {
+    try {
+      const out = await api('listMaster');
+      if (out.status === 'success' && out.master) { master = out.master; localStorage.setItem(MASTER_KEY, JSON.stringify(master)); }
+    } catch (e) {}
+  }
+  applyMaster();
+}
+
+// Dipakai setelah laporan tersimpan: kosongkan form dan buka kunci tombol kirim
+function afterSubmitReset(form) {
+  form.reset(); resetAllDocUI();
+  form.querySelectorAll('select').forEach(s => s.dispatchEvent(new Event('change')));
+  document.querySelectorAll('#officer-container > div:not(:first-child)').forEach(d => d.remove());
+  document.getElementById('sample-code-feedback').textContent = '';
+  currentStep = 1; updateWizard();
+  resetSubmitButton();
+  updateSessionUI(); // isi ulang nama petugas dari akun login
+}
+
+window.hapusKegiatan = async function (id) {
+  if (!confirm('Hapus kegiatan ini? Hanya bisa dihapus jika belum ada pemeriksaan yang terhubung.')) return;
+  try {
+    const out = await api('deleteKegiatan', { id });
+    if (out.status === 'success') {
+      if (currentKegiatanId === id) setActiveKegiatan('', '');
+      showAppNotify('Terhapus', 'Kegiatan berhasil dihapus.', 'success');
+      renderKegiatan();
+    } else { showAppNotify('Gagal', out.message || '', 'warning'); }
+  } catch (err) { showAppNotify('Gagal Terhubung', 'Tidak dapat menghubungi server.', 'warning'); }
+};
+  loadMaster();
 initDB();
 lucide.createIcons();
 </script>
