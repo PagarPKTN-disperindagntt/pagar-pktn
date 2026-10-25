@@ -55,7 +55,7 @@ button{-webkit-tap-highlight-color:transparent}
 .danger-btn{color:#d93025;background:rgba(217,48,37,.1)}
 .fab-btn{position:fixed;right:20px;bottom:88px;z-index:50;width:60px;height:60px;border-radius:50%;background:var(--blue);color:white;display:flex;align-items:center;justify-content:center;border:0;cursor:pointer;box-shadow:0 4px 16px rgba(26,115,232,.4)}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:40;border-top:1px solid var(--line);background:var(--surface);padding:8px 10px max(8px,env(safe-area-inset-bottom))}
-.nav-inner{max-width:720px;margin:auto;display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.nav-inner{max-width:720px;margin:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:4px}
 .nav-btn{min-height:56px;border:0;border-radius:10px;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;font-weight:700;cursor:pointer}
 .nav-btn.active{color:var(--blue);background:rgba(26,115,232,.1)}
 .nav-btn svg{width:22px;height:22px}
@@ -1398,12 +1398,16 @@ function updateSessionUI() {
     placeholder.classList.remove('hidden');
   }
 
-  document.getElementById('drawer-admin-btn').classList.toggle('hidden', currentInspector.role !== 'admin');
+    document.getElementById('drawer-admin-btn').classList.toggle('hidden', currentInspector.role !== 'admin');
   document.getElementById('drawer-log-btn').classList.toggle('hidden', currentInspector.role !== 'admin');
   document.getElementById('drawer-pimpinan-btn').classList.toggle('hidden', currentInspector.role !== 'admin' && currentInspector.role !== 'pimpinan');
-  document.getElementById('btn-new-kegiatan').classList.remove('hidden'); // semua peran yang login boleh membuat kegiatan (lihat bagian J spesifikasi)
-}
 
+  const isPimpinan = currentInspector.role === 'pimpinan';
+  document.getElementById('fab-form').classList.toggle('hidden', isPimpinan);
+  document.getElementById('btn-new-kegiatan').classList.toggle('hidden', isPimpinan);
+  document.querySelector('.nav-btn[data-target="page-form"]').classList.toggle('hidden', isPimpinan);
+  document.querySelectorAll('.quick-action[data-target="page-form"]').forEach(b => b.classList.toggle('hidden', isPimpinan));
+}
 window.toggleLoginPassword = function (btn) {
   const inp = document.getElementById('login-password');
   inp.type = inp.type === 'password' ? 'text' : 'password';
@@ -1692,6 +1696,7 @@ function updateKegiatanBanner() {
 }
 
 function switchPage(target) {
+  if (target === 'page-form' && currentInspector && currentInspector.role === 'pimpinan') target = 'page-beranda';
   // Formulir pemeriksaan WAJIB punya Kegiatan aktif terlebih dahulu (lihat bagian E spesifikasi).
   if (target === 'page-form' && !currentKegiatanId) target = 'page-pilih-kegiatan';
 
@@ -2509,6 +2514,7 @@ async function renderKegiatan() {
     const out = await api('listKegiatan');
     if (out.status !== 'success') { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">${escHtml(out.message||'Gagal memuat.')}</p>`; return; }
     const badge = s => s === 'Selesai' ? 'bg-emerald-50 text-emerald-700' : s === 'Berjalan' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700';
+        const isPimpinan = currentInspector && currentInspector.role === 'pimpinan';
     box.innerHTML = out.items.length === 0 ? `<div class="section-card text-center text-sm font-semibold text-slate-500">Belum ada kegiatan terjadwal.</div>` :
       out.items.map(k => `
         <div class="history-card pending">
@@ -2520,13 +2526,13 @@ async function renderKegiatan() {
             ${k.petugas ? `<p class="text-xs text-slate-500 mt-0.5">Petugas: ${escHtml(k.petugas)}</p>` : ''}</div>
             <span class="text-[10px] font-black px-2 py-1 rounded-full shrink-0 ${badge(k.status)}">${escHtml(k.status)}</span>
           </div>
-          <select class="field-control text-xs mt-2.5 !min-h-[40px]" onchange="updateKegiatanStatus('${escHtml(k.id)}', this.value)">
+                   ${isPimpinan ? '' : `<select class="field-control text-xs mt-2.5 !min-h-[40px]" onchange="updateKegiatanStatus('${escHtml(k.id)}', this.value)">
             <option ${k.status==='Direncanakan'?'selected':''}>Direncanakan</option>
             <option ${k.status==='Berjalan'?'selected':''}>Berjalan</option>
             <option ${k.status==='Selesai'?'selected':''}>Selesai</option>
-          </select>
+          </select>`}
           <div class="flex gap-2 mt-2.5">
-            <button type="button" class="primary-btn flex-1 text-xs py-2.5 font-bold" onclick="pilihKegiatan('${escHtml(k.id)}','${escHtml(k.nama).replace(/'/g, "\\'")}')">Pilih &amp; Mulai Periksa</button>
+                                   ${isPimpinan ? '' : `<button type="button" class="primary-btn flex-1 text-xs py-2.5 font-bold" onclick="pilihKegiatan('${escHtml(k.id)}','${escHtml(k.nama).replace(/'/g, "\\'")}')">Pilih &amp; Mulai Periksa</button>`}
             <button type="button" class="secondary-btn flex-1 text-xs py-2.5 font-bold" onclick="openKegiatanDetail('${escHtml(k.id)}')">Detail &amp; Laporan</button>
             ${currentInspector && currentInspector.role === 'admin' ? `<button type="button" class="danger-btn text-xs py-2.5 px-3 font-bold" onclick="hapusKegiatan('${escHtml(k.id)}')">Hapus</button>` : ''}
           </div>
@@ -2669,16 +2675,19 @@ async function renderTemuan() {
   try {
     const out = await api('listTemuan');
     if (out.status !== 'success') { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">${escHtml(out.message||'Gagal memuat.')}</p>`; return; }
+        const isPimpinan = currentInspector && currentInspector.role === 'pimpinan';
     box.innerHTML = out.items.length === 0 ? `<div class="section-card text-center text-sm font-semibold text-slate-500">Belum ada temuan tercatat.</div>` :
       out.items.map(t => `
         <div class="history-card temuan">
           <span class="text-xs font-bold text-rose-600">${escHtml(t.kategori)} &middot; Sampel: ${escHtml(t.inspeksiId)}</span>
           <p class="text-sm font-medium mt-1">${escHtml(t.deskripsi)}</p>
-          <label class="field-label text-xs mt-2.5">Tindak Lanjut</label>
-          <div class="flex gap-2">
-            <input class="field-control text-xs flex-1" id="tindakan-${escHtml(t.id)}" value="${escHtml(t.tindakan||'')}" placeholder="Catat tindak lanjut...">
-            <button type="button" class="secondary-btn text-xs px-3 font-bold" onclick="saveTindakan('${escHtml(t.id)}')">Simpan</button>
-          </div>
+                   <label class="field-label text-xs mt-2.5">Tindak Lanjut</label>
+          ${isPimpinan
+            ? `<p class="text-xs text-slate-600">${escHtml(t.tindakan || 'Belum ada tindak lanjut.')}</p>`
+            : `<div class="flex gap-2">
+                <input class="field-control text-xs flex-1" id="tindakan-${escHtml(t.id)}" value="${escHtml(t.tindakan||'')}" placeholder="Catat tindak lanjut...">
+                <button type="button" class="secondary-btn text-xs px-3 font-bold" onclick="saveTindakan('${escHtml(t.id)}')">Simpan</button>
+              </div>`}
         </div>`).join('');
   } catch (err) { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">Tidak dapat terhubung ke server.</p>`; }
 }
