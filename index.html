@@ -104,8 +104,10 @@ button{-webkit-tap-highlight-color:transparent}
 <h3 id="post-submit-title" class="text-lg font-black text-slate-900 tracking-tight">Laporan Tersimpan</h3>
 <p id="post-submit-desc" class="text-sm text-slate-600 font-medium leading-relaxed"></p>
 <button type="button" class="primary-btn w-full py-3.5 text-sm font-bold" onclick="closePostSubmitModal(); switchPage('page-form');">Lanjutkan Kegiatan Ini</button>
-<button type="button" class="secondary-btn w-full py-3.5 text-sm font-bold" onclick="closePostSubmitModal(); setActiveKegiatan('',''); switchPage('page-pilih-kegiatan');">Buat / Pilih Kegiatan Baru</button>
-<button type="button" class="text-xs font-bold text-slate-500" onclick="closePostSubmitModal(); switchPage('page-history');">Lihat Riwayat</button>
+<button type="button" class="secondary-btn w-full py-3.5 text-sm font-bold" onclick="closePostSubmitModal(); setActiveKegiatan('',''); switchPage('page-pilih-kegiatan');">Buat Kegiatan Baru</button>
+<button type="button" class="secondary-btn w-full py-3.5 text-sm font-bold" onclick="closePostSubmitModal(); switchPage('page-kegiatan');">Riwayat Kegiatan</button>
+<button type="button" class="danger-btn w-full py-3.5 text-sm font-bold" onclick="akhiriKegiatan()">Akhiri Kegiatan Ini</button>
+<button type="button" class="text-xs font-bold text-slate-500" onclick="closePostSubmitModal(); switchPage('page-history');">Lihat Riwayat Laporan</button>
 </div>
 </div>
 
@@ -326,6 +328,11 @@ button{-webkit-tap-highlight-color:transparent}
 <button id="btn-save-kegiatan" type="button" class="primary-btn flex-1 py-2.5 text-sm font-bold">Simpan Kegiatan</button>
 </div>
 </div>
+<div class="flex gap-2 mb-3 text-xs font-bold">
+<button type="button" class="keg-tab flex-1 py-2 rounded-lg" data-f="aktif">Aktif</button>
+<button type="button" class="keg-tab flex-1 py-2 rounded-lg" data-f="selesai">Riwayat (Selesai)</button>
+<button type="button" class="keg-tab flex-1 py-2 rounded-lg" data-f="semua">Semua</button>
+</div>
 <div id="kegiatan-list" class="space-y-3"></div>
 </section>
 
@@ -348,7 +355,7 @@ button{-webkit-tap-highlight-color:transparent}
 <!-- LAPORAN ARSIP -->
 <section id="page-laporan-arsip" class="page">
 <div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Arsip PDF</p><h2 class="text-2xl font-black">Laporan Arsip</h2></div>
-<p class="text-xs text-slate-500 mb-4">Katalog setiap laporan PDF yang berhasil dibuat otomatis, dari seluruh petugas.</p>
+<p class="text-xs text-slate-500 mb-4">Laporan kegiatan final yang sudah ditandatangani dan diunggah oleh petugas.</p>
 <div id="laporan-arsip-list" class="space-y-3"></div>
 </section>
 
@@ -447,9 +454,6 @@ button{-webkit-tap-highlight-color:transparent}
 </article>
 <button type="button" class="primary-btn w-full py-4 font-black text-sm" onclick="nextStep(1)">Selanjutnya: Produk &amp; Bagian A &rarr;</button>
 </div>
-
-<!-- ===== BAGIAN 1 BERAKHIR DI SINI (form masih terbuka). Bagian 2 dimulai dari STEP 2. ===== -->
-<!-- ===== BAGIAN 2 DIMULAI (lanjutan tepat setelah STEP 1) ===== -->
 
 <!-- STEP 2: Produk & Bagian A -->
 <div class="wizard-step" data-step="2">
@@ -661,9 +665,6 @@ button{-webkit-tap-highlight-color:transparent}
 <button type="button" class="primary-btn w-1/2 py-4 font-bold text-sm" onclick="nextStep(3)">Selanjutnya: Bagian C &amp; D &rarr;</button>
 </div>
 </div>
-
-<!-- ===== BAGIAN 2 BERAKHIR DI SINI (form masih terbuka). Bagian 3 dimulai dari STEP 4. ===== -->
-<!-- ===== BAGIAN 3 DIMULAI (lanjutan tepat setelah STEP 3) ===== -->
 
 <!-- STEP 4: Bagian C & D -->
 <div class="wizard-step" data-step="4">
@@ -1004,9 +1005,6 @@ Belum ada data laporan yang direkam untuk dianalisis.
 </div>
 </section>
 
-<!-- ===== BAGIAN 3 BERAKHIR DI SINI (di dalam <main>). Bagian 4 dimulai dari halaman Cari. ===== -->
-<!-- ===== BAGIAN 4 DIMULAI (lanjutan tepat setelah halaman Profil, masih di dalam <main>) ===== -->
-
 <!-- 6. PENCARIAN -->
 <section id="page-search" class="page">
 <div class="mb-5"><p class="text-xs font-bold uppercase text-blue-600">Pencarian</p><h2 class="text-2xl font-black">Cari Data Laporan</h2></div>
@@ -1164,7 +1162,7 @@ Belum ada data laporan yang direkam untuk dianalisis.
 <button id="drawer-pimpinan-btn" data-target="page-pimpinan" class="drawer-menu-item hidden w-full text-left px-4 py-3.5 rounded-xl flex items-center gap-3 hover:bg-indigo-50 text-indigo-700" type="button"><svg class="w-5 h-5 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg><span>Dashboard Pimpinan</span></button>
 <button data-target="page-kegiatan" class="drawer-menu-item w-full text-left px-4 py-3.5 rounded-xl flex items-center gap-3 hover:bg-blue-50 text-slate-700" type="button"><svg class="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span>Kegiatan Pengawasan</span></button>
 <button data-target="page-temuan" class="drawer-menu-item w-full text-left px-4 py-3.5 rounded-xl flex items-center gap-3 hover:bg-blue-50 text-slate-700" type="button"><i data-lucide="alert-triangle" class="w-5 h-5 text-blue-600"></i><span>Temuan</span></button>
-<button data-target="page-laporan-arsip" class="drawer-menu-item w-full text-left px-4 py-3.5 rounded-xl flex items-center gap-3 hover:bg-blue-50 text-slate-700" type="button"><svg class="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg><span>Laporan Arsip</span></button>
+<button id="drawer-arsip-btn" data-target="page-laporan-arsip" class="drawer-menu-item w-full text-left px-4 py-3.5 rounded-xl flex items-center gap-3 hover:bg-blue-50 text-slate-700" type="button"><svg class="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg><span>Laporan Arsip</span></button>
 <button id="drawer-log-btn" data-target="page-log" class="drawer-menu-item hidden w-full text-left px-4 py-3.5 rounded-xl flex items-center gap-3 hover:bg-amber-50 text-amber-700" type="button"><svg class="w-5 h-5 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg><span>Log Aktivitas</span></button>
 <button data-target="page-analytics" class="drawer-menu-item w-full text-left px-4 py-3.5 rounded-xl flex items-center gap-3 hover:bg-blue-50 text-slate-700" type="button"><i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-600"></i><span>Statistik Kepatuhan</span></button>
 <button data-target="page-sync" class="drawer-menu-item w-full text-left px-4 py-3.5 rounded-xl flex items-center gap-3 hover:bg-blue-50 text-slate-700" type="button"><i data-lucide="cloud" class="w-5 h-5 text-blue-600"></i><span>Sinkronisasi &amp; Backup</span></button>
@@ -1185,8 +1183,6 @@ Belum ada data laporan yang direkam untuk dianalisis.
 </div>
 </div>
 
-<!-- ===== BAGIAN 4 BERAKHIR DI SINI. Seluruh tampilan (markup) sudah lengkap. Bagian 5 dan 6 = <script> lalu </body></html>. ===== -->
-<!-- ===== BAGIAN 5 DIMULAI (lanjutan setelah bagian 4). Tag <script> dibuka di sini dan ditutup di bagian 6. ===== -->
 <script>
 // --- NOTIFIKASI KUSTOM ---
 function showAppNotify(title, desc, type = 'success') {
@@ -1212,6 +1208,7 @@ function closePostSubmitModal() { document.getElementById('post-submit-modal').c
 // --- DATABASE LOKAL (IndexedDB) & STATE ---
 let db = null;
 let reports = [];
+let kegiatanCache = [];
 let isFormSubmitting = false;
 const DB_NAME = 'PagarPKTNDB';
 const STORE_NAME = 'reports';
@@ -1219,10 +1216,14 @@ const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyM8GRS50S8Ex2z
 
 function initDB() {
   return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, 1);
+    const req = indexedDB.open(DB_NAME, 2);
     req.onerror = e => reject(e.target.error);
-    req.onsuccess = e => { db = e.target.result; loadReportsFromDB().then(() => resolve(db)); };
-    req.onupgradeneeded = e => { e.target.result.createObjectStore(STORE_NAME, { keyPath: 'id' }); };
+    req.onsuccess = e => { db = e.target.result; loadKegiatanLocal(); loadReportsFromDB().then(() => resolve(db)); };
+    req.onupgradeneeded = e => {
+      const d = e.target.result;
+      if (!d.objectStoreNames.contains(STORE_NAME)) d.createObjectStore(STORE_NAME, { keyPath: 'id' });
+      if (!d.objectStoreNames.contains('kegiatan')) d.createObjectStore('kegiatan', { keyPath: 'id' });
+    };
   });
 }
 function loadReportsFromDB() {
@@ -1255,9 +1256,10 @@ function updateSyncStatusBox() {
   const box = document.getElementById('sync-status-box');
   if (!box) return;
   const unsynced = reports.filter(r => !r.synced).length;
-  if (unsynced > 0) {
+  const kegPending = kegiatanCache.filter(k => !k.synced || k.statusSynced === false).length;
+  if (unsynced + kegPending > 0) {
     box.className = 'p-4 bg-amber-50 border border-amber-200 rounded-xl text-xs font-bold text-amber-800';
-    box.innerHTML = `⚠️ Terdapat <b>${unsynced}</b> laporan dalam antrean lokal yang belum tersinkronisasi ke Cloud.`;
+    box.innerHTML = `⚠️ Antrean lokal: <b>${unsynced}</b> laporan dan <b>${kegPending}</b> kegiatan belum tersinkronisasi ke Cloud.`;
   } else {
     box.className = 'p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-bold text-emerald-800';
     box.innerHTML = `✅ Seluruh laporan (${reports.length} sampel) telah tersinkronisasi sempurna ke Cloud.`;
@@ -1398,7 +1400,7 @@ function updateSessionUI() {
     placeholder.classList.remove('hidden');
   }
 
-    document.getElementById('drawer-admin-btn').classList.toggle('hidden', currentInspector.role !== 'admin');
+  document.getElementById('drawer-admin-btn').classList.toggle('hidden', currentInspector.role !== 'admin');
   document.getElementById('drawer-log-btn').classList.toggle('hidden', currentInspector.role !== 'admin');
   document.getElementById('drawer-pimpinan-btn').classList.toggle('hidden', currentInspector.role !== 'admin' && currentInspector.role !== 'pimpinan');
 
@@ -1407,6 +1409,7 @@ function updateSessionUI() {
   document.getElementById('btn-new-kegiatan').classList.toggle('hidden', isPimpinan);
   document.querySelector('.nav-btn[data-target="page-form"]').classList.toggle('hidden', isPimpinan);
   document.querySelectorAll('.quick-action[data-target="page-form"]').forEach(b => b.classList.toggle('hidden', isPimpinan));
+  document.getElementById('drawer-arsip-btn').classList.toggle('hidden', currentInspector.role === 'petugas');
 }
 window.toggleLoginPassword = function (btn) {
   const inp = document.getElementById('login-password');
@@ -1691,12 +1694,16 @@ function updateKegiatanBanner() {
   const b = document.getElementById('form-kegiatan-banner');
   if (!b) return;
   b.innerHTML = currentKegiatanId
-    ? `Kegiatan aktif: <b>${escHtml(currentKegiatanNama)}</b> &middot; <button type="button" class="underline font-bold" onclick="setActiveKegiatan('',''); switchPage('page-pilih-kegiatan');">Ganti Kegiatan</button>`
+    ? `Kegiatan aktif: <b>${escHtml(currentKegiatanNama)}</b> &middot; <button type="button" class="underline font-bold" onclick="setActiveKegiatan('',''); switchPage('page-pilih-kegiatan');">Ganti</button> &middot; <button type="button" class="underline font-bold text-rose-600" onclick="akhiriKegiatan()">Akhiri Kegiatan</button>`
     : '';
 }
 
 function switchPage(target) {
   if (target === 'page-form' && currentInspector && currentInspector.role === 'pimpinan') target = 'page-beranda';
+  if (target === 'page-form' && currentKegiatanId) {
+    const kg = kegiatanCache.find(x => x.id === currentKegiatanId);
+    if (kg && kg.status === 'Selesai') setActiveKegiatan('', '');  // kegiatan sudah ditutup
+  }
   // Formulir pemeriksaan WAJIB punya Kegiatan aktif terlebih dahulu (lihat bagian E spesifikasi).
   if (target === 'page-form' && !currentKegiatanId) target = 'page-pilih-kegiatan';
 
@@ -1970,10 +1977,6 @@ function compressImage(file, maxWidth = 900, quality = 0.7) {
   });
 }
 
-// ===== BAGIAN 5 BERAKHIR DI SINI (di dalam <script>, belum ditutup). Bagian 6 dimulai dari handler kirim formulir. =====
-
-// ===== BAGIAN 6 DIMULAI (lanjutan tepat setelah bagian 5, masih di dalam <script>) =====
-
 // --- KIRIM FORMULIR ---
 document.getElementById('inspection-form').addEventListener('submit', async e => {
   e.preventDefault();
@@ -1984,7 +1987,7 @@ document.getElementById('inspection-form').addEventListener('submit', async e =>
   }
   if (!currentInspector) { updateSessionUI(); return; }
   const form = e.target;
-    for (const s of [1, 2]) { if (!validateStep(s)) { currentStep = s; updateWizard(); return; } }
+  for (const s of [1, 2]) { if (!validateStep(s)) { currentStep = s; updateWizard(); return; } }
 
   const phoneClean = document.getElementById('phone').value.trim().replace(/[^0-9]/g, '');
   if (phoneClean.length < 10 || phoneClean.length > 15) {
@@ -2051,6 +2054,8 @@ document.getElementById('inspection-form').addEventListener('submit', async e =>
   };
 
   const driveLink = `https://drive.google.com/drive/search?q=${encodeURIComponent(reportData.sampleCode)}`;
+  const kg = kegiatanCache.find(x => x.id === currentKegiatanId);
+  if (kg && !kg.synced && navigator.onLine) await pushKegiatan(kg, 'create'); // kegiatan buatan offline harus ada di server dulu
   const sendResult = navigator.onLine ? await sendReport(reportData) : null;
 
   if (sendResult && sendResult.status === 'success') {
@@ -2343,48 +2348,6 @@ document.getElementById('export-csv').addEventListener('click', () => {
   link.click();
 });
 
-// --- SINKRONISASI ANTREAN ---
-document.getElementById('btn-sync-now').addEventListener('click', async () => {
-  const unsynced = reports.filter(r => !r.synced);
-  if (unsynced.length === 0) { showAppNotify("Sinkronisasi Selesai", "✅ Seluruh laporan sudah tersinkronisasi sempurna ke Cloud.", "success"); return; }
-  if (!navigator.onLine) { showAppNotify("Perangkat Offline", "⚠️ Sambungkan ke internet terlebih dahulu sebelum melakukan sinkronisasi cloud.", "warning"); return; }
-  if (!currentInspector) { updateSessionUI(); return; }
-
-  let successCount = 0, failCount = 0, conflictCount = 0;
-  const syncBtn = document.getElementById('btn-sync-now');
-  syncBtn.disabled = true;
-  syncBtn.textContent = "Sedang Menyinkronkan ke Cloud...";
-
-  for (const r of unsynced) {
-    let retries = 3, sent = false;
-    while (retries > 0 && !sent) {
-      if (!currentInspector) break; // sesi berakhir di tengah jalan
-      const out = await sendReport(r);
-      if (out && out.status === 'success') {
-        r.docUrl = out.folderUrl || `https://drive.google.com/drive/search?q=${encodeURIComponent(r.sampleCode)}`;
-        r.folderUrl = r.docUrl; r.synced = true;
-        await saveReportToDB(r);
-        sent = true; successCount++;
-      } else if (out && out.status === 'duplicate_sample') {
-        // Kode sampel bentrok dengan laporan lain -> tidak akan pernah berhasil walau diulang.
-        conflictCount++;
-        retries = 0;
-        break;
-      } else {
-        retries--;
-        if (retries === 0) failCount++; else await new Promise(res => setTimeout(res, 1000));
-      }
-    }
-    if (!sent && !currentInspector) { failCount = unsynced.length - successCount; break; }
-  }
-
-  syncBtn.disabled = false;
-  syncBtn.innerHTML = `<i data-lucide="cloud-upload" class="w-5 h-5"></i> Sinkronkan Antrean ke Cloud Sekarang`;
-  lucide.createIcons();
-  renderHistory();
-  showAppNotify("📊 Laporan Sinkronisasi Cloud", `Berhasil dikirim: ${successCount} sampel\nBentrok kode sampel (perlu diedit manual): ${conflictCount} sampel\nGagal/Tertunda: ${failCount} sampel`, (failCount === 0 && conflictCount === 0) ? "success" : "warning");
-});
-
 // --- PETA ---
 let leafletMap = null;
 let leafletMarkers = [];
@@ -2505,73 +2468,7 @@ async function renderPimpinan() {
   }
 }
 
-// --- KEGIATAN PENGAWASAN ---
-async function renderKegiatan() {
-  const box = document.getElementById('kegiatan-list');
-  box.innerHTML = `<p class="text-sm text-slate-400 italic">Memuat...</p>`;
-  if (!navigator.onLine) { box.innerHTML = `<p class="text-sm text-amber-600 font-semibold">Perlu koneksi internet untuk memuat kegiatan.</p>`; return; }
-  try {
-    const out = await api('listKegiatan');
-    if (out.status !== 'success') { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">${escHtml(out.message||'Gagal memuat.')}</p>`; return; }
-    const badge = s => s === 'Selesai' ? 'bg-emerald-50 text-emerald-700' : s === 'Berjalan' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700';
-        const isPimpinan = currentInspector && currentInspector.role === 'pimpinan';
-    box.innerHTML = out.items.length === 0 ? `<div class="section-card text-center text-sm font-semibold text-slate-500">Belum ada kegiatan terjadwal.</div>` :
-      out.items.map(k => `
-        <div class="history-card pending">
-          <div class="flex items-start justify-between gap-2">
-            <div><h4 class="font-extrabold text-sm">${escHtml(k.nama)}</h4>
-            <p class="text-xs text-slate-500 mt-0.5">${escHtml(k.jenis||'-')} &middot; ${escHtml(k.wilayah||'-')}</p>
-            <p class="text-xs text-slate-500 mt-0.5">${escHtml(k.tanggal)}${k.tanggalSelesai && k.tanggalSelesai !== k.tanggal ? ' s/d ' + escHtml(k.tanggalSelesai) : ''}</p>
-            ${k.komoditas ? `<p class="text-xs text-slate-500 mt-0.5">Komoditas: ${escHtml(k.komoditas)}</p>` : ''}
-            ${k.petugas ? `<p class="text-xs text-slate-500 mt-0.5">Petugas: ${escHtml(k.petugas)}</p>` : ''}</div>
-            <span class="text-[10px] font-black px-2 py-1 rounded-full shrink-0 ${badge(k.status)}">${escHtml(k.status)}</span>
-          </div>
-                   ${isPimpinan ? '' : `<select class="field-control text-xs mt-2.5 !min-h-[40px]" onchange="updateKegiatanStatus('${escHtml(k.id)}', this.value)">
-            <option ${k.status==='Direncanakan'?'selected':''}>Direncanakan</option>
-            <option ${k.status==='Berjalan'?'selected':''}>Berjalan</option>
-            <option ${k.status==='Selesai'?'selected':''}>Selesai</option>
-          </select>`}
-          <div class="flex gap-2 mt-2.5">
-                                   ${isPimpinan ? '' : `<button type="button" class="primary-btn flex-1 text-xs py-2.5 font-bold" onclick="pilihKegiatan('${escHtml(k.id)}','${escHtml(k.nama).replace(/'/g, "\\'")}')">Pilih &amp; Mulai Periksa</button>`}
-            <button type="button" class="secondary-btn flex-1 text-xs py-2.5 font-bold" onclick="openKegiatanDetail('${escHtml(k.id)}')">Detail &amp; Laporan</button>
-            ${currentInspector && currentInspector.role === 'admin' ? `<button type="button" class="danger-btn text-xs py-2.5 px-3 font-bold" onclick="hapusKegiatan('${escHtml(k.id)}')">Hapus</button>` : ''}
-          </div>
-        </div>`).join('');
-  } catch (err) { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">Tidak dapat terhubung ke server.</p>`; }
-}
-window.updateKegiatanStatus = async function (id, status) {
-  try {
-    const out = await api('updateKegiatanStatus', { id, status });
-    if (out.status === 'success') showAppNotify('Status Diperbarui', 'Status kegiatan berhasil diubah.', 'success');
-    else showAppNotify('Gagal', out.message || '', 'warning');
-  } catch (err) { showAppNotify('Gagal Terhubung', 'Tidak dapat menghubungi server.', 'warning'); }
-};
-window.pilihKegiatan = function (id, nama) {
-  setActiveKegiatan(id, nama);
-  switchPage('page-form');
-};
-
-// --- Halaman "Pilih atau Buat Kegiatan" (gerbang sebelum formulir) ---
-async function renderPilihKegiatan() {
-  const box = document.getElementById('pilih-kegiatan-list');
-  box.innerHTML = `<p class="text-sm text-slate-400 italic">Memuat kegiatan aktif...</p>`;
-  if (!navigator.onLine) { box.innerHTML = `<div class="section-card text-sm font-semibold text-amber-600">Perlu koneksi internet untuk memuat daftar kegiatan. Jika Anda sedang offline dan sudah pernah memilih kegiatan, gunakan menu Form untuk melanjutkan.</div>`; return; }
-  try {
-    const out = await api('listKegiatan');
-    if (out.status !== 'success') { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">${escHtml(out.message||'Gagal memuat.')}</p>`; return; }
-    const aktif = out.items.filter(k => k.status !== 'Selesai');
-    box.innerHTML = aktif.length === 0
-      ? `<div class="section-card text-center text-sm font-semibold text-slate-500">Belum ada kegiatan aktif. Silakan buat kegiatan baru terlebih dahulu.</div>`
-      : aktif.map(k => `
-        <button type="button" class="section-card !p-4 w-full text-left hover:shadow-md" onclick="pilihKegiatan('${escHtml(k.id)}','${escHtml(k.nama).replace(/'/g, "\\'")}')">
-          <h4 class="font-extrabold text-sm">${escHtml(k.nama)}</h4>
-          <p class="text-xs text-slate-500 mt-0.5">${escHtml(k.jenis||'-')} &middot; ${escHtml(k.wilayah||'-')} &middot; ${escHtml(k.tanggal)}${k.tanggalSelesai && k.tanggalSelesai !== k.tanggal ? ' s/d ' + escHtml(k.tanggalSelesai) : ''}</p>
-          <span class="inline-block mt-1.5 text-[10px] font-black px-2 py-0.5 rounded-full bg-blue-50 text-blue-700">${escHtml(k.status)}</span>
-        </button>`).join('');
-  } catch (err) { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">Tidak dapat terhubung ke server.</p>`; }
-}
-
-// --- Detail Kegiatan + Generate Laporan Gabungan ---
+// --- Detail Kegiatan + Generate Laporan Gabungan + Laporan Final ---
 let detailKegiatanId = '';
 window.openKegiatanDetail = function (id) {
   detailKegiatanId = id;
@@ -2583,7 +2480,27 @@ async function renderKegiatanDetail() {
   box.innerHTML = `<p class="text-sm text-slate-400 italic">Memuat...</p>`;
   if (!navigator.onLine) { box.innerHTML = `<div class="section-card text-sm font-semibold text-amber-600">Perlu koneksi internet.</div>`; return; }
   try {
-    const [kegOut, inspOut] = await Promise.all([api('listKegiatan'), api('listInspeksiByKegiatan', { idKegiatan: detailKegiatanId })]);
+    const [kegOut, inspOut, finOut] = await Promise.all([api('listKegiatan'), api('listInspeksiByKegiatan', { idKegiatan: detailKegiatanId }), api('listLaporanFinal')]);
+    const finals = (finOut.items || []).filter(f => f.idKegiatan === detailKegiatanId);
+    const finalAktif = finals.find(f => f.status === 'Final');
+    const isPimpinan = currentInspector && currentInspector.role === 'pimpinan';
+    const finalHtml = `
+      <div class="section-card space-y-3 mt-5">
+        <h3 class="font-extrabold text-sm">Laporan Final (Bertanda Tangan)</h3>
+        <ol class="list-decimal pl-5 text-xs text-slate-600 space-y-1">
+          <li>Klik <b>Generate Laporan Kegiatan</b> untuk mendapatkan draf.</li>
+          <li>Buka Google Docs, lalu sempurnakan isinya.</li>
+          <li>Cetak, tandatangani, dan scan (PDF disarankan).</li>
+          <li>Unggah hasil scan di bawah ini.</li>
+        </ol>
+        ${finalAktif
+          ? `<div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs"><b>✅ Final v${escHtml(finalAktif.versi)}</b> &middot; diunggah ${escHtml(finalAktif.oleh)} &middot; ${escHtml(String(finalAktif.tanggal).slice(0, 10))}<br><button type="button" class="underline font-bold mt-1" onclick="bukaLaporanFinal('${escHtml(finalAktif.id)}')">Buka berkas</button></div>`
+          : `<div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs font-bold text-amber-800">Belum ada laporan final.</div>`}
+        ${isPimpinan ? '' : `
+          <input id="final-file" type="file" accept="application/pdf,image/jpeg,image/png" class="field-control text-xs">
+          <input id="final-catatan" class="field-control text-xs" placeholder="Catatan (opsional)">
+          <button id="btn-upload-final" type="button" class="primary-btn w-full py-3 text-sm font-bold" onclick="uploadLaporanFinalClient()">${finalAktif ? 'Unggah Versi Baru' : 'Unggah Laporan Final'}</button>`}
+      </div>`;
     const k = (kegOut.items || []).find(x => x.id === detailKegiatanId);
     if (!k) { box.innerHTML = `<div class="section-card text-sm font-semibold text-rose-600">Kegiatan tidak ditemukan.</div>`; return; }
     document.getElementById('kegdetail-nama').textContent = k.nama;
@@ -2609,7 +2526,8 @@ async function renderKegiatanDetail() {
         ${items.length > 15 ? `<p class="text-xs text-slate-400 italic">...dan ${items.length - 15} sampel lainnya.</p>` : ''}
       </div>
       <button id="btn-generate-laporan-keg" type="button" class="primary-btn w-full py-3.5 font-bold text-sm" ${items.length === 0 ? 'disabled style="opacity:.5"' : ''}>Generate Laporan Kegiatan</button>
-      <div id="kegdetail-result" class="mt-3"></div>`;
+      <div id="kegdetail-result" class="mt-3"></div>
+      ${finalHtml}`;
     document.getElementById('btn-generate-laporan-keg').addEventListener('click', generateLaporanKegiatanClient);
   } catch (err) { box.innerHTML = `<div class="section-card text-sm font-semibold text-rose-600">Tidak dapat terhubung ke server.</div>`; }
 }
@@ -2626,46 +2544,19 @@ async function generateLaporanKegiatanClient() {
         <p class="text-sm font-bold text-emerald-700">✅ Laporan gabungan berhasil dibuat (${out.jumlahSampel} sampel).</p>
         <a href="${escHtml(out.pdfUrl)}" target="_blank" rel="noopener" class="primary-btn w-full text-xs py-2.5 font-bold">Buka PDF</a>
         <a href="${escHtml(out.docUrl)}" target="_blank" rel="noopener" class="secondary-btn w-full text-xs py-2.5 font-bold">Buka Google Docs (untuk ditinjau/diedit)</a>
-        <p class="text-[11px] text-slate-500">Tinjau dokumen sebelum disahkan. Kesimpulan & rekomendasi dibuat otomatis berdasarkan aturan program dan perlu dikonfirmasi pengawas.</p>
+        <p class="text-[11px] text-slate-500">Ini adalah DRAF otomatis. Sempurnakan di Google Docs, cetak, tandatangani, scan, lalu unggah di bagian "Laporan Final" di bawah.</p>
       </div>`;
     } else {
       result.innerHTML = `<div class="section-card text-sm font-semibold text-rose-600">${escHtml(out.message || 'Gagal membuat laporan.')}</div>`;
     }
   } catch (err) {
-    result.innerHTML = `<div class="section-card text-sm font-semibold text-rose-600">Tidak dapat menghubungi server (proses mungkin terlalu lama). Periksa menu Laporan Arsip, laporan bisa saja sudah selesai dibuat.</div>`;
+    result.innerHTML = `<div class="section-card text-sm font-semibold text-rose-600">Tidak dapat menghubungi server (proses mungkin terlalu lama). Coba buka kembali Detail Kegiatan ini; draf bisa saja sudah selesai dibuat di folder Drive kegiatan.</div>`;
   } finally {
     btn.disabled = false; btn.textContent = 'Generate Laporan Kegiatan';
   }
 }
 
 document.getElementById('btn-new-kegiatan').addEventListener('click', () => document.getElementById('kegiatan-form-box').classList.remove('hidden'));
-document.getElementById('btn-save-kegiatan').addEventListener('click', async () => {
-  const btn = document.getElementById('btn-save-kegiatan');
-  if (btn.disabled) return;
-  const nama = document.getElementById('keg-nama').value.trim();
-  const tanggal = document.getElementById('keg-tanggal').value;
-  const tanggalSelesai = document.getElementById('keg-tanggal-selesai').value;
-  if (!nama || !tanggal) { showAppNotify('Lengkapi Data', 'Nama kegiatan dan tanggal mulai wajib diisi.', 'warning'); return; }
-  if (tanggalSelesai && tanggalSelesai < tanggal) { showAppNotify('Tanggal Tidak Valid', 'Tanggal selesai tidak boleh sebelum tanggal mulai.', 'warning'); return; }
-  const komoditas = Array.from(document.querySelectorAll('.keg-komoditas-chk:checked')).map(c => c.value).join(', ');
-  const petugas = Array.from(document.querySelectorAll('.keg-petugas-chk:checked')).map(c => c.value).join(' | ');
-  btn.disabled = true; btn.textContent = 'Menyimpan... mohon tunggu';
-  try {
-    const out = await api('createKegiatan', {
-      nama, jenis: document.getElementById('keg-jenis').value.trim(),
-      wilayah: document.getElementById('keg-wilayah').value.trim(), tanggal, tanggalSelesai, komoditas, petugas,
-      keterangan: document.getElementById('keg-keterangan').value.trim()
-    });
-    if (out.status === 'success') {
-      ['keg-nama','keg-jenis','keg-wilayah','keg-tanggal','keg-tanggal-selesai','keg-keterangan'].forEach(id => document.getElementById(id).value = '');
-      document.querySelectorAll('.keg-komoditas-chk, .keg-petugas-chk').forEach(c => c.checked = false);
-      document.getElementById('kegiatan-form-box').classList.add('hidden');
-      showAppNotify('Kegiatan Dibuat', 'Kegiatan baru berhasil ditambahkan. Silakan pilih kegiatan ini untuk mulai memeriksa.', 'success');
-      renderKegiatan();
-    } else { showAppNotify('Gagal', out.message || '', 'warning'); }
-  } catch (err) { showAppNotify('Gagal Terhubung', 'Tidak dapat menghubungi server.', 'warning'); }
-  finally { btn.disabled = false; btn.textContent = 'Simpan Kegiatan'; }
-});
 
 // --- TEMUAN ---
 async function renderTemuan() {
@@ -2675,13 +2566,13 @@ async function renderTemuan() {
   try {
     const out = await api('listTemuan');
     if (out.status !== 'success') { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">${escHtml(out.message||'Gagal memuat.')}</p>`; return; }
-        const isPimpinan = currentInspector && currentInspector.role === 'pimpinan';
+    const isPimpinan = currentInspector && currentInspector.role === 'pimpinan';
     box.innerHTML = out.items.length === 0 ? `<div class="section-card text-center text-sm font-semibold text-slate-500">Belum ada temuan tercatat.</div>` :
       out.items.map(t => `
         <div class="history-card temuan">
           <span class="text-xs font-bold text-rose-600">${escHtml(t.kategori)} &middot; Sampel: ${escHtml(t.inspeksiId)}</span>
           <p class="text-sm font-medium mt-1">${escHtml(t.deskripsi)}</p>
-                   <label class="field-label text-xs mt-2.5">Tindak Lanjut</label>
+          <label class="field-label text-xs mt-2.5">Tindak Lanjut</label>
           ${isPimpinan
             ? `<p class="text-xs text-slate-600">${escHtml(t.tindakan || 'Belum ada tindak lanjut.')}</p>`
             : `<div class="flex gap-2">
@@ -2698,24 +2589,6 @@ window.saveTindakan = async function (id) {
     showAppNotify(out.status === 'success' ? 'Tersimpan' : 'Gagal', out.status === 'success' ? 'Tindak lanjut berhasil disimpan.' : (out.message||''), out.status === 'success' ? 'success' : 'warning');
   } catch (err) { showAppNotify('Gagal Terhubung', 'Tidak dapat menghubungi server.', 'warning'); }
 };
-
-// --- LAPORAN ARSIP ---
-async function renderLaporanArsip() {
-  const box = document.getElementById('laporan-arsip-list');
-  box.innerHTML = `<p class="text-sm text-slate-400 italic">Memuat...</p>`;
-  if (!navigator.onLine) { box.innerHTML = `<p class="text-sm text-amber-600 font-semibold">Perlu koneksi internet untuk memuat arsip laporan.</p>`; return; }
-  try {
-    const out = await api('listLaporan');
-    if (out.status !== 'success') { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">${escHtml(out.message||'Gagal memuat.')}</p>`; return; }
-    box.innerHTML = out.items.length === 0 ? `<div class="section-card text-center text-sm font-semibold text-slate-500">Belum ada laporan PDF yang tercatat.</div>` :
-      out.items.map(l => `
-        <div class="history-card legal flex items-center justify-between gap-3">
-          <div class="min-w-0"><h4 class="font-extrabold text-sm truncate">${escHtml(l.namaFile)}</h4>
-          <p class="text-xs text-slate-500 mt-0.5">Ref: ${escHtml(l.inspeksiId)} &middot; ${escHtml(l.tanggal)}</p></div>
-          <a href="${escHtml(l.url)}" target="_blank" rel="noopener" class="secondary-btn text-xs px-3 py-2 font-bold shrink-0">Buka</a>
-        </div>`).join('');
-  } catch (err) { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">Tidak dapat terhubung ke server.</p>`; }
-}
 
 // --- LOG AKTIVITAS ---
 async function renderLog() {
@@ -2783,12 +2656,316 @@ window.hapusKegiatan = async function (id) {
     const out = await api('deleteKegiatan', { id });
     if (out.status === 'success') {
       if (currentKegiatanId === id) setActiveKegiatan('', '');
+      await delKegiatanLocal(id);
       showAppNotify('Terhapus', 'Kegiatan berhasil dihapus.', 'success');
       renderKegiatan();
     } else { showAppNotify('Gagal', out.message || '', 'warning'); }
   } catch (err) { showAppNotify('Gagal Terhubung', 'Tidak dapat menghubungi server.', 'warning'); }
 };
-  loadMaster();
+
+// ===================== KEGIATAN OFFLINE + AKHIRI KEGIATAN =====================
+let kegFilter = 'aktif';
+
+function idbReq(store, mode, fn) {
+  return new Promise((resolve, reject) => {
+    if (!db) { resolve(null); return; }
+    const tx = db.transaction([store], mode);
+    const req = fn(tx.objectStore(store));
+    tx.oncomplete = () => resolve(req ? req.result : null);
+    tx.onerror = e => reject(e.target.error);
+  });
+}
+async function loadKegiatanLocal() { kegiatanCache = (await idbReq('kegiatan', 'readonly', s => s.getAll())) || []; return kegiatanCache; }
+async function putKegiatanLocal(k) { await idbReq('kegiatan', 'readwrite', s => s.put(k)); await loadKegiatanLocal(); }
+async function delKegiatanLocal(id) { await idbReq('kegiatan', 'readwrite', s => s.delete(id)); await loadKegiatanLocal(); }
+
+// Daftar kegiatan: bila online, segarkan dari server lalu simpan salinan lokal; bila offline, pakai salinan lokal.
+async function getKegiatanList() {
+  await loadKegiatanLocal();
+  if (navigator.onLine && loadSession()) {
+    try {
+      const out = await api('listKegiatan');
+      if (out.status === 'success') {
+        const serverIds = new Set(out.items.map(k => k.id));
+        for (const k of kegiatanCache.slice()) if (k.synced && !serverIds.has(k.id)) await delKegiatanLocal(k.id);
+        for (const k of out.items) {
+          const loc = kegiatanCache.find(x => x.id === k.id);
+          if (loc && loc.statusSynced === false) continue; // perubahan status lokal belum terkirim, jangan ditimpa
+          await putKegiatanLocal({ ...k, synced: true, statusSynced: true });
+        }
+      }
+    } catch (e) { /* offline / server tidak merespons: pakai data lokal */ }
+  }
+  return kegiatanCache.slice().sort((a, b) => String(b.tanggal || '').localeCompare(String(a.tanggal || '')) || String(b.id).localeCompare(String(a.id)));
+}
+
+// phase 'create' = kirim kegiatan baru; phase 'status' = kirim perubahan status (setelah laporan terkirim)
+async function pushKegiatan(k, phase) {
+  if (!navigator.onLine || !loadSession()) return false;
+  try {
+    if (phase === 'create' && !k.synced) {
+      const out = await api('createKegiatan', {
+        id: k.id, nama: k.nama, jenis: k.jenis, wilayah: k.wilayah, tanggal: k.tanggal, tanggalSelesai: k.tanggalSelesai,
+        komoditas: k.komoditas, petugas: k.petugas, keterangan: k.keterangan, status: k.status === 'Selesai' ? 'Berjalan' : k.status
+      });
+      if (out.status === 'success') { k.synced = true; k.statusSynced = k.status !== 'Selesai'; delete k.syncError; }
+      else { k.syncError = out.message || 'Ditolak server'; }
+      await putKegiatanLocal(k);
+    }
+    if (phase === 'status' && k.synced && k.statusSynced === false) {
+      const out = await api('updateKegiatanStatus', { id: k.id, status: k.status });
+      if (out.status === 'success') { k.statusSynced = true; await putKegiatanLocal(k); }
+    }
+  } catch (e) { return false; }
+  return true;
+}
+
+async function setKegiatanStatus(id, status) {
+  const k = kegiatanCache.find(x => x.id === id);
+  if (!k) return false;
+  k.status = status; k.statusSynced = false;
+  await putKegiatanLocal(k);
+  if (status === 'Selesai' && id === currentKegiatanId) setActiveKegiatan('', '');
+  await pushKegiatan(k, 'create');
+  await pushKegiatan(k, 'status');
+  return true;
+}
+
+window.akhiriKegiatan = async function (id) {
+  id = (typeof id === 'string' && id) ? id : currentKegiatanId;
+  const k = kegiatanCache.find(x => x.id === id);
+  if (!k) return;
+  if (!confirm(`Akhiri kegiatan "${k.nama}"?\n\nKegiatan akan ditutup dan tidak dapat diisi pemeriksaan baru. Tombol Input Data akan meminta Anda membuat kegiatan baru.`)) return;
+  closePostSubmitModal();
+  await setKegiatanStatus(id, 'Selesai');
+  const sinkron = kegiatanCache.find(x => x.id === id);
+  showAppNotify('Kegiatan Diakhiri',
+    (sinkron && sinkron.statusSynced === false ? 'Tersimpan di perangkat; status akan dikirim saat sinkronisasi.\n\n' : '') +
+    'Buka "Detail & Laporan" pada kegiatan ini untuk membuat draf laporan dan mengunggah laporan final.', 'success');
+  kegFilter = 'selesai';
+  switchPage('page-kegiatan');
+};
+
+window.pilihKegiatan = async function (id) {
+  const k = kegiatanCache.find(x => x.id === id);
+  if (!k) return;
+  if (k.status === 'Selesai') { showAppNotify('Kegiatan Sudah Selesai', 'Pilih atau buat kegiatan lain.', 'warning'); return; }
+  if (k.status === 'Direncanakan') await setKegiatanStatus(id, 'Berjalan');
+  setActiveKegiatan(id, k.nama);
+  switchPage('page-form');
+};
+
+document.querySelectorAll('.keg-tab').forEach(b => b.addEventListener('click', () => { kegFilter = b.dataset.f; renderKegiatan(); }));
+
+async function renderKegiatan() {
+  const box = document.getElementById('kegiatan-list');
+  document.querySelectorAll('.keg-tab').forEach(b => b.className = 'keg-tab flex-1 py-2 rounded-lg ' + (b.dataset.f === kegFilter ? 'bg-blue-50 text-blue-600' : 'text-slate-500'));
+  box.innerHTML = `<p class="text-sm text-slate-400 italic">Memuat...</p>`;
+  const all = await getKegiatanList();
+  const items = all.filter(k => kegFilter === 'semua' ? true : kegFilter === 'selesai' ? k.status === 'Selesai' : k.status !== 'Selesai');
+  const role = currentInspector && currentInspector.role;
+  const badge = s => s === 'Selesai' ? 'bg-emerald-50 text-emerald-700' : s === 'Berjalan' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700';
+  box.innerHTML = items.length === 0
+    ? `<div class="section-card text-center text-sm font-semibold text-slate-500">Tidak ada kegiatan pada tampilan ini.</div>`
+    : items.map(k => {
+        const selesai = k.status === 'Selesai';
+        const pending = (!k.synced || k.statusSynced === false) ? `<p class="text-[11px] font-bold text-amber-600 mt-1">⏳ Belum tersinkron${k.syncError ? ' — ' + escHtml(k.syncError) : ''}</p>` : '';
+        return `
+        <div class="history-card ${selesai ? 'legal' : 'pending'}">
+          <div class="flex items-start justify-between gap-2">
+            <div><h4 class="font-extrabold text-sm">${escHtml(k.nama)}</h4>
+            <p class="text-xs text-slate-500 mt-0.5">${escHtml(k.jenis || '-')} &middot; ${escHtml(k.wilayah || '-')}</p>
+            <p class="text-xs text-slate-500 mt-0.5">${escHtml(k.tanggal)}${k.tanggalSelesai && k.tanggalSelesai !== k.tanggal ? ' s/d ' + escHtml(k.tanggalSelesai) : ''}</p>
+            ${k.komoditas ? `<p class="text-xs text-slate-500 mt-0.5">Komoditas: ${escHtml(k.komoditas)}</p>` : ''}
+            ${k.petugas ? `<p class="text-xs text-slate-500 mt-0.5">Petugas: ${escHtml(k.petugas)}</p>` : ''}
+            ${pending}</div>
+            <span class="text-[10px] font-black px-2 py-1 rounded-full shrink-0 ${badge(k.status)}">${escHtml(k.status)}</span>
+          </div>
+          <div class="flex gap-2 mt-2.5 flex-wrap">
+            ${role !== 'pimpinan' && !selesai ? `<button type="button" class="primary-btn flex-1 text-xs py-2.5 font-bold" onclick="pilihKegiatan('${escHtml(k.id)}')">Pilih &amp; Mulai Periksa</button>` : ''}
+            <button type="button" class="secondary-btn flex-1 text-xs py-2.5 font-bold" onclick="openKegiatanDetail('${escHtml(k.id)}')">Detail &amp; Laporan</button>
+          </div>
+          <div class="flex gap-2 mt-2 flex-wrap">
+            ${role !== 'pimpinan' && !selesai ? `<button type="button" class="danger-btn flex-1 text-xs py-2 font-bold" onclick="akhiriKegiatan('${escHtml(k.id)}')">Akhiri Kegiatan</button>` : ''}
+            ${role === 'admin' && selesai ? `<button type="button" class="secondary-btn flex-1 text-xs py-2 font-bold" onclick="setKegiatanStatus('${escHtml(k.id)}','Berjalan').then(renderKegiatan)">Buka Kembali</button>` : ''}
+            ${role === 'admin' ? `<button type="button" class="danger-btn text-xs py-2 px-3 font-bold" onclick="hapusKegiatan('${escHtml(k.id)}')">Hapus</button>` : ''}
+          </div>
+        </div>`;
+      }).join('');
+}
+
+async function renderPilihKegiatan() {
+  const box = document.getElementById('pilih-kegiatan-list');
+  box.innerHTML = `<p class="text-sm text-slate-400 italic">Memuat kegiatan aktif...</p>`;
+  const aktif = (await getKegiatanList()).filter(k => k.status !== 'Selesai');
+  box.innerHTML = aktif.length === 0
+    ? `<div class="section-card text-center text-sm font-semibold text-slate-500">Belum ada kegiatan aktif. Silakan buat kegiatan baru terlebih dahulu.</div>`
+    : aktif.map(k => `
+      <button type="button" class="section-card !p-4 w-full text-left hover:shadow-md" onclick="pilihKegiatan('${escHtml(k.id)}')">
+        <h4 class="font-extrabold text-sm">${escHtml(k.nama)}</h4>
+        <p class="text-xs text-slate-500 mt-0.5">${escHtml(k.jenis || '-')} &middot; ${escHtml(k.wilayah || '-')} &middot; ${escHtml(k.tanggal)}</p>
+        <span class="inline-block mt-1.5 text-[10px] font-black px-2 py-0.5 rounded-full bg-blue-50 text-blue-700">${escHtml(k.status)}</span>
+        ${!k.synced ? '<span class="inline-block mt-1.5 ml-1 text-[10px] font-black px-2 py-0.5 rounded-full bg-amber-50 text-amber-700">⏳ Belum tersinkron</span>' : ''}
+      </button>`).join('');
+}
+
+// Simpan kegiatan baru: SELALU ke perangkat dulu (bisa offline), lalu dikirim bila online
+document.getElementById('btn-save-kegiatan').addEventListener('click', async () => {
+  const btn = document.getElementById('btn-save-kegiatan');
+  if (btn.disabled) return;
+  const nama = document.getElementById('keg-nama').value.trim();
+  const tanggal = document.getElementById('keg-tanggal').value;
+  const tanggalSelesai = document.getElementById('keg-tanggal-selesai').value;
+  if (!nama || !tanggal) { showAppNotify('Lengkapi Data', 'Nama kegiatan dan tanggal mulai wajib diisi.', 'warning'); return; }
+  if (tanggalSelesai && tanggalSelesai < tanggal) { showAppNotify('Tanggal Tidak Valid', 'Tanggal selesai tidak boleh sebelum tanggal mulai.', 'warning'); return; }
+  await loadKegiatanLocal();
+  if (kegiatanCache.some(k => String(k.nama || '').trim().toLowerCase() === nama.toLowerCase())) {
+    showAppNotify('Nama Sudah Ada', 'Kegiatan dengan nama yang sama sudah ada. Gunakan nama lain atau pilih kegiatan yang sudah ada.', 'warning'); return;
+  }
+  const k = {
+    id: 'KEG-' + Date.now().toString(36).toUpperCase(),
+    nama, jenis: document.getElementById('keg-jenis').value.trim(), wilayah: document.getElementById('keg-wilayah').value.trim(),
+    tanggal, tanggalSelesai: tanggalSelesai || tanggal,
+    komoditas: Array.from(document.querySelectorAll('.keg-komoditas-chk:checked')).map(c => c.value).join(', '),
+    petugas: Array.from(document.querySelectorAll('.keg-petugas-chk:checked')).map(c => c.value).join(' | '),
+    keterangan: document.getElementById('keg-keterangan').value.trim(),
+    status: 'Berjalan', synced: false, statusSynced: false
+  };
+  btn.disabled = true; btn.textContent = 'Menyimpan...';
+  try {
+    await putKegiatanLocal(k);
+    await pushKegiatan(k, 'create');
+    ['keg-nama', 'keg-jenis', 'keg-wilayah', 'keg-tanggal', 'keg-tanggal-selesai', 'keg-keterangan'].forEach(id => document.getElementById(id).value = '');
+    document.querySelectorAll('.keg-komoditas-chk, .keg-petugas-chk').forEach(c => c.checked = false);
+    document.getElementById('kegiatan-form-box').classList.add('hidden');
+    const saved = kegiatanCache.find(x => x.id === k.id);
+    if (saved && saved.syncError) showAppNotify('Tersimpan di Perangkat', 'Server menolak: ' + saved.syncError + '\nUbah nama kegiatan bila perlu.', 'warning');
+    else showAppNotify('Kegiatan Dibuat', saved && saved.synced ? 'Kegiatan tersimpan di server. Silakan pilih untuk mulai memeriksa.' : 'Kegiatan tersimpan di perangkat dan akan dikirim saat sinkronisasi. Anda sudah bisa memilihnya untuk mulai memeriksa.', 'success');
+    kegFilter = 'aktif';
+    renderKegiatan();
+  } catch (err) { showAppNotify('Gagal Menyimpan', 'Penyimpanan di perangkat gagal: ' + err, 'warning'); }
+  finally { btn.disabled = false; btn.textContent = 'Simpan Kegiatan'; }
+});
+
+// Sinkronisasi: (1) kegiatan baru dulu, (2) laporan, (3) status kegiatan
+document.getElementById('btn-sync-now').addEventListener('click', async () => {
+  const unsynced = reports.filter(r => !r.synced);
+  const kegPending = kegiatanCache.filter(k => !k.synced || k.statusSynced === false);
+  if (unsynced.length === 0 && kegPending.length === 0) { showAppNotify("Sinkronisasi Selesai", "✅ Seluruh data sudah tersinkronisasi sempurna ke Cloud.", "success"); return; }
+  if (!navigator.onLine) { showAppNotify("Perangkat Offline", "⚠️ Sambungkan ke internet terlebih dahulu sebelum melakukan sinkronisasi cloud.", "warning"); return; }
+  if (!currentInspector) { updateSessionUI(); return; }
+
+  let successCount = 0, failCount = 0, conflictCount = 0;
+  const syncBtn = document.getElementById('btn-sync-now');
+  syncBtn.disabled = true;
+  syncBtn.textContent = "Sedang Menyinkronkan ke Cloud...";
+
+  for (const k of kegiatanCache.filter(x => !x.synced)) await pushKegiatan(k, 'create');
+
+  for (const r of unsynced) {
+    let retries = 3, sent = false;
+    while (retries > 0 && !sent) {
+      if (!currentInspector) break;
+      const out = await sendReport(r);
+      if (out && out.status === 'success') {
+        r.docUrl = out.folderUrl || `https://drive.google.com/drive/search?q=${encodeURIComponent(r.sampleCode)}`;
+        r.folderUrl = r.docUrl; r.synced = true;
+        await saveReportToDB(r);
+        sent = true; successCount++;
+      } else if (out && out.status === 'duplicate_sample') {
+        conflictCount++; retries = 0; break;
+      } else {
+        retries--;
+        if (retries === 0) failCount++; else await new Promise(res => setTimeout(res, 1000));
+      }
+    }
+    if (!sent && !currentInspector) { failCount = unsynced.length - successCount; break; }
+  }
+
+  for (const k of kegiatanCache.filter(x => x.synced && x.statusSynced === false)) await pushKegiatan(k, 'status');
+  const kegGagal = kegiatanCache.filter(k => !k.synced || k.statusSynced === false).length;
+
+  syncBtn.disabled = false;
+  syncBtn.innerHTML = `<i data-lucide="cloud-upload" class="w-5 h-5"></i> Sinkronkan Antrean ke Cloud Sekarang`;
+  lucide.createIcons();
+  renderHistory();
+  showAppNotify("📊 Laporan Sinkronisasi Cloud",
+    `Laporan berhasil dikirim: ${successCount}\nBentrok kode sampel (perlu diedit manual): ${conflictCount}\nLaporan gagal/tertunda: ${failCount}\nKegiatan belum tersinkron: ${kegGagal}`,
+    (failCount === 0 && conflictCount === 0 && kegGagal === 0) ? "success" : "warning");
+});
+
+// ===================== LAPORAN FINAL =====================
+function fileToBase64(file) {
+  return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1]); r.onerror = rej; r.readAsDataURL(file); });
+}
+window.uploadLaporanFinalClient = async function () {
+  const f = document.getElementById('final-file').files[0];
+  if (!f) { showAppNotify('Pilih Berkas', 'Pilih berkas hasil scan (PDF/JPG/PNG) terlebih dahulu.', 'warning'); return; }
+  if (!['application/pdf', 'image/jpeg', 'image/png'].includes(f.type)) { showAppNotify('Format Tidak Didukung', 'Gunakan PDF, JPG, atau PNG.', 'warning'); return; }
+  if (f.size > 6 * 1024 * 1024) { showAppNotify('Berkas Terlalu Besar', 'Maksimal 6 MB. Perkecil resolusi scan atau gabungkan menjadi satu PDF yang lebih ringan.', 'warning'); return; }
+  if (!navigator.onLine) { showAppNotify('Perangkat Offline', 'Pengunggahan laporan final memerlukan koneksi internet.', 'warning'); return; }
+  const btn = document.getElementById('btn-upload-final');
+  const label = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Mengunggah...';
+  try {
+    const out = await api('uploadLaporanFinal', {
+      idKegiatan: detailKegiatanId, mimeType: f.type, fileName: f.name,
+      data: await fileToBase64(f), catatan: document.getElementById('final-catatan').value.trim()
+    });
+    if (out.status === 'success') { showAppNotify('Laporan Final Terunggah', 'Berkas versi ' + out.versi + ' tersimpan dan kini dapat dilihat Pimpinan di menu Laporan Arsip.', 'success'); renderKegiatanDetail(); return; }
+    showAppNotify('Gagal Mengunggah', out.message || 'Terjadi kesalahan.', 'warning');
+  } catch (err) { showAppNotify('Gagal Terhubung', 'Tidak dapat menghubungi server. Coba lagi dengan koneksi yang lebih stabil.', 'warning'); }
+  btn.disabled = false; btn.textContent = label;
+};
+
+window.bukaLaporanFinal = async function (id) {
+  const w = window.open('', '_blank'); // dibuka dulu agar tidak diblokir pop-up
+  try {
+    const out = await api('getLaporanFinalFile', { id });
+    if (out.status !== 'success') { if (w) w.close(); showAppNotify('Gagal Membuka', out.message || '', 'warning'); return; }
+    const bin = atob(out.data), bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const url = URL.createObjectURL(new Blob([bytes], { type: out.mimeType }));
+    if (w) w.location.href = url;
+    else { const a = document.createElement('a'); a.href = url; a.download = out.name; a.click(); }
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+  } catch (err) { if (w) w.close(); showAppNotify('Gagal Terhubung', 'Tidak dapat mengambil berkas.', 'warning'); }
+};
+
+window.tarikLaporanFinal = async function (id) {
+  if (!confirm('Tarik laporan final ini? Berkas tidak lagi tampil di Laporan Arsip.')) return;
+  try {
+    const out = await api('tarikLaporanFinal', { id });
+    showAppNotify(out.status === 'success' ? 'Berhasil' : 'Gagal', out.message || '', out.status === 'success' ? 'success' : 'warning');
+    renderLaporanArsip();
+  } catch (err) { showAppNotify('Gagal Terhubung', 'Tidak dapat menghubungi server.', 'warning'); }
+};
+
+async function renderLaporanArsip() {
+  const box = document.getElementById('laporan-arsip-list');
+  box.innerHTML = `<p class="text-sm text-slate-400 italic">Memuat...</p>`;
+  if (!navigator.onLine) { box.innerHTML = `<p class="text-sm text-amber-600 font-semibold">Perlu koneksi internet untuk memuat arsip laporan.</p>`; return; }
+  try {
+    const out = await api('listLaporanFinal');
+    if (out.status !== 'success') { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">${escHtml(out.message || 'Gagal memuat.')}</p>`; return; }
+    const items = out.items.filter(f => f.status === 'Final');
+    const isAdmin = currentInspector && currentInspector.role === 'admin';
+    box.innerHTML = items.length === 0
+      ? `<div class="section-card text-center text-sm font-semibold text-slate-500">Belum ada laporan final yang diunggah.</div>`
+      : items.map(f => `
+        <div class="history-card legal">
+          <h4 class="font-extrabold text-sm">${escHtml(f.namaKegiatan)}</h4>
+          <p class="text-xs text-slate-500 mt-0.5">Versi ${escHtml(f.versi)} &middot; diunggah ${escHtml(f.oleh)} &middot; ${escHtml(String(f.tanggal).slice(0, 10))}</p>
+          ${f.catatan ? `<p class="text-xs text-slate-600 mt-1">${escHtml(f.catatan)}</p>` : ''}
+          <div class="flex gap-2 mt-2.5">
+            <button type="button" class="primary-btn flex-1 text-xs py-2.5 font-bold" onclick="bukaLaporanFinal('${escHtml(f.id)}')">Buka Laporan</button>
+            ${isAdmin ? `<button type="button" class="danger-btn text-xs py-2.5 px-3 font-bold" onclick="tarikLaporanFinal('${escHtml(f.id)}')">Tarik</button>` : ''}
+          </div>
+        </div>`).join('');
+  } catch (err) { box.innerHTML = `<p class="text-sm text-rose-600 font-semibold">Tidak dapat terhubung ke server.</p>`; }
+}
+
+loadMaster();
 initDB();
 lucide.createIcons();
 </script>
