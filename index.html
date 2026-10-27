@@ -402,23 +402,6 @@ button{-webkit-tap-highlight-color:transparent}
 <div class="section-icon"><i data-lucide="store" class="w-5 h-5"></i></div>
 <div class="flex-1"><h3 class="font-extrabold text-base">Tim Pengawas &amp; Identitas Pengecer</h3></div>
 </div>
-<div>
-<label class="field-label">Instansi / Unit Kerja <span class="text-rose-600">*</span></label>
-<input class="field-control" id="agency" required value="Dinas Perindustrian dan Perdagangan Pemerintah Provinsi NTT">
-</div>
-
-<div class="space-y-3">
-<label class="field-label">Nama Petugas Pengawas <span class="text-rose-600">*</span></label>
-<div id="officer-container" class="space-y-3">
-<div class="flex gap-2">
-<input id="officer-0" class="field-control flex-1 officer-input" list="petugas-list" required placeholder="Pilih / ketik nama petugas">
-</div>
-</div>
-<button type="button" class="secondary-btn text-xs py-2 px-3 font-bold mt-1" onclick="addOfficerField()">
-<i data-lucide="user-plus" class="w-4 h-4"></i> Tambah Petugas
-</button>
-</div>
-
 <div class="grid sm:grid-cols-2 gap-4">
 <div>
 <label class="field-label">Kode Sampel <span class="text-rose-600">*</span></label>
@@ -475,10 +458,6 @@ button{-webkit-tap-highlight-color:transparent}
 <option value="Baja Tulangan Beton">Baja Tulangan Beton (BjTB)</option>
 <option value="Kabel Listrik">Kabel Listrik</option>
 </select>
-</div>
-<div>
-<label class="field-label">Merek / Brand <span class="text-rose-600">*</span></label>
-<input class="field-control" id="brand" placeholder="Contoh: Shimizu / Supreme / Master Steel">
 </div>
 
 <hr class="my-3">
@@ -553,18 +532,43 @@ button{-webkit-tap-highlight-color:transparent}
 <h4 class="font-black text-base tracking-tight">Verifikasi Validitas Nomor SNI</h4>
 <p class="text-xs text-blue-100 leading-relaxed font-medium">Gunakan Portal Bang Beni untuk mengecek keaslian nomor pendaftaran (Dapat dilewati jika offline).</p>
 </div>
-<a href="https://bangbeni.bsn.go.id" target="_blank" rel="noopener" class="shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-blue-700 hover:bg-blue-50 font-black text-xs shadow-md transition-transform active:scale-95">
+<a href="https://bangbeni.bsn.go.id" target="_blank" rel="noopener" onclick="copyFieldValue('sni-barang-num')" class="shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-blue-700 hover:bg-blue-50 font-black text-xs shadow-md transition-transform active:scale-95">
 <i data-lucide="external-link" class="w-4 h-4 text-blue-600"></i> Buka Portal Bang Beni
 </a>
 </div>
 
+<!-- PORTAL LAMANSITU (NPB) -->
+<div class="p-5 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 rounded-2xl shadow-lg text-white flex flex-col sm:flex-row items-center justify-between gap-4 border border-emerald-400/30">
+<div class="space-y-1 text-center sm:text-left">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/40 text-xs font-black uppercase tracking-wider text-emerald-100 border border-emerald-300/30">
+<i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Resmi Kemendag
+</div>
+<h4 class="font-black text-base tracking-tight">Verifikasi Validitas Nomor NPB</h4>
+<p class="text-xs text-emerald-100 leading-relaxed font-medium">Cek keaslian NPB lewat Lamansitu Kemendag (dapat dilewati jika offline). Nomor NPB yang sudah diisi otomatis disalin ke clipboard.</p>
+</div>
+<a href="https://lamansitu.kemendag.go.id" target="_blank" rel="noopener" onclick="copyFieldValue('npb-barang-num')" class="shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-emerald-700 hover:bg-emerald-50 font-black text-xs shadow-md transition-transform active:scale-95">
+<i data-lucide="external-link" class="w-4 h-4"></i> Buka Lamansitu Kemendag
+</a>
+</div>
+
 <div>
-<label class="field-label">Kesimpulan Status Validasi (Dapat diubah nanti jika Offline) <span class="text-rose-600">*</span></label>
+<label class="field-label">Kesimpulan Status Validasi SNI (Dapat diubah nanti jika Offline) <span class="text-rose-600">*</span></label>
 <select id="sni-status" class="field-control">
 <option value="Terdaftar dan Sesuai (Legal)">Terdaftar dan Sesuai (Legal)</option>
 <option value="Tidak Terdaftar (Temuan)">Tidak Terdaftar (Temuan)</option>
 <option value="Terdaftar namun Tidak Sesuai Spesifikasinya">Terdaftar namun Tidak Sesuai Spesifikasinya</option>
 </select>
+</div>
+
+<div>
+<label class="field-label">Kesimpulan Status Validasi NPB (Dapat diubah nanti jika Offline)</label>
+<select id="npb-status" class="field-control">
+<option value="Belum diverifikasi" selected>Belum diverifikasi</option>
+<option value="Terdaftar">Terdaftar</option>
+<option value="Tidak Terdaftar">Tidak Terdaftar</option>
+<option value="Terdaftar namun Tidak Sesuai Spesifikasinya">Terdaftar namun Tidak Sesuai Spesifikasinya</option>
+</select>
+<p class="mt-1.5 text-xs font-semibold text-slate-500">NPB "Tidak Terdaftar" atau "Tidak Sesuai Spesifikasi" akan tercatat otomatis sebagai Temuan.</p>
 </div>
 </article>
 <div class="flex gap-3">
@@ -1393,7 +1397,6 @@ function updateSessionUI() {
   document.getElementById('profile-email').textContent = currentInspector.email || '-';
   document.getElementById('profile-nip').textContent = currentInspector.nip || '-';
   document.getElementById('active-user-badge').textContent = `Sesi: ${currentInspector.name}`;
-  document.getElementById('officer-0').value = currentInspector.name;
   document.getElementById('welcome-greeting').textContent = `Selamat Datang, ${currentInspector.name}!`;
   document.getElementById('login-modal').classList.remove('open');
 
@@ -1610,16 +1613,6 @@ document.getElementById('drawer-admin-btn').addEventListener('click', renderAdmi
 updateSessionUI();
 
 // --- PETUGAS TAMBAHAN, STATUS JARINGAN, WIZARD ---
-window.addOfficerField = function() {
-  const container = document.getElementById('officer-container');
-  const div = document.createElement('div');
-  div.className = 'flex gap-2 items-center';
-  div.innerHTML = `
-    <input class="field-control flex-1 officer-input" list="petugas-list" required placeholder="Nama petugas tambahan">
-    <button type="button" class="danger-btn p-3 shrink-0" onclick="this.parentElement.remove()" title="Hapus Petugas"><i data-lucide="trash-2" class="w-5 h-5"></i></button>`;
-  container.appendChild(div);
-  lucide.createIcons();
-};
 
 function updateNetworkStatus() {
   const pill = document.getElementById('network-status');
@@ -1646,7 +1639,6 @@ function validateStep(step) {
   const v = id => (document.getElementById(id)?.value || '').trim();
   const fail = (id, msg) => { showAppNotify('Data Belum Lengkap', msg, 'warning'); const el = document.getElementById(id); if (el) el.focus(); return false; };
   if (step === 1) {
-    if (!Array.from(document.querySelectorAll('.officer-input')).some(i => i.value.trim())) return fail('officer-0', 'Nama petugas pengawas wajib diisi.');
     if (!v('sample-code')) return fail('sample-code', 'Kode Sampel wajib diisi.');
     const ph = v('phone').replace(/[^0-9]/g, '');
     if (ph.length < 10 || ph.length > 15) return fail('phone', 'Nomor telepon harus 10-15 digit angka.');
@@ -1657,8 +1649,10 @@ function validateStep(step) {
   }
   if (step === 2) {
     if (!v('product-type')) return fail('product-type', 'Jenis produk wajib dipilih.');
-    if (!v('brand')) return fail('brand', 'Merek / brand wajib diisi.');
     if (v('sni-barang-opt').includes('Ada') && !v('sni-barang-num')) return fail('sni-barang-num', 'Nomor SNI pada barang belum diisi.');
+  }
+  if (step === 3) {
+    if (v('label-brg-merek-opt') === 'Ada' && !v('label-brg-merek-val')) return fail('label-brg-merek-val', 'Merek pada barang dipilih "Ada", tetapi belum diisi.');
   }
   return true;
 }
@@ -1762,8 +1756,8 @@ function renderBeranda() {
     const d = new Date(r.timestamp);
     return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
   });
-  const legal = monthly.filter(r => r.sniStatus && r.sniStatus.includes('Legal')).length;
-  const temuan = monthly.filter(r => r.sniStatus && r.sniStatus.includes('Temuan')).length;
+  const legal = monthly.filter(r => overallKat(r) === 'legal').length;
+  const temuan = monthly.filter(r => overallKat(r) === 'temuan').length;
   const menunggu = monthly.length - legal - temuan;
   document.getElementById('ber-stat-total').textContent = monthly.length;
   document.getElementById('ber-stat-legal').textContent = legal;
@@ -1939,6 +1933,25 @@ document.addEventListener('DOMContentLoaded', () => {
   ].forEach(p => setupConditionalInput(p[0], p[1]));
 });
 
+// --- BANTU: salin nomor & status gabungan SNI + NPB ---
+window.copyFieldValue = function (id) {
+  const v = (document.getElementById(id)?.value || '').trim();
+  if (v && navigator.clipboard) navigator.clipboard.writeText(v).catch(() => {});
+};
+window.copyFromAttr = function (el) {
+  const v = el.dataset.copy || '';
+  if (v && v !== '-' && navigator.clipboard) navigator.clipboard.writeText(v).catch(() => {});
+};
+// Hasil gabungan: NPB "Tidak Terdaftar" => Temuan; NPB "Tidak Sesuai Spesifikasi" => Tidak Sesuai Spesifikasi
+function overallKat(r) {
+  const s = String(r.sniStatus || ''), n = String(r.npbStatus || '');
+  if (s.includes('Temuan') || n === 'Tidak Terdaftar') return 'temuan';
+  if (s.includes('Spesifikasinya') || n.includes('Spesifikasinya')) return 'spesifikasi';
+  if (s.includes('Legal')) return 'legal';
+  return 'belum';
+}
+const FILTER_KAT = { Legal: 'legal', Temuan: 'temuan', Spesifikasinya: 'spesifikasi' };
+
 // --- GPS ---
 document.getElementById('gps-button').addEventListener('click', () => {
   const fb = document.getElementById('gps-feedback');
@@ -2007,7 +2020,7 @@ document.getElementById('inspection-form').addEventListener('submit', async e =>
   }
   if (!currentInspector) { updateSessionUI(); return; }
   const form = e.target;
-  for (const s of [1, 2]) { if (!validateStep(s)) { currentStep = s; updateWizard(); return; } }
+  for (const s of [1, 2, 3]) { if (!validateStep(s)) { currentStep = s; updateWizard(); return; } }
 
   const phoneClean = document.getElementById('phone').value.trim().replace(/[^0-9]/g, '');
   if (phoneClean.length < 10 || phoneClean.length > 15) {
@@ -2027,7 +2040,10 @@ document.getElementById('inspection-form').addEventListener('submit', async e =>
   if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = '0.6'; submitBtn.style.cursor = 'not-allowed'; }
   setSubmitLock(true);
 
-  const officersList = Array.from(document.querySelectorAll('.officer-input')).map(i => i.value.trim()).filter(v => v !== '');
+  const AGENCY_DEFAULT = 'Dinas Perindustrian dan Perdagangan Pemerintah Provinsi NTT';
+  const kgAktif = kegiatanCache.find(x => x.id === currentKegiatanId);
+  const officersList = (kgAktif && kgAktif.petugas) ? kgAktif.petugas.split('|').map(s => s.trim()).filter(Boolean) : [];
+  if (!officersList.length) officersList.push(currentInspector.name);
   const val = id => document.getElementById(id)?.value || '';
   const photoIds = { toko: 'photo-toko', etalase: 'photo-etalase', pel1: 'photo-pelaksanaan-1', pel2: 'photo-pelaksanaan-2',
     docSniBrg: 'doc-sni-barang', docSniKem: 'doc-sni-kemasan', docLsproBrg: 'doc-lspro-barang', docLsproKem: 'doc-lspro-kemasan',
@@ -2056,12 +2072,12 @@ document.getElementById('inspection-form').addEventListener('submit', async e =>
   const reportData = {
     id: 'INS-' + Date.now().toString(36).toUpperCase(),
     timestamp: new Date().toISOString(),
-    agency: form.agency.value, officers: officersList, inspectorAccount: currentInspector.name,
+    agency: AGENCY_DEFAULT, officers: officersList, inspectorAccount: currentInspector.name,
     idKegiatan: currentKegiatanId,
     sampleCode: val('sample-code'), businessName: val('business-name'), retailerAddress: val('retailer-address'),
     wilayah: val('wilayah'),
     ownerName: val('owner-name'), phone: phoneClean, coordinates: val('coordinates'),
-    productType: val('product-type'), brand: val('brand'), sniStatus: val('sni-status'),
+    productType: val('product-type'), brand: (val('label-brg-merek-val').trim() || val('label-kem-merek-val').trim()), sniStatus: val('sni-status'), npbStatus: val('npb-status'),
     bagianA: {
       sniBarangOpt: sniBrgOpt, sniBarangNum: sniBrgNum,
       sniKemasanOpt: val('sni-kemasan-opt'), sniKemasanNum: val('sni-kemasan-num'),
@@ -2109,14 +2125,19 @@ document.getElementById('inspection-form').addEventListener('submit', async e =>
 });
 
 // --- RIWAYAT, STATISTIK ---
-function reportCard(r, withSync) {
-  return `<div class="history-card ${getStatusClass(r.sniStatus)} flex justify-between items-center gap-3">
+function reportCard(r, withSync, withDelete) {
+  const brandTxt = r.brand ? ' (' + escHtml(r.brand) + ')' : '';
+  const cls = ({ legal: 'legal', temuan: 'temuan', spesifikasi: 'pending', belum: 'pending' })[overallKat(r)];
+  return `<div class="history-card ${cls} flex justify-between items-center gap-3">
     <div class="min-w-0">
       <span class="text-xs font-bold text-blue-600">Sampel: ${escHtml(r.sampleCode)}${withSync ? ' | ' + (r.synced ? '✅ Tersinkron' : '⏳ Pending (Offline)') : ''}</span>
       <h4 class="font-extrabold text-base mt-0.5">${escHtml(r.businessName)}</h4>
-      <p class="text-xs text-slate-600 font-medium mt-0.5">${escHtml(r.productType)} (${escHtml(r.brand)})${withSync ? ' — Status: <b>' + escHtml(r.sniStatus) + '</b>' : ''}</p>
+      <p class="text-xs text-slate-600 font-medium mt-0.5">${escHtml(r.productType)}${brandTxt}${withSync ? ' — SNI: <b>' + escHtml(r.sniStatus) + '</b><br>NPB: <b>' + escHtml(r.npbStatus || 'Belum diverifikasi') + '</b>' : ''}</p>
     </div>
-    <button class="secondary-btn px-4 py-2 text-xs font-bold shrink-0" onclick="openDetail('${escHtml(r.id)}')">Detail</button>
+    <div class="flex flex-col gap-2 shrink-0">
+      <button class="secondary-btn px-4 py-2 text-xs font-bold" onclick="openDetail('${escHtml(r.id)}')">Detail</button>
+      ${withDelete ? `<button class="danger-btn px-4 py-2 text-xs font-bold" onclick="deleteReportItem('${escHtml(r.id)}')">Hapus</button>` : ''}
+    </div>
   </div>`;
 }
 function applyHistoryFilters(list) {
@@ -2130,7 +2151,7 @@ function applyHistoryFilters(list) {
     if (from && r.timestamp < from) return false;
     if (to && r.timestamp.slice(0, 10) > to) return false;
     if (product && r.productType !== product) return false;
-    if (status && !(r.sniStatus && r.sniStatus.includes(status))) return false;
+    if (status && overallKat(r) !== FILTER_KAT[status]) return false;
     return true;
   });
 }
@@ -2150,13 +2171,13 @@ function renderHistory() {
   const filtered = applyHistoryFilters(reports);
   document.getElementById('history-list').innerHTML = filtered.length === 0
     ? `<div class="section-card text-center text-sm font-semibold text-slate-500">${reports.length === 0 ? 'Belum ada laporan tersimpan.' : 'Tidak ada laporan yang cocok dengan filter.'}</div>`
-    : filtered.map(r => reportCard(r, true)).join('');
+    : filtered.map(r => reportCard(r, true, true)).join('');
   lucide.createIcons();
 }
 function renderAnalytics() {
   const total = reports.length;
-  const legal = reports.filter(r => r.sniStatus && r.sniStatus.includes('Legal')).length;
-  const temuan = reports.filter(r => r.sniStatus && r.sniStatus.includes('Temuan')).length;
+  const legal = reports.filter(r => overallKat(r) === 'legal').length;
+  const temuan = reports.filter(r => overallKat(r) === 'temuan').length;
   const pending = total - legal - temuan;
   const pct = n => total ? Math.round((n / total) * 100) : 0;
   document.getElementById('stat-card-legal').textContent = legal;
@@ -2176,8 +2197,9 @@ function renderAnalytics() {
     const p = r.productType || '(Tidak diisi)';
     if (!byProduk[p]) byProduk[p] = { total: 0, legal: 0, temuan: 0 };
     byProduk[p].total++;
-    if (r.sniStatus && r.sniStatus.includes('Legal')) byProduk[p].legal++;
-    else if (r.sniStatus && r.sniStatus.includes('Temuan')) byProduk[p].temuan++;
+    const kp = overallKat(r);
+    if (kp === 'legal') byProduk[p].legal++;
+    else if (kp === 'temuan') byProduk[p].temuan++;
   });
   const box = document.getElementById('analytics-per-produk');
   const keys = Object.keys(byProduk).sort((a, b) => byProduk[b].total - byProduk[a].total);
@@ -2205,8 +2227,9 @@ function renderAnalytics() {
     const w = r.wilayah;
     if (!byWilayah[w]) byWilayah[w] = { total: 0, legal: 0, temuan: 0 };
     byWilayah[w].total++;
-    if (r.sniStatus && r.sniStatus.includes('Legal')) byWilayah[w].legal++;
-    else if (r.sniStatus && r.sniStatus.includes('Temuan')) byWilayah[w].temuan++;
+    const kw = overallKat(r);
+    if (kw === 'legal') byWilayah[w].legal++;
+    else if (kw === 'temuan') byWilayah[w].temuan++;
   });
   const wbox = document.getElementById('analytics-per-wilayah');
   const wkeys = Object.keys(byWilayah).sort((a, b) => byWilayah[b].temuan - byWilayah[a].temuan);
@@ -2225,24 +2248,36 @@ function renderAnalytics() {
 document.getElementById('close-modal').addEventListener('click', () => document.getElementById('detail-modal').classList.remove('open'));
 document.getElementById('detail-modal').addEventListener('click', e => { if (e.target.id === 'detail-modal') e.target.classList.remove('open'); });
 
-window.openDetail = function(id) {
+window.openDetail = function (id) {
   const r = reports.find(item => item.id === id);
   if (!r) return;
-  document.getElementById('modal-title').textContent = `Sampel: ${r.sampleCode}`;
+  const a = r.bagianA || {};
+  const E = escHtml;
   const driveUrl = r.docUrl || `https://drive.google.com/drive/search?q=${encodeURIComponent(r.sampleCode)}`;
+  document.getElementById('modal-title').textContent = `Sampel: ${r.sampleCode}`;
   document.getElementById('modal-content').innerHTML = `
-    <p class="text-sm font-medium"><b>Toko:</b> ${escHtml(r.businessName)} (${escHtml(r.retailerAddress)})</p>
-    <p class="text-sm font-medium"><b>Barang:</b> ${escHtml(r.productType)} - ${escHtml(r.brand)}</p>
-    <p class="text-sm font-medium"><b>Status Validasi:</b> <span class="font-bold text-blue-600">${escHtml(r.sniStatus)}</span></p>
+    <p class="text-sm font-medium"><b>Toko:</b> ${E(r.businessName)} (${E(r.retailerAddress)})</p>
+    <p class="text-sm font-medium"><b>Barang:</b> ${E(r.productType)}${r.brand ? ' - ' + E(r.brand) : ''}</p>
+    <p class="text-sm font-medium"><b>Status Validasi SNI:</b> <span class="font-bold text-blue-600">${E(r.sniStatus)}</span></p>
+    <p class="text-sm font-medium"><b>Status Validasi NPB:</b> <span class="font-bold text-emerald-600">${E(r.npbStatus || 'Belum diverifikasi')}</span></p>
     <p class="text-xs text-slate-500">Status Sinkron: <b>${r.synced ? 'Tersinkron ke Cloud' : 'Belum disinkron (Offline/Pending)'}</b></p>
     <div class="pt-2 space-y-2.5">
-      <button class="primary-btn text-xs font-bold py-3 bg-blue-600 hover:bg-blue-700 w-full" onclick="openTablePreview('${r.id}')"><i data-lucide="table" class="w-4 h-4"></i> Pratinjau Keseluruhan Tabel Laporan</button>
-      <button class="secondary-btn text-xs font-bold py-3 w-full" onclick="openEditReport('${r.id}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4Z"></path></svg> Edit / Verifikasi Status Validasi</button>
+      <div class="p-3.5 bg-indigo-50 border border-indigo-200 rounded-xl space-y-2.5">
+        <p class="text-xs font-bold text-indigo-900">Verifikasi Validitas (butuh internet)</p>
+        ${!r.synced ? '<p class="text-[11px] text-amber-700 font-semibold">Laporan ini masih pending. Verifikasi lalu tetapkan statusnya; perubahan ikut terkirim saat sinkronisasi.</p>' : ''}
+        <p class="text-xs text-slate-600">No. SNI: <b>${E(a.sniBarangNum || '-')}</b> &middot; No. NPB: <b>${E(a.npbBarangNum || '-')}</b></p>
+        <div class="grid grid-cols-2 gap-2">
+          <a href="https://bangbeni.bsn.go.id" target="_blank" rel="noopener" data-copy="${E(a.sniBarangNum || '')}" onclick="copyFromAttr(this)" class="secondary-btn text-xs font-bold py-2.5 justify-center">Cek SNI (Bang Beni)</a>
+          <a href="https://lamansitu.kemendag.go.id" target="_blank" rel="noopener" data-copy="${E(a.npbBarangNum || '')}" onclick="copyFromAttr(this)" class="secondary-btn text-xs font-bold py-2.5 justify-center">Cek NPB (Lamansitu)</a>
+        </div>
+        <button class="primary-btn text-xs font-bold py-3 w-full" onclick="openEditReport('${E(r.id)}')">Tetapkan Status Validasi SNI &amp; NPB</button>
+      </div>
+      <button class="primary-btn text-xs font-bold py-3 bg-blue-600 hover:bg-blue-700 w-full" onclick="openTablePreview('${E(r.id)}')"><i data-lucide="table" class="w-4 h-4"></i> Pratinjau Keseluruhan Tabel Laporan</button>
       <div class="p-3.5 bg-blue-50 border border-blue-200 rounded-xl space-y-2.5">
         <p class="text-xs font-bold text-blue-900">Akses Berkas PDF, Foto, &amp; Google Docs:</p>
-        <a href="${escHtml(driveUrl)}" target="_blank" rel="noopener" class="primary-btn text-xs font-bold py-2.5 w-full justify-center"><i data-lucide="external-link" class="w-4 h-4"></i> Buka Folder Arsip Drive</a>
+        <a href="${E(driveUrl)}" target="_blank" rel="noopener" class="primary-btn text-xs font-bold py-2.5 w-full justify-center"><i data-lucide="external-link" class="w-4 h-4"></i> Buka Folder Arsip Drive</a>
       </div>
-      <button class="danger-btn text-xs font-bold py-3 w-full" onclick="deleteReportItem('${r.id}'); document.getElementById('detail-modal').classList.remove('open');">Hapus Laporan</button>
+      <button class="danger-btn text-xs font-bold py-3 w-full" onclick="document.getElementById('detail-modal').classList.remove('open'); deleteReportItem('${E(r.id)}');">Hapus Laporan</button>
     </div>`;
   document.getElementById('detail-modal').classList.add('open');
   lucide.createIcons();
@@ -2282,7 +2317,8 @@ window.openTablePreview = function(id) {
       <div class="p-3 bg-slate-50 rounded-xl border space-y-1">
         <p><b>Nama Barang:</b> ${E(r.productType)}</p><p><b>Merek Barang:</b> ${E(r.brand)}</p><p><b>Kode Sampel:</b> ${E(r.sampleCode)}</p>
         <p><b>Nama &amp; Alamat Pengecer:</b> ${E(r.businessName)}, ${E(r.retailerAddress)}</p>
-        <p><b>Kesimpulan:</b> <span class="font-bold text-blue-600">${E(r.sniStatus)}</span></p>
+        <p><b>Kesimpulan SNI:</b> <span class="font-bold text-blue-600">${E(r.sniStatus)}</span></p>
+        <p><b>Status NPB:</b> <span class="font-bold text-emerald-600">${E(r.npbStatus || 'Belum diverifikasi')}</span></p>
       </div>
       <div class="overflow-x-auto"><table class="preview-table"><thead><tr>
         <th style="width:20%">Dasar Hukum</th><th style="width:25%">Parameter Pengawasan</th><th style="width:25%">Keterangan Penandaan</th>
@@ -2293,21 +2329,32 @@ window.openTablePreview = function(id) {
 };
 
 // --- EDIT STATUS (verifikasi setelah offline) ---
-window.openEditReport = function(id) {
+window.openEditReport = function (id) {
   const r = reports.find(item => item.id === id);
   if (!r) return;
-  const S = (v, label) => `<option value="${v}" ${r.sniStatus === v ? 'selected' : ''}>${label}</option>`;
+  const a = r.bagianA || {};
+  const E = escHtml;
+  const sniOpts = ['Terdaftar dan Sesuai (Legal)', 'Tidak Terdaftar (Temuan)', 'Terdaftar namun Tidak Sesuai Spesifikasinya'];
+  const npbOpts = ['Belum diverifikasi', 'Terdaftar', 'Tidak Terdaftar', 'Terdaftar namun Tidak Sesuai Spesifikasinya'];
+  const npbNow = r.npbStatus || 'Belum diverifikasi';
+  const opt = (list, cur) => list.map(v => `<option value="${v}" ${cur === v ? 'selected' : ''}>${v}</option>`).join('');
   document.getElementById('modal-title').textContent = `Verifikasi: ${r.sampleCode}`;
   document.getElementById('modal-content').innerHTML = `
-    <form onsubmit="saveEditedReport(event, '${r.id}')" class="space-y-4">
-      <div><label class="field-label text-xs">Status Validasi Pengawasan</label>
-        <select id="edit-sni-status" class="field-control text-sm">
-          ${S('Terdaftar dan Sesuai (Legal)', 'Terdaftar dan Sesuai (Legal)')}${S('Tidak Terdaftar (Temuan)', 'Tidak Terdaftar (Temuan)')}${S('Terdaftar namun Tidak Sesuai Spesifikasinya', 'Terdaftar namun Tidak Sesuai Spesifikasinya')}
-        </select></div>
-      <div><label class="field-label text-xs">Merek Tertera</label><input id="edit-brand" class="field-control text-sm" value="${escHtml(r.brand)}"></div>
-      <div><label class="field-label text-xs">Nama Pengecer / Toko</label><input id="edit-business" class="field-control text-sm" value="${escHtml(r.businessName)}"></div>
+    <form onsubmit="saveEditedReport(event, '${E(r.id)}')" class="space-y-4">
+      <div class="space-y-2">
+        <label class="field-label text-xs">Status Validasi SNI &nbsp;<span class="font-medium text-slate-500">(No. ${E(a.sniBarangNum || '-')})</span></label>
+        <a href="https://bangbeni.bsn.go.id" target="_blank" rel="noopener" data-copy="${E(a.sniBarangNum || '')}" onclick="copyFromAttr(this)" class="secondary-btn text-xs font-bold py-2.5 w-full justify-center">Buka Bang Beni (BSN)</a>
+        <select id="edit-sni-status" class="field-control text-sm">${opt(sniOpts, r.sniStatus)}</select>
+      </div>
+      <div class="space-y-2">
+        <label class="field-label text-xs">Status Validasi NPB &nbsp;<span class="font-medium text-slate-500">(No. ${E(a.npbBarangNum || '-')})</span></label>
+        <a href="https://lamansitu.kemendag.go.id" target="_blank" rel="noopener" data-copy="${E(a.npbBarangNum || '')}" onclick="copyFromAttr(this)" class="secondary-btn text-xs font-bold py-2.5 w-full justify-center">Buka Lamansitu (Kemendag)</a>
+        <select id="edit-npb-status" class="field-control text-sm">${opt(npbOpts, npbNow)}</select>
+      </div>
+      <div><label class="field-label text-xs">Merek Tertera</label><input id="edit-brand" class="field-control text-sm" value="${E(r.brand)}"></div>
+      <div><label class="field-label text-xs">Nama Pengecer / Toko</label><input id="edit-business" class="field-control text-sm" value="${E(r.businessName)}"></div>
       <div class="flex gap-2 pt-2">
-        <button type="button" class="secondary-btn flex-1 py-3 text-xs font-bold" onclick="openDetail('${r.id}')">Batal</button>
+        <button type="button" class="secondary-btn flex-1 py-3 text-xs font-bold" onclick="openDetail('${E(r.id)}')">Batal</button>
         <button type="submit" class="primary-btn flex-1 py-3 text-xs font-bold bg-emerald-600 hover:bg-emerald-700">Simpan Perubahan</button>
       </div>
     </form>`;
@@ -2318,6 +2365,7 @@ window.saveEditedReport = async function(e, id) {
   const r = reports.find(item => item.id === id);
   if (!r) return;
   r.sniStatus = document.getElementById('edit-sni-status').value;
+  r.npbStatus = document.getElementById('edit-npb-status').value;
   r.brand = document.getElementById('edit-brand').value;
   r.businessName = document.getElementById('edit-business').value;
   await saveReportToDB(r);
@@ -2325,7 +2373,7 @@ window.saveEditedReport = async function(e, id) {
 
   if (r.synced && navigator.onLine) {
     try {
-      const out = await api('updateReportStatus', { id: r.id, sniStatus: r.sniStatus, brand: r.brand, businessName: r.businessName });
+      const out = await api('updateReportStatus', { id: r.id, sniStatus: r.sniStatus, npbStatus: r.npbStatus, brand: r.brand, businessName: r.businessName });
       if (out.status === 'success') {
         showAppNotify("Perubahan Disimpan", "Data laporan diperbarui di perangkat ini dan di Spreadsheet pusat.", "success");
       } else {
@@ -2340,8 +2388,14 @@ window.saveEditedReport = async function(e, id) {
     showAppNotify("Perubahan Disimpan", "Data laporan berhasil diperbarui dalam database lokal!", "success");
   }
 };
-window.deleteReportItem = async function(id) {
-  if (confirm('Apakah Anda yakin ingin menghapus laporan ini?')) { await deleteReportFromDB(id); renderHistory(); }
+window.deleteReportItem = async function (id) {
+  const r = reports.find(x => x.id === id);
+  if (!r) return;
+  const msg = r.synced
+    ? `Hapus laporan sampel ${r.sampleCode} dari perangkat ini?\n\nData di Spreadsheet & Drive pusat TIDAK ikut terhapus.`
+    : `Laporan sampel ${r.sampleCode} BELUM terkirim ke server.\n\nMenghapusnya berarti data hilang permanen. Lanjutkan?`;
+  if (!confirm(msg)) return;
+  await deleteReportFromDB(id); // sudah me-render ulang riwayat, statistik, dan beranda
 };
 document.getElementById('btn-clear-all').addEventListener('click', async () => {
   if (confirm('Hapus seluruh riwayat laporan di perangkat ini?')) { for (const r of reports.slice()) await deleteReportFromDB(r.id); renderHistory(); }
@@ -2395,7 +2449,7 @@ function renderMapsList() {
     const wilayahFilter = document.getElementById('map-wilayah-filter').value;
     const listBox = document.getElementById('map-locations-list');
     let valid = reports.filter(r => r.coordinates && r.coordinates.includes(','));
-    if (mapStatusFilter) valid = valid.filter(r => r.sniStatus && r.sniStatus.includes(mapStatusFilter));
+    if (mapStatusFilter) valid = valid.filter(r => overallKat(r) === FILTER_KAT[mapStatusFilter]);
     if (wilayahFilter) valid = valid.filter(r => r.wilayah === wilayahFilter);
     if (valid.length === 0) { listBox.innerHTML = `<p class="text-sm text-slate-400 italic font-medium">${reports.some(r=>r.coordinates) ? 'Tidak ada laporan yang cocok dengan filter.' : 'Belum ada titik koordinat GPS toko yang terekam.'}</p>`; return; }
 
@@ -2413,15 +2467,16 @@ function renderMapsList() {
       const [lat, lng] = r.coordinates.split(',').map(parseFloat);
       if (isNaN(lat) || isNaN(lng)) return;
       let color = '#0f9d58';
-      if (r.sniStatus && r.sniStatus.includes('Temuan')) color = '#d93025';
-      else if (r.sniStatus && r.sniStatus.includes('Spesifikasi')) color = '#fbbc05';
+      const kk = overallKat(r);
+      if (kk === 'temuan') color = '#d93025';
+      else if (kk === 'spesifikasi') color = '#fbbc05';
       const icon = L.divIcon({
         className: 'custom-map-marker',
         html: `<div style="background-color:${color};width:18px;height:18px;border-radius:50%;border:2.5px solid white;box-shadow:0 0 6px rgba(0,0,0,0.5);"></div>`,
         iconSize: [18, 18], iconAnchor: [9, 9]
       });
       leafletMarkers.push(L.marker([lat, lng], { icon }).addTo(leafletMap)
-        .bindPopup(`<b>${escHtml(r.businessName)}</b><br>Produk: ${escHtml(r.productType)} (${escHtml(r.brand)})<br>Status: <b>${escHtml(r.sniStatus)}</b>`));
+        .bindPopup(`<b>${escHtml(r.businessName)}</b><br>Produk: ${escHtml(r.productType)}${r.brand ? ' (' + escHtml(r.brand) + ')' : ''}<br>Status: <b>${escHtml(r.sniStatus)}</b>`));
     });
   }, 200);
 }
