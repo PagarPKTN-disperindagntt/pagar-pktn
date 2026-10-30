@@ -46,12 +46,15 @@ button{-webkit-tap-highlight-color:transparent}
 .field-label{display:block;margin-bottom:8px;font-size:.9375rem;font-weight:700;color:var(--ink)}
 .field-control{width:100%;min-height:52px;padding:14px 16px;border:1.5px solid var(--line);border-radius:10px;color:var(--ink);background:var(--surface);outline:none;font-size:1rem}
 .field-control:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(26,115,232,.2)}
-.doc-box{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;border:2px dashed var(--blue);border-radius:12px;background:var(--bg);cursor:pointer;transition:all .2s;min-height:115px;text-align:center}
+.doc-box{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;border:2px dashed var(--blue);border-radius:12px;background:var(--bg);cursor:default;transition:all .2s;min-height:115px;text-align:center}
 .doc-box:hover{background:var(--surface)}
 .doc-box.has-file{border-color:var(--success);background:#e6f4ea}
 .doc-box.has-file .icon-state{color:var(--success)}
 .file-info{font-size:.8125rem;margin-top:6px;font-weight:700;color:var(--muted)}
 .doc-box input{position:absolute;opacity:0;pointer-events:none;width:0;height:0}
+.doc-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;width:100%}
+.doc-act-btn{flex:1 1 90px;display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:10px;padding:10px 8px;font-weight:700;font-size:.8125rem;cursor:pointer;color:var(--blue);background:rgba(26,115,232,.12)}
+.doc-act-btn:active{opacity:.7}
 .primary-btn,.secondary-btn,.danger-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:0;border-radius:10px;font-weight:700;cursor:pointer;padding:14px 22px;transition:.15s;font-size:.9375rem}
 .primary-btn{color:white;background:var(--blue)}
 .primary-btn:hover{opacity:.9}
@@ -428,7 +431,7 @@ html[data-contrast="high"]:not([data-theme="dark"]) .text-blue-600{color:#1d4ed8
 <div id="form-kegiatan-banner" class="mb-3 p-2.5 bg-blue-50 border border-blue-200 rounded-xl text-xs font-semibold text-blue-800"></div>
 <div class="mb-5">
 <div class="flex justify-between items-center mb-1.5">
-<p class="font-bold uppercase tracking-wider text-xs text-blue-600" id="wizard-title">Langkah 1 dari 5: Tim &amp; Toko</p>
+<p class="font-bold uppercase tracking-wider text-xs text-blue-600" id="wizard-title">Langkah 1 dari 5: Identitas Pengecer</p>
 <span id="wizard-progress-text" class="text-sm font-black text-slate-600">20%</span>
 </div>
 <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
@@ -443,7 +446,7 @@ html[data-contrast="high"]:not([data-theme="dark"]) .text-blue-600{color:#1d4ed8
 <article class="section-card space-y-5">
 <div class="section-heading">
 <div class="section-icon"><i data-lucide="store" class="w-5 h-5"></i></div>
-<div class="flex-1"><h3 class="font-extrabold text-base">Tim Pengawas &amp; Identitas Pengecer</h3></div>
+<div class="flex-1"><h3 class="font-extrabold text-base">Identitas Pengecer</h3></div>
 </div>
 <div class="grid sm:grid-cols-2 gap-4">
 <div>
@@ -452,8 +455,8 @@ html[data-contrast="high"]:not([data-theme="dark"]) .text-blue-600{color:#1d4ed8
 <p id="sample-code-feedback" class="mt-1.5 text-xs font-semibold"></p>
 </div>
 <div>
-<label class="field-label">Nomor Telepon / WhatsApp <span class="text-rose-600">*</span></label>
-<input class="field-control" id="phone" type="tel" inputmode="numeric" required placeholder="08123456789 (Min. 10 digit)">
+<label class="field-label">Nomor Telepon / WhatsApp <span class="text-slate-400 font-medium text-xs">(opsional)</span></label>
+<input class="field-control" id="phone" type="tel" inputmode="numeric" placeholder="08123456789 (boleh dikosongkan)">
 </div>
 </div>
 <div>
@@ -475,10 +478,13 @@ html[data-contrast="high"]:not([data-theme="dark"]) .text-blue-600{color:#1d4ed8
 <div>
 <label class="field-label">Koordinat GPS</label>
 <div class="flex gap-2">
-<input id="coordinates" class="field-control flex-1" readonly placeholder="Belum mengambil titik GPS">
+<input id="coordinates" class="field-control flex-1" inputmode="text" autocomplete="off" placeholder="Ambil GPS, atau tempel: -10.178900, 123.607000">
 <button id="gps-button" class="secondary-btn px-5 font-bold shrink-0" type="button"><i data-lucide="map-pin" class="w-4 h-4"></i> Ambil GPS</button>
 </div>
-<p id="gps-feedback" class="mt-1.5 text-xs font-semibold text-slate-500"></p>
+<div class="flex items-center gap-2 mt-2">
+<button id="gps-paste" type="button" class="secondary-btn text-xs py-2 px-3 font-bold"><i data-lucide="clipboard" class="w-4 h-4"></i> Tempel dari Clipboard</button>
+</div>
+<p id="gps-feedback" class="mt-1.5 text-xs font-semibold text-slate-500">Bisa juga ketik/tempel manual titik yang sudah disalin sebelumnya (format: lintang, bujur).</p>
 </div>
 </article>
 <button type="button" class="primary-btn w-full py-4 font-black text-sm" onclick="nextStep(1)">Selanjutnya: Produk &amp; Bagian A &rarr;</button>
@@ -510,60 +516,72 @@ html[data-contrast="high"]:not([data-theme="dark"]) .text-blue-600{color:#1d4ed8
 <label class="field-label font-bold">1. Tanda &amp; Nomor SNI pada Barang</label>
 <select id="sni-barang-opt" class="field-control"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
 <div id="sni-barang-box" class="hidden"><input id="sni-barang-num" class="field-control" placeholder="Format: SNI XXXX:YYYY"></div>
-<label class="doc-box" for="doc-sni-barang">
-<input id="doc-sni-barang" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+<div class="doc-box" data-doc="doc-sni-barang">
+<input id="doc-sni-barang" type="file" accept="image/*" onchange="updateDocUI(this)">
+<input id="doc-sni-barang-cam" type="file" accept="image/*" capture="environment" onchange="docFromCamera(this,'doc-sni-barang')">
 <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto SNI Barang</span>
-</label>
+<div class="doc-actions"><button type="button" class="doc-act-btn" onclick="pickDoc('doc-sni-barang','cam')"><i data-lucide="camera" class="w-4 h-4"></i> Kamera</button><button type="button" class="doc-act-btn" onclick="pickDoc('doc-sni-barang','file')"><i data-lucide="image" class="w-4 h-4"></i> Galeri</button></div>
+</div>
 </div>
 
 <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
 <label class="field-label font-bold">2. Tanda &amp; Nomor SNI pada Kemasan</label>
 <select id="sni-kemasan-opt" class="field-control"><option value="Ada dan sama pada barang">Ada dan sama pada barang</option><option value="Ada dan beda pada barang">Ada dan beda pada barang</option><option value="Tidak ada" selected>Tidak ada</option></select>
 <div id="sni-kemasan-box" class="hidden"><input id="sni-kemasan-num" class="field-control" placeholder="Format: SNI XXXX:YYYY"></div>
-<label class="doc-box" for="doc-sni-kemasan">
-<input id="doc-sni-kemasan" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+<div class="doc-box" data-doc="doc-sni-kemasan">
+<input id="doc-sni-kemasan" type="file" accept="image/*" onchange="updateDocUI(this)">
+<input id="doc-sni-kemasan-cam" type="file" accept="image/*" capture="environment" onchange="docFromCamera(this,'doc-sni-kemasan')">
 <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto SNI Kemasan</span>
-</label>
+<div class="doc-actions"><button type="button" class="doc-act-btn" onclick="pickDoc('doc-sni-kemasan','cam')"><i data-lucide="camera" class="w-4 h-4"></i> Kamera</button><button type="button" class="doc-act-btn" onclick="pickDoc('doc-sni-kemasan','file')"><i data-lucide="image" class="w-4 h-4"></i> Galeri</button></div>
+</div>
 </div>
 
 <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
 <label class="field-label font-bold">3. Kode LSpro pada Barang</label>
 <select id="lspro-barang-opt" class="field-control"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
 <div id="lspro-barang-box" class="hidden"><input id="lspro-barang-num" class="field-control" placeholder="Format: LSPr-004-IDN"></div>
-<label class="doc-box" for="doc-lspro-barang">
-<input id="doc-lspro-barang" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+<div class="doc-box" data-doc="doc-lspro-barang">
+<input id="doc-lspro-barang" type="file" accept="image/*" onchange="updateDocUI(this)">
+<input id="doc-lspro-barang-cam" type="file" accept="image/*" capture="environment" onchange="docFromCamera(this,'doc-lspro-barang')">
 <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto LSpro Barang</span>
-</label>
+<div class="doc-actions"><button type="button" class="doc-act-btn" onclick="pickDoc('doc-lspro-barang','cam')"><i data-lucide="camera" class="w-4 h-4"></i> Kamera</button><button type="button" class="doc-act-btn" onclick="pickDoc('doc-lspro-barang','file')"><i data-lucide="image" class="w-4 h-4"></i> Galeri</button></div>
+</div>
 </div>
 
 <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
 <label class="field-label font-bold">4. Kode LSpro pada Kemasan</label>
 <select id="lspro-kemasan-opt" class="field-control"><option value="Ada dan sama pada barang">Ada dan sama pada barang</option><option value="Ada dan beda pada barang">Ada dan beda pada barang</option><option value="Tidak ada" selected>Tidak ada</option></select>
 <div id="lspro-kemasan-box" class="hidden"><input id="lspro-kemasan-num" class="field-control" placeholder="Format LSpro..."></div>
-<label class="doc-box" for="doc-lspro-kemasan">
-<input id="doc-lspro-kemasan" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+<div class="doc-box" data-doc="doc-lspro-kemasan">
+<input id="doc-lspro-kemasan" type="file" accept="image/*" onchange="updateDocUI(this)">
+<input id="doc-lspro-kemasan-cam" type="file" accept="image/*" capture="environment" onchange="docFromCamera(this,'doc-lspro-kemasan')">
 <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto LSpro Kemasan</span>
-</label>
+<div class="doc-actions"><button type="button" class="doc-act-btn" onclick="pickDoc('doc-lspro-kemasan','cam')"><i data-lucide="camera" class="w-4 h-4"></i> Kamera</button><button type="button" class="doc-act-btn" onclick="pickDoc('doc-lspro-kemasan','file')"><i data-lucide="image" class="w-4 h-4"></i> Galeri</button></div>
+</div>
 </div>
 
 <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
 <label class="field-label font-bold">5. Nomor NPB pada Barang</label>
 <select id="npb-barang-opt" class="field-control"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
 <div id="npb-barang-box" class="hidden"><input id="npb-barang-num" class="field-control" placeholder="Format NPB: 123.456/NPB/I/YYYY"></div>
-<label class="doc-box" for="doc-npb-barang">
-<input id="doc-npb-barang" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+<div class="doc-box" data-doc="doc-npb-barang">
+<input id="doc-npb-barang" type="file" accept="image/*" onchange="updateDocUI(this)">
+<input id="doc-npb-barang-cam" type="file" accept="image/*" capture="environment" onchange="docFromCamera(this,'doc-npb-barang')">
 <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto NPB Barang</span>
-</label>
+<div class="doc-actions"><button type="button" class="doc-act-btn" onclick="pickDoc('doc-npb-barang','cam')"><i data-lucide="camera" class="w-4 h-4"></i> Kamera</button><button type="button" class="doc-act-btn" onclick="pickDoc('doc-npb-barang','file')"><i data-lucide="image" class="w-4 h-4"></i> Galeri</button></div>
+</div>
 </div>
 
 <div class="p-4 bg-slate-50 rounded-xl border space-y-3">
 <label class="field-label font-bold">6. Nomor NPB pada Kemasan</label>
 <select id="npb-kemasan-opt" class="field-control"><option value="Ada dan sama pada barang">Ada dan sama pada barang</option><option value="Ada dan beda pada barang">Ada dan beda pada barang</option><option value="Tidak ada" selected>Tidak ada</option></select>
 <div id="npb-kemasan-box" class="hidden"><input id="npb-kemasan-num" class="field-control" placeholder="Format NPB..."></div>
-<label class="doc-box" for="doc-npb-kemasan">
-<input id="doc-npb-kemasan" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+<div class="doc-box" data-doc="doc-npb-kemasan">
+<input id="doc-npb-kemasan" type="file" accept="image/*" onchange="updateDocUI(this)">
+<input id="doc-npb-kemasan-cam" type="file" accept="image/*" capture="environment" onchange="docFromCamera(this,'doc-npb-kemasan')">
 <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto NPB Kemasan</span>
-</label>
+<div class="doc-actions"><button type="button" class="doc-act-btn" onclick="pickDoc('doc-npb-kemasan','cam')"><i data-lucide="camera" class="w-4 h-4"></i> Kamera</button><button type="button" class="doc-act-btn" onclick="pickDoc('doc-npb-kemasan','file')"><i data-lucide="image" class="w-4 h-4"></i> Galeri</button></div>
+</div>
 </div>
 
 <!-- PORTAL BANG BENI -->
@@ -641,10 +659,12 @@ html[data-contrast="high"]:not([data-theme="dark"]) .text-blue-600{color:#1d4ed8
 <label class="field-label text-xs">Penggunaan listrik / Spesifikasi Teknis / Ukuran</label>
 <select id="label-brg-listrik-opt" class="field-control mb-2"><option value="Ada">Ada</option><option value="Tidak ada" selected>Tidak ada</option></select>
 <input id="label-brg-listrik-val" class="field-control hidden mb-3" placeholder="Format spesifikasi teknis...">
-<label class="doc-box" for="doc-label-listrik">
-<input id="doc-label-listrik" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+<div class="doc-box" data-doc="doc-label-listrik">
+<input id="doc-label-listrik" type="file" accept="image/*" onchange="updateDocUI(this)">
+<input id="doc-label-listrik-cam" type="file" accept="image/*" capture="environment" onchange="docFromCamera(this,'doc-label-listrik')">
 <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto Spesifikasi / Label</span>
-</label>
+<div class="doc-actions"><button type="button" class="doc-act-btn" onclick="pickDoc('doc-label-listrik','cam')"><i data-lucide="camera" class="w-4 h-4"></i> Kamera</button><button type="button" class="doc-act-btn" onclick="pickDoc('doc-label-listrik','file')"><i data-lucide="image" class="w-4 h-4"></i> Galeri</button></div>
+</div>
 </div>
 <div>
 <label class="field-label text-xs">Negara pembuat atau Made in</label>
@@ -736,10 +756,12 @@ html[data-contrast="high"]:not([data-theme="dark"]) .text-blue-600{color:#1d4ed8
 </div>
 
 <div id="petunjuk-sub-box" class="hidden space-y-4 pt-2">
-<label class="doc-box" for="doc-petunjuk">
-<input id="doc-petunjuk" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+<div class="doc-box" data-doc="doc-petunjuk">
+<input id="doc-petunjuk" type="file" accept="image/*" onchange="updateDocUI(this)">
+<input id="doc-petunjuk-cam" type="file" accept="image/*" capture="environment" onchange="docFromCamera(this,'doc-petunjuk')">
 <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto Petunjuk Penggunaan</span>
-</label>
+<div class="doc-actions"><button type="button" class="doc-act-btn" onclick="pickDoc('doc-petunjuk','cam')"><i data-lucide="camera" class="w-4 h-4"></i> Kamera</button><button type="button" class="doc-act-btn" onclick="pickDoc('doc-petunjuk','file')"><i data-lucide="image" class="w-4 h-4"></i> Galeri</button></div>
+</div>
 
 <div class="space-y-1.5 border-b pb-3">
 <div class="flex items-center justify-between gap-3 text-sm">
@@ -836,10 +858,12 @@ html[data-contrast="high"]:not([data-theme="dark"]) .text-blue-600{color:#1d4ed8
 <input id="g-reg-val" class="field-control mt-1.5 text-xs hidden" placeholder="Nomor tanda pendaftaran garansi...">
 </div>
 <div class="pt-3">
-<label class="doc-box" for="doc-garansi">
-<input id="doc-garansi" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)">
+<div class="doc-box" data-doc="doc-garansi">
+<input id="doc-garansi" type="file" accept="image/*" onchange="updateDocUI(this)">
+<input id="doc-garansi-cam" type="file" accept="image/*" capture="environment" onchange="docFromCamera(this,'doc-garansi')">
 <div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Foto Kartu Jaminan / Garansi</span>
-</label>
+<div class="doc-actions"><button type="button" class="doc-act-btn" onclick="pickDoc('doc-garansi','cam')"><i data-lucide="camera" class="w-4 h-4"></i> Kamera</button><button type="button" class="doc-act-btn" onclick="pickDoc('doc-garansi','file')"><i data-lucide="image" class="w-4 h-4"></i> Galeri</button></div>
+</div>
 </div>
 </div>
 </div>
@@ -859,15 +883,35 @@ html[data-contrast="high"]:not([data-theme="dark"]) .text-blue-600{color:#1d4ed8
 </div>
 <p class="text-sm font-medium text-slate-500 mb-2">Unggah foto umum penunjang lokasi dan produk.</p>
 <div class="grid grid-cols-2 gap-4 mb-4">
-<label class="doc-box" for="photo-toko"><input id="photo-toko" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)"><div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Tampak Depan Toko</span></label>
-<label class="doc-box" for="photo-etalase"><input id="photo-etalase" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)"><div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Produk di Rak / Etalase</span></label>
+<div class="doc-box" data-doc="photo-toko">
+<input id="photo-toko" type="file" accept="image/*" onchange="updateDocUI(this)">
+<input id="photo-toko-cam" type="file" accept="image/*" capture="environment" onchange="docFromCamera(this,'photo-toko')">
+<div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Tampak Depan Toko</span>
+<div class="doc-actions"><button type="button" class="doc-act-btn" onclick="pickDoc('photo-toko','cam')"><i data-lucide="camera" class="w-4 h-4"></i> Kamera</button><button type="button" class="doc-act-btn" onclick="pickDoc('photo-toko','file')"><i data-lucide="image" class="w-4 h-4"></i> Galeri</button></div>
+</div>
+<div class="doc-box" data-doc="photo-etalase">
+<input id="photo-etalase" type="file" accept="image/*" onchange="updateDocUI(this)">
+<input id="photo-etalase-cam" type="file" accept="image/*" capture="environment" onchange="docFromCamera(this,'photo-etalase')">
+<div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Produk di Rak / Etalase</span>
+<div class="doc-actions"><button type="button" class="doc-act-btn" onclick="pickDoc('photo-etalase','cam')"><i data-lucide="camera" class="w-4 h-4"></i> Kamera</button><button type="button" class="doc-act-btn" onclick="pickDoc('photo-etalase','file')"><i data-lucide="image" class="w-4 h-4"></i> Galeri</button></div>
+</div>
 </div>
 <div class="border-t pt-4 mt-4">
 <h4 class="font-black text-xs uppercase text-blue-700 tracking-wider mb-2">Dokumentasi Pelaksanaan di Lapangan (Opsional)</h4>
 <p class="text-xs text-slate-500 mb-3 font-medium">Foto aktivitas saat wawancara atau pemeriksaan fisik di tempat (bersifat opsional, dapat dikosongkan).</p>
 <div class="grid grid-cols-2 gap-4">
-<label class="doc-box" for="photo-pelaksanaan-1"><input id="photo-pelaksanaan-1" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)"><div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Aktivitas Pengawasan (Opsional)</span></label>
-<label class="doc-box" for="photo-pelaksanaan-2"><input id="photo-pelaksanaan-2" type="file" accept="image/*" capture="environment" onchange="updateDocUI(this)"><div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Wawancara Pemilik (Opsional)</span></label>
+<div class="doc-box" data-doc="photo-pelaksanaan-1">
+<input id="photo-pelaksanaan-1" type="file" accept="image/*" onchange="updateDocUI(this)">
+<input id="photo-pelaksanaan-1-cam" type="file" accept="image/*" capture="environment" onchange="docFromCamera(this,'photo-pelaksanaan-1')">
+<div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Aktivitas Pengawasan (Opsional)</span>
+<div class="doc-actions"><button type="button" class="doc-act-btn" onclick="pickDoc('photo-pelaksanaan-1','cam')"><i data-lucide="camera" class="w-4 h-4"></i> Kamera</button><button type="button" class="doc-act-btn" onclick="pickDoc('photo-pelaksanaan-1','file')"><i data-lucide="image" class="w-4 h-4"></i> Galeri</button></div>
+</div>
+<div class="doc-box" data-doc="photo-pelaksanaan-2">
+<input id="photo-pelaksanaan-2" type="file" accept="image/*" onchange="updateDocUI(this)">
+<input id="photo-pelaksanaan-2-cam" type="file" accept="image/*" capture="environment" onchange="docFromCamera(this,'photo-pelaksanaan-2')">
+<div class="icon-state"><i data-lucide="camera" class="w-7 h-7"></i></div><span class="file-info font-bold">Wawancara Pemilik (Opsional)</span>
+<div class="doc-actions"><button type="button" class="doc-act-btn" onclick="pickDoc('photo-pelaksanaan-2','cam')"><i data-lucide="camera" class="w-4 h-4"></i> Kamera</button><button type="button" class="doc-act-btn" onclick="pickDoc('photo-pelaksanaan-2','file')"><i data-lucide="image" class="w-4 h-4"></i> Galeri</button></div>
+</div>
 </div>
 </div>
 </article>
@@ -1710,7 +1754,7 @@ let currentStep = 1;
 function updateWizard() {
   document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active-step'));
   document.querySelector(`.wizard-step[data-step="${currentStep}"]`).classList.add('active-step');
-  const titles = ["Tim & Toko", "Produk & Bagian A", "Bagian B (Label)", "Bagian C & D (Garansi)", "Dokumentasi Foto"];
+  const titles = ["Identitas Pengecer", "Produk & Bagian A", "Bagian B (Label)", "Bagian C & D (Garansi)", "Dokumentasi Foto"];
   const pcts = ["20%", "40%", "60%", "80%", "100%"];
   document.getElementById('wizard-title').textContent = `Langkah ${currentStep} dari 5: ${titles[currentStep - 1]}`;
   document.getElementById('wizard-progress-text').textContent = pcts[currentStep - 1];
@@ -1723,11 +1767,12 @@ function validateStep(step) {
   if (step === 1) {
     if (!v('sample-code')) return fail('sample-code', 'Kode Sampel wajib diisi.');
     const ph = v('phone').replace(/[^0-9]/g, '');
-    if (ph.length < 10 || ph.length > 15) return fail('phone', 'Nomor telepon harus 10-15 digit angka.');
+    if (ph && (ph.length < 10 || ph.length > 15)) return fail('phone', 'Nomor telepon, jika diisi, harus 10-15 digit angka.');
     if (!v('business-name')) return fail('business-name', 'Nama toko / pengecer wajib diisi.');
     if (!v('retailer-address')) return fail('retailer-address', 'Alamat pengecer wajib diisi.');
     if (!v('wilayah')) return fail('wilayah', 'Kabupaten / Kota wajib diisi.');
     if (!v('owner-name')) return fail('owner-name', 'Nama pemilik / penanggung jawab wajib diisi.');
+    if (!normalizeCoordField()) return fail('coordinates', 'Format koordinat GPS tidak dikenali. Contoh: -10.178900, 123.607000');
   }
   if (step === 2) {
     if (!v('product-type')) return fail('product-type', 'Jenis produk wajib dipilih.');
@@ -2034,16 +2079,72 @@ function overallKat(r) {
 }
 const FILTER_KAT = { Legal: 'legal', Temuan: 'temuan', Spesifikasinya: 'spesifikasi' };
 
-// --- GPS ---
-document.getElementById('gps-button').addEventListener('click', () => {
+// --- GPS: ambil otomatis, atau ketik/tempel titik yang sudah disalin sebelumnya ---
+function parseCoordinates(str) {
+  str = String(str || '').trim();
+  if (!str) return null;
+  let m = str.match(/@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/) || str.match(/[?&](?:q|ll|query)=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/);
+  let lat, lng;
+  if (m) { lat = parseFloat(m[1]); lng = parseFloat(m[2]); }
+  else {
+    const nums = str.match(/-?\d+(?:[.,]\d+)?/g);
+    if (!nums || nums.length !== 2) return null;
+    lat = parseFloat(nums[0].replace(',', '.')); lng = parseFloat(nums[1].replace(',', '.'));
+  }
+  if (isNaN(lat) || isNaN(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) return null;
+  return { lat, lng };
+}
+function setGpsFeedback(msg, kind) {
   const fb = document.getElementById('gps-feedback');
+  fb.textContent = msg;
+  fb.className = 'mt-1.5 text-xs font-semibold ' + (kind === 'error' ? 'text-rose-600' : kind === 'ok' ? 'text-emerald-600' : kind === 'warn' ? 'text-amber-600' : 'text-slate-500');
+}
+// Rapikan isi kolom menjadi "lat, lng" (6 desimal). Mengembalikan false bila diisi tetapi formatnya tidak dikenali.
+function normalizeCoordField() {
+  const el = document.getElementById('coordinates');
+  const raw = el.value.trim();
+  if (!raw) { setGpsFeedback('Bisa juga ketik/tempel manual titik yang sudah disalin sebelumnya (format: lintang, bujur).', ''); return true; }
+  const c = parseCoordinates(raw);
+  if (!c) { setGpsFeedback('Format koordinat tidak dikenali. Contoh: -10.178900, 123.607000 (angka desimal, bukan derajat/menit).', 'error'); return false; }
+  el.value = `${c.lat.toFixed(6)}, ${c.lng.toFixed(6)}`;
+  const diIndonesia = c.lat >= -11.5 && c.lat <= 6.5 && c.lng >= 94 && c.lng <= 141.5;
+  if (!diIndonesia) setGpsFeedback('Titik ini tampak di luar wilayah Indonesia. Periksa kembali tanda minus (-) pada lintang.', 'warn');
+  else setGpsFeedback('Koordinat siap digunakan.', 'ok');
+  return true;
+}
+document.getElementById('coordinates').addEventListener('change', normalizeCoordField);
+document.getElementById('gps-button').addEventListener('click', () => {
+  if (!navigator.geolocation) { setGpsFeedback('Perangkat ini tidak mendukung GPS. Ketik atau tempel koordinat secara manual.', 'error'); return; }
+  setGpsFeedback('Mencari lokasi...', '');
   navigator.geolocation.getCurrentPosition(pos => {
     document.getElementById('coordinates').value = `${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`;
-    fb.textContent = 'Koordinat GPS berhasil diperoleh.';
-  }, () => { fb.textContent = 'Gagal mendeteksi GPS.'; });
+    setGpsFeedback('Koordinat GPS berhasil diperoleh.', 'ok');
+  }, () => setGpsFeedback('Gagal mendeteksi GPS. Pastikan izin lokasi aktif, atau ketik/tempel koordinat secara manual.', 'error'),
+  { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
+});
+document.getElementById('gps-paste').addEventListener('click', async () => {
+  try {
+    const t = await navigator.clipboard.readText();
+    document.getElementById('coordinates').value = t;
+    normalizeCoordField();
+  } catch (e) {
+    setGpsFeedback('Browser tidak mengizinkan membaca clipboard. Tekan lama di kolom koordinat lalu pilih Tempel.', 'warn');
+  }
 });
 
-// --- UNGGAH FOTO ---
+// --- UNGGAH FOTO: dua jalur (kamera langsung / pilih dari galeri-berkas) ---
+window.pickDoc = function (id, mode) {
+  const el = document.getElementById(mode === 'cam' ? id + '-cam' : id);
+  if (el) el.click();
+};
+window.docFromCamera = function (cam, id) {
+  const main = document.getElementById(id);
+  if (!main || !cam.files || !cam.files[0]) return;
+  try { const dt = new DataTransfer(); dt.items.add(cam.files[0]); main.files = dt.files; }
+  catch (e) { main.files = cam.files; }
+  cam.value = '';
+  updateDocUI(main);
+};
 function updateDocUI(input) {
   const label = input.parentElement;
   const iconState = label.querySelector('.icon-state');
@@ -2105,8 +2206,8 @@ document.getElementById('inspection-form').addEventListener('submit', async e =>
   for (const s of [1, 2, 3]) { if (!validateStep(s)) { currentStep = s; updateWizard(); return; } }
 
   const phoneClean = document.getElementById('phone').value.trim().replace(/[^0-9]/g, '');
-  if (phoneClean.length < 10 || phoneClean.length > 15) {
-    showAppNotify("Peringatan", "Nomor Telepon/WhatsApp harus berupa angka dan minimal 10 digit.", "warning");
+  if (phoneClean && (phoneClean.length < 10 || phoneClean.length > 15)) {
+    showAppNotify("Peringatan", "Nomor Telepon/WhatsApp, jika diisi, harus berupa angka 10-15 digit.", "warning");
     currentStep = 1; updateWizard(); document.getElementById('phone').focus();
     return;
   }
